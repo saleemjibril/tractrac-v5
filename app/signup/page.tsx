@@ -292,7 +292,7 @@ export default function Home() {
                                   value: isoNo,
                                 }))
                                 .map((option) => (
-                                  <option value={option.value}>
+                                  <option value={option.value} key={option.value}>
                                     +{option.value}
                                   </option>
                                 ))}

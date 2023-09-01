@@ -77,7 +77,7 @@ export default function BecomeAnAgent() {
     if (requestSuccessful && !isOpen) {
       onOpen();
     }
-  }, [requestSuccessful]);
+  }, [requestSuccessful, isOpen, onOpen]);
 
   function validateEmpty(value: any) {
     let error;
