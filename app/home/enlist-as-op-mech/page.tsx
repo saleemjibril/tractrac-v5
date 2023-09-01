@@ -38,7 +38,7 @@ import {
 } from "@chakra-ui/icons";
 import dynamic from "next/dynamic";
 import { useAppSelector } from "@/redux/hooks";
-import { useBecomeAnAgentMutation } from "@/redux/services/userApi";
+import { useBecomeAnOpOrMechMutation } from "@/redux/services/userApi";
 import { toast } from "react-toastify";
 import * as nigerianStates from "nigerian-states-and-lgas";
 import { FaPlus } from "react-icons/fa";
@@ -61,7 +61,7 @@ export default function BecomeAnAgent() {
     setGender(profileInfo?.gender ?? "");
   }, [profileInfo]);
 
-  const [becomeAgent] = useBecomeAnAgentMutation();
+  const [becomeAnOpOrMech] = useBecomeAnOpOrMechMutation();
   const router = useRouter();
 
   function validateEmpty(value: any) {
@@ -101,7 +101,7 @@ export default function BecomeAnAgent() {
                 try {
                   // alert('ss')
                   console.log(values);
-                  const response = await becomeAgent({
+                  const response = await becomeAnOpOrMech({
                     ...values,
                     user_id: profileInfo?.id,
                   }).unwrap();
@@ -121,6 +121,8 @@ export default function BecomeAnAgent() {
                     // setError(error?.data?.errors[0])
                   } else if (error?.data?.message) {
                     setError(error?.data?.message);
+                  }else{
+                    setError("An unknown error occured, please try again");
                   }
                   console.error("rejected", error);
                 }
@@ -431,14 +433,13 @@ export default function BecomeAnAgent() {
                 Registration Completed
               </Text>
               <Text my="8px" fontSize="14px">
-                We will be in touch with you shortly with a thorough response
-                tailored to your specific needs.
+              Thank you for providing us with this information, check you profile for the status of your tractor
               </Text>
               <Button
                 mb="4px"
                 onClick={() => {
                   onClose();
-                  router.replace("/home");
+                  router.replace("/dashboard");
                 }}
                 width="100%"
                 height="45px"

@@ -89,6 +89,18 @@ export const userApi = createApi({
         // },
       }),
     }),
+    becomeAnOpOrMech: builder.mutation({
+      query: (data: any) => ({
+        url: "/become_an_operator_or_mech",
+        method: "POST",
+        // body: data,
+        body: transformRequest(data),
+        // formData: true,
+        // headers: {
+        //   "Content-Type": "multipart/form-data",
+        // },
+      }),
+    }),
   }),
 });
 
@@ -103,5 +115,6 @@ export const {
   useValidateIssamIdMutation,
   useCollaborateMutation,
   useHireTractorMutation,
+  useBecomeAnOpOrMechMutation
 } = userApi;
 // export const { useGetActiveUsersQuery } = userApi

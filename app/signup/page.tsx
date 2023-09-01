@@ -198,20 +198,28 @@ export default function Home() {
                   //   interests: JSON.stringify(values.interests),
                   //   gender,
                   // }).unwrap();
+                  let parsePhoneNumber = values?.phone.toString().startsWith("0")
+                    ? values?.phone.toString().substr("0")
+                    : values?.phone;
+                  let phoneNumber = `${countryCode}${parsePhoneNumber}`;
+                  console.log(phoneNumber);
 
-                  localStorage.setItem('user_data', JSON.stringify({...values, gender}));
+
+                  localStorage.setItem(
+                    "user_data",
+                    JSON.stringify({ ...values,phone: phoneNumber, gender })
+                  );
                   const response = await sendOtp({
-                    type: 'registration',
-                    phone: values?.phone
+                    type: "registration",
+                    phone: phoneNumber,
                   }).unwrap();
 
-                
+                  console.log(response)
+
                   if (response.status === "success") {
                     toast.success(response.message);
                     // const user = response?.data[0];
-                    router.push(
-                      `/verification?phone=${values?.phone}`
-                    );
+                    // router.push(`/verification?phone=${phoneNumber}`);
                   } else {
                     setError("An unknown error occured");
                   }
@@ -292,7 +300,10 @@ export default function Home() {
                                   value: isoNo,
                                 }))
                                 .map((option) => (
-                                  <option value={option.value} key={option.value}>
+                                  <option
+                                    value={option.value}
+                                    key={option.value}
+                                  >
                                     +{option.value}
                                   </option>
                                 ))}

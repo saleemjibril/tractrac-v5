@@ -2,7 +2,7 @@
 import { useEffect, useId, useState } from "react";
 import TracTracPageModal from "../components/PageModal";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { openModal } from "@/redux/features/modalSlice";
+import lookup from "country-code-lookup";
 import {
   Alert,
   AlertIcon,
@@ -10,7 +10,7 @@ import {
   Box,
   Button,
   Text,
-  CircularProgress,
+  InputLeftElement,
   Flex,
   FormControl,
   FormErrorMessage,
@@ -19,6 +19,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Select as ChakraSelect,
   Link,
   Image,
   Stack,
@@ -37,6 +38,7 @@ export default function Home() {
   const [passwordShown, setPasswordVisibility] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const toggleVisibility = () => setPasswordVisibility(!passwordShown);
+  let [countryCode, setCountryCode] = useState("234");
   const router = useRouter();
 
   // useEffect(() => {
@@ -127,7 +129,16 @@ export default function Home() {
                 try {
                   // alert('ss')
                   console.log(typeof values);
-                  const response = await loginUser(values).unwrap();
+                  let parsePhoneNumber = values?.phone
+                    .toString()
+                    .startsWith("0")
+                    ? values?.phone.toString().substr("0")
+                    : values?.phone;
+                  let phoneNumber = `${countryCode}${parsePhoneNumber}`;
+                  const response = await loginUser({
+                    ...values,
+                    phone: phoneNumber,
+                  }).unwrap();
                   if (response.token) {
                     dispatch(
                       saveLoginInfo({
@@ -185,7 +196,7 @@ export default function Home() {
               </AlertDescription> */}
                     </Alert>
                   )}
-                  <Field name="phone" validate={validatePhoneNumber}>
+                  {/* <Field name="phone" validate={validatePhoneNumber}>
                     {({ field, form }: { [x: string]: any }) => (
                       <FormControl
                         isInvalid={form.errors.phone && form.touched.phone}
@@ -202,6 +213,61 @@ export default function Home() {
                           type="number"
                           id="phone number field"
                         />
+                        <FormErrorMessage>{form.errors.phone}</FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field> */}
+                  <Field name="phone" validate={validatePhoneNumber}>
+                    {({ field, form }: { [x: string]: any }) => (
+                      <FormControl
+                        isInvalid={form.errors.phone && form.touched.phone}
+                      >
+                        <FormLabel fontSize="12px" color="#222222">
+                          Phone number
+                        </FormLabel>
+                        <InputGroup>
+                          <InputLeftElement width="5rem">
+                            <ChakraSelect
+                              top="0"
+                              left="0"
+                              zIndex={1}
+                              bottom={0}
+                              ml="8px"
+                              // opacity={0}
+                              height="100%"
+                              variant="unstyled"
+                              // position="absolute"
+                              value={countryCode}
+                              onChange={(v) => {
+                                // alert(v?.currentTarget?.value)
+                                setCountryCode(v?.currentTarget?.value);
+                              }}
+                            >
+                              {/* <option value="" /> */}
+                              {lookup.countries
+                                .map(({ country, isoNo }) => ({
+                                  label: country,
+                                  value: isoNo,
+                                }))
+                                .map((option) => (
+                                  <option
+                                    value={option.value}
+                                    key={option.value}
+                                  >
+                                    +{option.value}
+                                  </option>
+                                ))}
+                            </ChakraSelect>
+                          </InputLeftElement>
+                          <Input
+                            pl="68px"
+                            {...field}
+                            // placeholder="Enter your phone number"
+                            bgColor="#3232320D"
+                            type="number"
+                          />
+                        </InputGroup>
+
                         <FormErrorMessage>{form.errors.phone}</FormErrorMessage>
                       </FormControl>
                     )}

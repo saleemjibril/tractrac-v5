@@ -40,7 +40,7 @@ import {
 import { toast } from "react-toastify";
 
 export default function Verification() {
-  const [countdown, setCountdown] = useState(120); // 2 minutes in seconds
+  const [countdown, setCountdown] = useState(45); // 2 minutes in seconds
   const [disabled, setDisabled] = useState(true);
 
   const router = useRouter();
@@ -85,7 +85,7 @@ export default function Verification() {
   }, [countdown, disabled, params, router]);
 
   const startCountdown = () => {
-    setCountdown(120);
+    setCountdown(60);
     setDisabled(true);
   };
 
@@ -158,6 +158,7 @@ export default function Verification() {
                   }).unwrap();
 
                   if (r?.status == "success") {
+                    localStorage.removeItem("user_data");
                     toast.success(r.message);
                     router.replace("/login");
                   } else {
@@ -240,7 +241,7 @@ export default function Verification() {
               Didn&apos;t recieve a code?
               <Link
                 ml="4px"
-                color="#FA9411"
+                color={disabled ? '#929292': "#FA9411"}
                 as="button"
                 type="button"
                 disabled={disabled}
@@ -269,7 +270,7 @@ export default function Verification() {
                   }
                 }}
               >
-                Resend SMS
+              {disabled ? 'SMS Sent' : 'Resend SMS'}  
               </Link>
             </Box>
             <Text fontSize="14px" color="#333333">
