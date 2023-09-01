@@ -1,0 +1,208 @@
+"use client";
+import {
+  Box,
+  Image,
+  ComponentWithAs,
+  Flex,
+  IconProps,
+  SimpleGrid,
+  Text,
+} from "@chakra-ui/react";
+import { SidebarWithHeader } from "../components/Sidenav";
+import { TaskList, TractorIcon, Track, Tractor_2, Money_2, Demand, TaskListWhite } from "../components/Icons";
+import { createElement, useEffect, useState } from "react";
+import { useAppSelector } from "@/redux/hooks";
+import { usePathname } from "next/navigation";
+
+interface ItemProps {
+  name: string;
+  path: string;
+  icon: ComponentWithAs<"svg", IconProps>;
+  iconActive?: ComponentWithAs<"svg", IconProps>;
+  // imageLight: string;
+  // imageDark: string;
+}
+
+export default function Dashboard() {
+  const path = usePathname();
+
+  const PageItems: Array<ItemProps> = [
+    {
+      name: "Hired Tractors",
+      // imageLight: "home-light",
+      // imageDark: "home-dark",
+      icon: Tractor_2,
+      path: `#`,
+    },
+    {
+      name: "Enlisted Tractors",
+      // imageLight: "pay-light",
+      // imageDark: "pay-dark",
+      icon: TaskList,
+      iconActive: TaskListWhite,
+      path: `${path}/enlisted-tractors`,
+    },
+    {
+      name: "Investment",
+      // imageLight: "pay-light",
+      // imageDark: "pay-dark",
+      icon: Money_2,
+      path: "#",
+    },
+    {
+      name: "Land Processed",
+      // imageLight: "pay-light",
+      // imageDark: "pay-dark",
+      iconActive: TaskListWhite,
+      icon: TaskList,
+      path: "#",
+    },
+    {
+      name: "Serviced Hour",
+      // imageLight: "pay-light",
+      // imageDark: "pay-dark",
+      icon: TaskList,
+      iconActive: TaskListWhite,
+      path: "#",
+    },
+    {
+      name: "Demand Generated",
+      // imageLight: "pay-light",
+      // imageDark: "pay-dark",
+      icon: Demand,
+      path: "#",
+    },
+    {
+      name: "Demand Fulfilled",
+      // imageLight: "pay-light",
+      // imageDark: "pay-dark",
+      icon: TaskList,
+      iconActive: TaskListWhite,
+      path: "#",
+    },
+    {
+      name: "Revenue Generated",
+      // imageLight: "pay-light",
+      // imageDark: "pay-dark",
+      icon: TaskList,
+      iconActive: TaskListWhite,
+      path: "#",
+    },
+    {
+      name: "Agent",
+      // imageLight: "pay-light",
+      // imageDark: "pay-dark",
+      icon: TaskList,
+      iconActive: TaskListWhite,
+      path: "#",
+    },
+  ];
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    // console.log(profileInfo)
+    setMounted(true);
+  }, []);
+
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const { profileInfo } = useAppSelector((state) => state.auth);
+
+  return (
+    <SidebarWithHeader>
+      {mounted && (
+        <Flex alignItems="center" py="8px" mb="10px" columnGap="8px">
+          <Image src="/sun.svg" width="30px" alt="Sun image icon" />
+          <Text fontSize="24px" color="#929292" fontWeight={400}>
+            Good day,{" "}
+            <Box as="span" fontWeight={600} color="#929292">
+              {profileInfo?.fname || "Guest"}
+            </Box>
+          </Text>
+        </Flex>
+      )}
+      <SimpleGrid
+        columns={{ base: 2, lg: 3 }}
+        // spacing={{base: "12px", md: "35px"}}
+        spacingX={{ base: "20px", md: "40px" }}
+        spacingY="20px"
+        p={{ base: "0px", md: "0px" }}
+        mr={{base: "0px", lg: "120px"}}
+      >
+        {PageItems.map((pageItem, index) => {
+          //  const [isHovering, setIsHovered] = useState(false);
+          //  const onMouseEnter = () => setIsHovered(true);
+          //  const onMouseLeave = () => setIsHovered(false);
+
+          return (
+            <Flex
+              key={pageItem.path}
+              // flexDir="column"
+              borderColor="#FA9411"
+              borderWidth="1px"
+              px="15px"
+              py="10px"
+              as="a"
+              href={pageItem.path}
+              // py="35px"
+              // px="15px"
+              color="#929292"
+              alignItems="center"
+              justifyContent="start"
+              gap="10px"
+              bgColor="white"
+              onMouseEnter={() => setHoveredIndex(index)} // Set hoveredIndex on mouse enter
+              onMouseLeave={() => setHoveredIndex(null)} // Clear hoveredIndex on mouse leave
+              _hover={{
+                bgColor: "#FA9411",
+                color: "white",
+                "& > .item-icon": {
+                  // Use "& > .child-element" to select the child element
+                  color: "white", // Change the color of the child element on hover
+                },
+              }}
+              borderRadius="15px"
+            >
+              <Flex
+                bgColor={hoveredIndex === index ? "#FFFFFF20" : "#92929240"}
+                borderRadius="12px"
+                width="50px"
+                height="50px"
+                justifyContent="center"
+                alignItems="center"
+              >
+                {/* <Center> */}
+                {createElement(
+                  // 1 === index && pageItem.iconActive
+                  hoveredIndex === index && pageItem.iconActive
+                    ? pageItem.iconActive
+                    : pageItem.icon, // Use iconDark if hovered
+                  {
+                    className: "item-icon",
+                    // color: "#FA9411",
+                    boxSize: "28px",
+                  }
+                )}
+                {/* </Center> */}
+              </Flex>
+              {/* <pageItem.icon
+                className="item-icon"
+                color="#FA9411"
+                boxSize="60px"
+              /> */}
+              {/* <Money_2  color="#FA9411" boxSize="40px" /> */}
+              {/* <Image src="icons/tractor-light.svg" alt="" width="80px" /> */}
+              <Text
+                fontSize={{ base: "14px", md: "18px" }}
+                fontWeight={600}
+                // textAlign="center"
+              >
+                {pageItem.name}
+              </Text>
+            </Flex>
+          );
+        })}
+      </SimpleGrid>
+    </SidebarWithHeader>
+  );
+}
