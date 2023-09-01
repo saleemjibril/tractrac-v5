@@ -219,7 +219,7 @@ export default function Home() {
                   if (response.status === "success") {
                     toast.success(response.message);
                     // const user = response?.data[0];
-                    // router.push(`/verification?phone=${phoneNumber}`);
+                    router.push(`/verification?phone=${phoneNumber}`);
                   } else {
                     setError("An unknown error occured");
                   }
