@@ -51,6 +51,9 @@ const fileTypes = ["JPG", "PNG", "JPEG"];
 //     loading: () => <p>Loading...</p>,
 //   })
 
+
+const MAX_IMAGE_SIZE_BYTES = 2 * 1024 * 1024;
+
 export default function BecomeAnAgent() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
@@ -60,6 +63,9 @@ export default function BecomeAnAgent() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
+
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: currentYear - 1979 }, (_, i) => 1980 + i);
 
   const dispatch = useAppDispatch();
   const { profileInfo } = useAppSelector((state) => state.auth);
@@ -137,6 +143,16 @@ export default function BecomeAnAgent() {
             onSubmit={async (values: any, { resetForm }) => {
               setError(null);
 
+              if (values?.insured == "yes") {
+                if (!values?.insurance_company || !values?.insurance_expiry) {
+                  toast.error(
+                    "Please fill in insurance company and expiry if tractor is ensured!"
+                  );
+                  // alert(values?.insurance_company)
+                  return;
+                }
+              }
+
               try {
                 // alert('ss')
                 console.log(values);
@@ -153,10 +169,9 @@ export default function BecomeAnAgent() {
                 formData.append("insured", values?.insured);
                 formData.append("insurance_company", values?.insurance_company);
                 formData.append("tracker", values?.tracker);
-                formData.append("insurance_expiry", values?.id_type);
+                formData.append("insurance_expiry", values?.insurance_expiry);
                 formData.append("image", values?.image);
                 console.log(formData);
-
 
                 dispatch(enlistTractor(formData));
 
@@ -205,29 +220,29 @@ export default function BecomeAnAgent() {
                         </FormLabel>
 
                         <Select
-                        {...field}
-                        bgColor="#3232320D"
+                          {...field}
+                          bgColor="#3232320D"
                           fontSize="12px"
                           color="#323232"
-                        placeholder="What brand of Tractor are you
+                          placeholder="What brand of Tractor are you
                         interested in?"
-                        // _placeholder={{
-                        //   fontSize: "12px",
-                        //   color: "red"
-                        // }}
-                        // _focusVisible={{
-                        //   borderColor: "#929292",
-                        // }}
-                        // variant="flushed"
-                        // borderColor="#929292"
-                      >
-                        {brands.map((brand) => (
-                          <option key={brand} value={brand.toLowerCase()}>
-                            {snakeToCamelWithSpaces(brand)}
-                          </option>
-                        ))}
-                      </Select>
-                        
+                          // _placeholder={{
+                          //   fontSize: "12px",
+                          //   color: "red"
+                          // }}
+                          // _focusVisible={{
+                          //   borderColor: "#929292",
+                          // }}
+                          // variant="flushed"
+                          // borderColor="#929292"
+                        >
+                          {brands.map((brand) => (
+                            <option key={brand} value={brand.toLowerCase()}>
+                              {snakeToCamelWithSpaces(brand)}
+                            </option>
+                          ))}
+                        </Select>
+
                         {/* <Input
                           {...field}
                           bgColor="#3232320D"
@@ -263,19 +278,30 @@ export default function BecomeAnAgent() {
                   <Field name="tractor_type" validate={validateEmpty}>
                     {({ field, form }: { [x: string]: any }) => (
                       <FormControl
-                        isInvalid={form.errors.tractor_type && form.touched.tractor_type}
+                        isInvalid={
+                          form.errors.tractor_type && form.touched.tractor_type
+                        }
                       >
                         <FormLabel fontSize="12px" color="#323232">
                           Tractor type
                         </FormLabel>
-                        {/* <Input {...field} bgColor="#3232320D" /> */}
-                        <Input
-                        {...field}
+
+                        <Select
+                          {...field}
                           bgColor="#3232320D"
-                          placeholder="Select type"
                           fontSize="12px"
                           color="#323232"
-                        />
+                          placeholder="Select type"
+                        >
+                          {tractorTypes.map((tractorType) => (
+                            <option
+                              key={tractorType}
+                              value={tractorType.toLowerCase()}
+                            >
+                              {tractorType}
+                            </option>
+                          ))}
+                        </Select>
                         {/* <Select
                           bgColor="#3232320D"
                           placeholder="Select type"
@@ -284,7 +310,9 @@ export default function BecomeAnAgent() {
                         >
                           <option value="trc1">Tractor one</option>
                         </Select> */}
-                        <FormErrorMessage>{form.errors.tractor_type}</FormErrorMessage>
+                        <FormErrorMessage>
+                          {form.errors.tractor_type}
+                        </FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
@@ -303,7 +331,9 @@ export default function BecomeAnAgent() {
                           fontSize="12px"
                           color="#323232"
                         />
-                        <FormErrorMessage>{form.errors.rating}</FormErrorMessage>
+                        <FormErrorMessage>
+                          {form.errors.rating}
+                        </FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
@@ -322,7 +352,7 @@ export default function BecomeAnAgent() {
                           Purchase year
                         </FormLabel>
                         <Input
-                        {...field}
+                          {...field}
                           bgColor="#3232320D"
                           placeholder="Select year"
                           fontSize="12px"
@@ -358,7 +388,9 @@ export default function BecomeAnAgent() {
                           fontSize="12px"
                           color="#323232"
                         />
-                        <FormErrorMessage>{form.errors.chasis}</FormErrorMessage>
+                        <FormErrorMessage>
+                          {form.errors.chasis}
+                        </FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
@@ -368,7 +400,9 @@ export default function BecomeAnAgent() {
                   <Field name="plate_number" validate={validateEmpty}>
                     {({ field, form }: { [x: string]: any }) => (
                       <FormControl
-                        isInvalid={form.errors.plate_number && form.touched.plate_number}
+                        isInvalid={
+                          form.errors.plate_number && form.touched.plate_number
+                        }
                       >
                         <FormLabel fontSize="12px" color="#323232">
                           Plate number
@@ -379,7 +413,9 @@ export default function BecomeAnAgent() {
                           fontSize="12px"
                           color="#323232"
                         />
-                        <FormErrorMessage>{form.errors.plate_number}</FormErrorMessage>
+                        <FormErrorMessage>
+                          {form.errors.plate_number}
+                        </FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
@@ -387,18 +423,36 @@ export default function BecomeAnAgent() {
                   <Field name="manufactured_year" validate={validateEmpty}>
                     {({ field, form }: { [x: string]: any }) => (
                       <FormControl
-                        isInvalid={form.errors.manufactured_year && form.touched.manufactured_year}
+                        isInvalid={
+                          form.errors.manufactured_year &&
+                          form.touched.manufactured_year
+                        }
                       >
                         <FormLabel fontSize="12px" color="#323232">
                           Manufacturing year
                         </FormLabel>
-                        <Input
+                        <Select
                           {...field}
                           bgColor="#3232320D"
                           fontSize="12px"
                           color="#323232"
-                        />
-                        <FormErrorMessage>{form.errors.manufactured_year}</FormErrorMessage>
+                          placeholder="Select year"
+                        >
+                          {years.map((year) => (
+                            <option key={year} value={year}>
+                              {year}
+                            </option>
+                          ))}
+                        </Select>
+                        {/* <Input
+                          {...field}
+                          bgColor="#3232320D"
+                          fontSize="12px"
+                          color="#323232"
+                        /> */}
+                        <FormErrorMessage>
+                          {form.errors.manufactured_year}
+                        </FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
@@ -414,7 +468,7 @@ export default function BecomeAnAgent() {
                           Is the tractor insured
                         </FormLabel>
                         <Select
-                        {...field}
+                          {...field}
                           bgColor="#3232320D"
                           placeholder="Select"
                           fontSize="12px"
@@ -423,15 +477,21 @@ export default function BecomeAnAgent() {
                           <option value="yes">Yes</option>
                           <option value="no">No</option>
                         </Select>
-                        <FormErrorMessage>{form.errors.insured}</FormErrorMessage>
+                        <FormErrorMessage>
+                          {form.errors.insured}
+                        </FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
 
-                  <Field name="insurance_company" validate={validateEmpty}>
+                  <Field name="insurance_company">
+                    {/* <Field name="insurance_company" validate={validateEmpty}> */}
                     {({ field, form }: { [x: string]: any }) => (
                       <FormControl
-                        isInvalid={form.errors.insurance_company && form.touched.insurance_company}
+                        isInvalid={
+                          form.errors.insurance_company &&
+                          form.touched.insurance_company
+                        }
                       >
                         <FormLabel fontSize="12px" color="#323232">
                           Insurance company
@@ -442,17 +502,22 @@ export default function BecomeAnAgent() {
                           fontSize="12px"
                           color="#323232"
                         />
-                        <FormErrorMessage>{form.errors.insurance_company}</FormErrorMessage>
+                        <FormErrorMessage>
+                          {form.errors.insurance_company}
+                        </FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
                 </Flex>
 
                 <Flex my="40px" columnGap="30px">
-                  <Field name="insurance_expiry" validate={validateEmpty}>
+                  <Field name="insurance_expiry">
                     {({ field, form }: { [x: string]: any }) => (
                       <FormControl
-                        isInvalid={form.errors.insurance_expiry && form.touched.insurance_expiry}
+                        isInvalid={
+                          form.errors.insurance_expiry &&
+                          form.touched.insurance_expiry
+                        }
                       >
                         <FormLabel fontSize="12px" color="#323232">
                           Insurance expiry
@@ -471,7 +536,9 @@ export default function BecomeAnAgent() {
                         >
                           <option value="trc1">2 weeks</option>
                         </Select> */}
-                        <FormErrorMessage>{form.errors.insurance_expiry}</FormErrorMessage>
+                        <FormErrorMessage>
+                          {form.errors.insurance_expiry}
+                        </FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
@@ -485,7 +552,7 @@ export default function BecomeAnAgent() {
                           Is there a tracker
                         </FormLabel>
                         <Select
-                        {...field}
+                          {...field}
                           bgColor="#3232320D"
                           placeholder="Select"
                           fontSize="12px"
@@ -494,7 +561,9 @@ export default function BecomeAnAgent() {
                           <option value="yes">Yes</option>
                           <option value="no">No</option>
                         </Select>
-                        <FormErrorMessage>{form.errors.tracker}</FormErrorMessage>
+                        <FormErrorMessage>
+                          {form.errors.tracker}
+                        </FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
@@ -580,7 +649,12 @@ export default function BecomeAnAgent() {
                             onChange={(event) => {
                               const files = event?.currentTarget?.files;
                               if (files) {
-                                form.setFieldValue(field.name, files[0]);
+                                const file = files[0];
+                                if (file.size > MAX_IMAGE_SIZE_BYTES) {
+                                  toast.error('Image size exceeds the maximum allowed size (2MB). Please select a smaller image.');
+                                  return;
+                                }
+                                form.setFieldValue(field.name, file);
                               }
                             }}
                             // {...field}
@@ -667,10 +741,11 @@ export default function BecomeAnAgent() {
                 alt="Checkmark image icon"
               />
               <Text fontSize="16px" fontWeight={600}>
-              Enlisting Completed
+                Enlisting Completed
               </Text>
               <Text my="8px" fontSize="14px">
-              Thank you for providing us with this information, check you profile for the status of your tractor
+                Thank you for providing us with this information, check you
+                profile for the status of your tractor
               </Text>
               <Button
                 mb="4px"
@@ -698,6 +773,8 @@ export default function BecomeAnAgent() {
 }
 
 const brands = ["case_ih", "sonalika", "john_deere", "mahindra", "others"];
+
+const tractorTypes = ["Harrower", "Ridger", "Plougher"];
 
 const states = [
   "Abia",

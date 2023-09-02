@@ -34,6 +34,9 @@ import {
   CrawlerHandDrawnTransportWhite,
   ToolsWhite,
   TrackWhite,
+  TaskList,
+  TaskListColored,
+  TaskListWhite,
 } from "../components/Icons";
 import { IconBaseProps } from "react-icons";
 import { usePathname } from "next/navigation";
@@ -72,7 +75,8 @@ export default function Dashboard() {
       name: "Enlist your Tractor",
       imageLight: "dashboard-light",
       imageDark: "dashboard-dark",
-      icon: Money_2,
+      icon: TaskListColored,
+      iconActive: TaskListWhite,
       path: `${path}/enlist-tractor`,
     },
     {

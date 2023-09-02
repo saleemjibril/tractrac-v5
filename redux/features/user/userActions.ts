@@ -24,10 +24,6 @@ export const tractorOnboarding = createAsyncThunk<
 
     console.log(response.data, response.status)
 
-    // console.log("DATA", user, token)
-    // store user's token in local storage
-    // secureLocalStorage.setItem("xad", JSON.stringify(user));
-    // secureLocalStorage.setItem("xak", token);
     return response.data;
   } catch (error) {
     console.log(error);

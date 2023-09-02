@@ -77,18 +77,6 @@ export const userApi = createApi({
         body: transformRequest(data),
       }),
     }),
-    hireTractor: builder.mutation({
-      query: (data: any) => ({
-        url: "/hire_a_tractor",
-        method: "POST",
-        // body: data,
-        body: transformRequest(data),
-        // formData: true,
-        // headers: {
-        //   "Content-Type": "multipart/form-data",
-        // },
-      }),
-    }),
     becomeAnOpOrMech: builder.mutation({
       query: (data: any) => ({
         url: "/become_an_operator_or_mech",
@@ -114,7 +102,7 @@ export const {
   useInvestInTractorMutation,
   useValidateIssamIdMutation,
   useCollaborateMutation,
-  useHireTractorMutation,
+  // useHireTractorMutation,
   useBecomeAnOpOrMechMutation
 } = userApi;
 // export const { useGetActiveUsersQuery } = userApi

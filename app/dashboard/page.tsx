@@ -9,7 +9,15 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { SidebarWithHeader } from "../components/Sidenav";
-import { TaskList, TractorIcon, Track, Tractor_2, Money_2, Demand, TaskListWhite } from "../components/Icons";
+import {
+  TaskList,
+  TractorIcon,
+  Track,
+  Tractor_2,
+  Money_2,
+  Demand,
+  TaskListWhite,
+} from "../components/Icons";
 import { createElement, useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import { usePathname } from "next/navigation";
@@ -32,7 +40,7 @@ export default function Dashboard() {
       // imageLight: "home-light",
       // imageDark: "home-dark",
       icon: Tractor_2,
-      path: `#`,
+      path: `${path}/hired-tractors`,
     },
     {
       name: "Enlisted Tractors",
@@ -127,7 +135,7 @@ export default function Dashboard() {
         spacingX={{ base: "20px", md: "40px" }}
         spacingY="20px"
         p={{ base: "0px", md: "0px" }}
-        mr={{base: "0px", lg: "120px"}}
+        mr={{ base: "0px", lg: "120px" }}
       >
         {PageItems.map((pageItem, index) => {
           //  const [isHovering, setIsHovered] = useState(false);
@@ -203,6 +211,38 @@ export default function Dashboard() {
           );
         })}
       </SimpleGrid>
+      <Box bgColor="#FFFFFF" mt="50px"  mr={{ base: "0px", lg: "120px" }} px="66px" py="43px" borderRadius="6px">
+        <Text color="#333333" fontWeight={700} fontSize="28px">
+          Engagement Overview
+        </Text>
+
+        <SimpleGrid
+        mt="20px"
+        columns={{ base: 2, lg: 3 }}
+        spacingX={{ base: "24px" }}
+        spacingY="20px"
+        >
+
+          <StatisticsCard title="Total Amount Invested" amount="2904" />
+          <StatisticsCard title="Total Farmers Registered" amount="2904" />
+          <StatisticsCard title="Total Tractors Hired" amount="150" />
+          <StatisticsCard title="Total Agent Registered" amount="150" />
+          <StatisticsCard title="Total Tractors Enlisted" amount="300" />
+          <StatisticsCard title="Total Number of Demand Fulfilled" amount="300" />
+
+
+
+        </SimpleGrid>
+
+
+      </Box>
     </SidebarWithHeader>
   );
+}
+
+function StatisticsCard({amount, title}:{amount: string, title: string}){
+  return <Box border="1px" borderColor="#F8A730" p="20px" textAlign="center">
+      <Text fontWeight={700} fontSize={amount?.length > 9 ? "24px": "28px"}>{amount}</Text>
+      <Text fontSize="14px" mt="10px">{title}</Text>
+  </Box>
 }

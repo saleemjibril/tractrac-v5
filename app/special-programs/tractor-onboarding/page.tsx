@@ -47,6 +47,8 @@ import { tractorOnboarding } from "@/redux/features/user/userActions";
 //     loading: () => <p>Loading...</p>,
 //   })
 
+const MAX_IMAGE_SIZE_BYTES = 2 * 1024 * 1024;
+
 export default function BecomeAnAgent() {
   const [error, setError] = useState<string | null>(null);
   const [idImageError, setIdImageError] = useState<string | null>(null);
@@ -405,7 +407,12 @@ export default function BecomeAnAgent() {
                             onChange={(event) => {
                               const files = event?.currentTarget?.files;
                               if (files) {
-                                form.setFieldValue(field.name, files[0]);
+                                const file = files[0];
+                                if (file.size > MAX_IMAGE_SIZE_BYTES) {
+                                  toast.error('Image size exceeds the maximum allowed size (2MB). Please select a smaller image.');
+                                  return;
+                                }
+                                form.setFieldValue(field.name, file);
                               }
                             }}
                             // {...field}
@@ -444,6 +451,13 @@ export default function BecomeAnAgent() {
                             ref={inputRef2}
                             onChange={(event) => {
                               if (event?.currentTarget?.files) {
+                                const file = event?.currentTarget?.files[0];
+                                if (file.size > MAX_IMAGE_SIZE_BYTES) {
+                                  toast.error('Image size exceeds the maximum allowed size (2MB). Please select a smaller image.');
+                                  return;
+                                }
+
+                                
                                 form.setFieldValue(
                                   field.name,
                                   event?.currentTarget?.files[0]
