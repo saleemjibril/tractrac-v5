@@ -33,7 +33,7 @@ const statusTypes: Record<string, { title: string; color: string }> = {
   not_approved: { title: "Not Approved", color: "#FE391E" },
 };
 
-export default function EnlistedTractors() {
+export default function HiredTractors() {
   return (
     <SidebarWithHeader>
       {/* <EmptyTractorsPlaceholder /> */}

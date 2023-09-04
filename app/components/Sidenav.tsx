@@ -26,6 +26,8 @@ import {
   Spacer,
   ComponentWithAs,
   IconProps,
+  Button,
+  Show,
 } from "@chakra-ui/react";
 import {
   FiHome,
@@ -41,9 +43,15 @@ import { IconType } from "react-icons";
 
 import { FaUser } from "react-icons/fa";
 
-import { SearchIcon, StarIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, SearchIcon, StarIcon } from "@chakra-ui/icons";
 import { usePathname, useRouter } from "next/navigation";
-import { HomeDark, Dashboard, Payment, User, TractorPlusDark } from "../components/Icons";
+import {
+  HomeDark,
+  Dashboard,
+  Payment,
+  User,
+  TractorPlusDark,
+} from "../components/Icons";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useEffect, useState, useId } from "react";
 import { userLogout } from "@/redux/features/auth/authActions";
@@ -109,7 +117,7 @@ const LinkItems: Array<LinkItemProps> = [
     path: "#",
     icon: Payment,
   },
-  
+
   //   { name: 'Favourites', icon: FiStar },
   {
     name: "Account",
@@ -138,14 +146,19 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       {...rest}
     >
       <Box pl="18px" pt="24px" as="a" href="/" display="block">
-      <Image
-        display={{ base: "none", md: "flex" }}
-        src="/logo.svg"
-        fill="red"
-        alt="Logo"
-      />
+        <Image
+          display={{ base: "none", md: "flex" }}
+          src="/logo.svg"
+          fill="red"
+          alt="Logo"
+        />
       </Box>
-      <Flex h={{base: "20", md: "8"}} alignItems="center" mx="8" justifyContent="space-between">
+      <Flex
+        h={{ base: "20", md: "8" }}
+        alignItems="center"
+        mx="8"
+        justifyContent="space-between"
+      >
         {/* <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
           Logo
         </Text> */}
@@ -242,6 +255,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const [mounted, setMounted] = useState(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const pathLength = usePathname().split('/').length;
   useEffect(() => {
     // console.log(profileInfo)
     setMounted(true);
@@ -274,14 +288,31 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         alt="Logo"
       />
 
+     { pathLength > 2 && <Show above="sm">
+        <Button
+          mr="auto"
+          border="1px"
+          bgColor="transparent"
+          onClick={() => {
+            router.back();
+          }}
+        >
+          <ArrowBackIcon boxSize="20px" mr="14px" />
+          <Text fontSize="14px" fontWeight={400}>
+            Back 
+          </Text>
+        </Button>
+      </Show>
+}
+
       <HStack spacing={{ base: "0", md: "6" }}>
         {/* <IconButton size="lg" variant="ghost" aria-label="open menu" icon={<FiBell />} /> */}
         <Flex alignItems={"center"}>
           <Menu id="app-menu">
             <MenuButton
-            //  className="kkk"
-             
-             id="kkkkjjj"
+              //  className="kkk"
+
+              id="kkkkjjj"
               py={2}
               transition="all 0.3s"
               _focus={{ boxShadow: "none" }}
@@ -300,7 +331,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   ml="2"
                 >
                   {mounted && (
-                    <Text fontSize="sm">Hello, {profileInfo?.fname}</Text>
+                    <Text fontSize="sm">Hello, {profileInfo?.fname ?? "Guest"}</Text>
                   )}
                   {/* <Text fontSize="xs" color="gray.600">
                     Admin
@@ -320,7 +351,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               {/* <MenuItem>Billing</MenuItem> */}
               <MenuDivider />
               <MenuItem
-              key="3"
+                key="3"
                 onClick={() => {
                   dispatch(userLogout());
                   toast.success("You have been logged out successfully");
@@ -345,18 +376,17 @@ interface ModalProps {
 
 export const SidebarWithHeader: React.FC<ModalProps> = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const router = useRouter();
-  const { profileInfo } = useAppSelector((state) => state.auth);
+  // const router = useRouter();
+  // const { profileInfo } = useAppSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (!profileInfo) {
-      router.replace("/login");
-    }
-  });
+  // useEffect(() => {
+  //   if (!profileInfo) {
+  //     router.replace("/login");
+  //   }
+  // });
 
   return (
     <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")} p={0}>
-    
       <SidebarContent
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}

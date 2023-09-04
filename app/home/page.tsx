@@ -41,6 +41,8 @@ import {
 import { IconBaseProps } from "react-icons";
 import { usePathname } from "next/navigation";
 import { useState, createElement } from "react";
+import { useAppSelector } from "@/redux/hooks";
+import LoginRequiredModal from "../components/LoginRequiredModal";
 
 interface ItemProps {
   name: string;
@@ -49,11 +51,15 @@ interface ItemProps {
   iconActive?: ComponentWithAs<"svg", IconProps>;
   imageLight: string;
   imageDark: string;
+  loginRequired: boolean;
 }
 
 export default function Dashboard() {
   const path = usePathname();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const [modalState, setModalState] = useState<boolean>(false);
+  const { profileInfo } = useAppSelector((state) => state.auth);
 
   const PageItems: Array<ItemProps> = [
     {
@@ -63,6 +69,7 @@ export default function Dashboard() {
       icon: TractorPlus,
       iconActive: TractorPlusWhite,
       path: `/special-programs`,
+      loginRequired: false,
     },
     {
       name: "Hire a Tractor",
@@ -70,6 +77,7 @@ export default function Dashboard() {
       imageDark: "pay-dark",
       icon: Tractor_2,
       path: `${path}/hire-tractor`,
+      loginRequired: true,
     },
     {
       name: "Enlist your Tractor",
@@ -78,6 +86,7 @@ export default function Dashboard() {
       icon: TaskListColored,
       iconActive: TaskListWhite,
       path: `${path}/enlist-tractor`,
+      loginRequired: true,
     },
     {
       name: "Become an Agent",
@@ -86,6 +95,7 @@ export default function Dashboard() {
       icon: Agent2,
       iconActive: IconWhite6,
       path: `${path}/agent`,
+      loginRequired: true,
     },
     {
       name: "Invest In Tractors",
@@ -93,6 +103,7 @@ export default function Dashboard() {
       imageDark: "user-dark",
       icon: Money_2,
       path: `${path}/invest-in-tractor`,
+      loginRequired: false,
     },
     {
       name: "Register as Vendors",
@@ -101,6 +112,7 @@ export default function Dashboard() {
       icon: Vendor,
       iconActive: CrawlerHandDrawnTransportWhite,
       path: "/reg",
+      loginRequired: true,
     },
     {
       name: "Enlist as Operator/Mechanic",
@@ -109,6 +121,7 @@ export default function Dashboard() {
       icon: Wrench,
       iconActive: ToolsWhite,
       path: `${path}/enlist-as-op-mech`,
+      loginRequired: true,
     },
     {
       name: "Measure your Farm",
@@ -117,6 +130,7 @@ export default function Dashboard() {
       icon: Measure,
       iconActive: IconWhite8,
       path: "#",
+      loginRequired: true,
     },
     {
       name: "Track your Tractor",
@@ -125,6 +139,7 @@ export default function Dashboard() {
       icon: Track,
       iconActive: TrackWhite,
       path: "#",
+      loginRequired: true,
     },
   ];
 
@@ -132,7 +147,7 @@ export default function Dashboard() {
     <SidebarWithHeader>
       <SimpleGrid
         columns={{ base: 2, xl: 3 }}
-        spacing={{base: "12px", md: "40px"}}
+        spacing={{ base: "12px", md: "40px" }}
         p={{ base: "0px", md: "50px" }}
       >
         {PageItems.map((pageItem, index) => {
@@ -146,6 +161,12 @@ export default function Dashboard() {
               flexDir="column"
               as="a"
               href={pageItem.path}
+              onClick={(e) => {
+                if (pageItem.loginRequired && !profileInfo?.id) {
+                  setModalState(true);
+                  e.preventDefault();
+                }
+              }}
               py="35px"
               px="15px"
               alignItems="center"
@@ -165,8 +186,7 @@ export default function Dashboard() {
               {createElement(
                 hoveredIndex === index && pageItem.iconActive
                   ? pageItem.iconActive
-                  : 
-                  pageItem.icon, // Use iconDark if hovered
+                  : pageItem.icon, // Use iconDark if hovered
                 {
                   className: "item-icon",
                   color: "#FA9411",
@@ -180,13 +200,19 @@ export default function Dashboard() {
               /> */}
               {/* <Money_2  color="#FA9411" boxSize="40px" /> */}
               {/* <Image src="icons/tractor-light.svg" alt="" width="80px" /> */}
-              <Text fontSize={{base: "14px", md: "18px"}} fontWeight={600} mt="16px" textAlign="center">
+              <Text
+                fontSize={{ base: "14px", md: "18px" }}
+                fontWeight={600}
+                mt="16px"
+                textAlign="center"
+              >
                 {pageItem.name}
               </Text>
             </Flex>
           );
         })}
       </SimpleGrid>
+      <LoginRequiredModal title="" isOpen={modalState} setModalState={setModalState} />
     </SidebarWithHeader>
   );
 }

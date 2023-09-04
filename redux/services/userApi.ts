@@ -43,12 +43,12 @@ export const userApi = createApi({
     //   }),
     // //   providesTags: ['users'],
     // }),
-    // getUser: builder.query({
-    //   query: (userId) => ({
-    //     url: `/api/system/admin-app/user/${userId}`,
-    //     method: 'GET',
-    //   }),
-    // }),
+    getDashboardStats: builder.query({
+      query: () => ({
+        url: "/dashboard_stats",
+        method: "GET",
+      }),
+    }),
     becomeAnAgent: builder.mutation({
       query: ({ user_id, state, lga, town }) => ({
         url: "/become_an_agent",
@@ -97,12 +97,11 @@ export const userApi = createApi({
 export const {
   //   useLazyGetActiveUsersQuery,
   //   useLazyGetInActiveUsersQuery,
-  //   useLazyGetUserQuery,
+  useGetDashboardStatsQuery,
   useBecomeAnAgentMutation,
   useInvestInTractorMutation,
   useValidateIssamIdMutation,
   useCollaborateMutation,
-  // useHireTractorMutation,
-  useBecomeAnOpOrMechMutation
+  useBecomeAnOpOrMechMutation,
 } = userApi;
 // export const { useGetActiveUsersQuery } = userApi

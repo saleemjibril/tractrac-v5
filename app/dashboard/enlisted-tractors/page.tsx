@@ -10,16 +10,23 @@ import {
   Button,
   Center,
   Stack,
+  SkeletonCircle,
+  SkeletonText,
+  Skeleton,
 } from "@chakra-ui/react";
 import { SidebarWithHeader } from "../../components/Sidenav";
 import { createElement, useEffect, useState } from "react";
 import PersonalOverview from "@/app/components/PersonalOverview";
+import { useGetEnlistedTractorsQuery } from "@/redux/services/tractorApi";
+import { useAppSelector } from "@/redux/hooks";
 
 interface ITractorCard {
   name: string;
   capacity: string;
+  type: string;
   location: string;
   status: string;
+  image: string;
 }
 
 const statusTypes: Record<string, { title: string; color: string }> = {
@@ -29,85 +36,147 @@ const statusTypes: Record<string, { title: string; color: string }> = {
 };
 
 export default function EnlistedTractors() {
+  const { profileInfo } = useAppSelector((state) => state.auth);
+
+  const {
+    data: result,
+    error,
+    // isFetching,
+    isLoading,
+    // } = useGetEnlistedTractorsQuery("39");
+  } = useGetEnlistedTractorsQuery(profileInfo?.id);
+
+  console.log(error, result);
+
+  // const skeletons = [1,2,3,4,5,6];
+
   return (
     <SidebarWithHeader>
-      {/* <EmptyTractorsPlaceholder /> */}
+      {/* <SimpleGrid columns={{ base: 2, md: 4 }} spacingX="40px" spacingY="20px">
+        {[1, 2, 3, 4, 5, 6, 7, 8].map((index) => (
+          <Box key={index} boxShadow="lg" bg="white" borderRadius="4px">
+            <Skeleton height="120px" />
+            <Box p="12px">
+              <SkeletonText
+                my="12px"
+                noOfLines={3}
+                spacing="3"
+                skeletonHeight="6px"
+              />
 
-      <Box mx="20px" my="12px" py="20px">
-        <Flex justifyContent="space-between" mb="20px">
-          <Stack>
-            <Text fontSize="24px" fontWeight={700} lineHeight="24px">
-              Enlisted tractors.
-            </Text>
-            <Text color="#323232">
-              Below is the list of tractors you&apos;ve enlisted on TracTrac
-            </Text>
-          </Stack>
-          <Button
-            bgColor="#FA9411"
-            height="42px"
-            borderRadius="4px"
-            width="200px"
-            color="white"
-            as="a"
-            href="/home/enlist-tractor"
-            _hover={{
-              opacity: 0.8,
-            }}
-          >
-            Enlist a new tractor
-          </Button>
-        </Flex>
+              <Skeleton mt="12px" height="30px" borderRadius="4px" w="111px" />
+            </Box>
 
-        <SimpleGrid
-          columns={{ base: 2, md: 4 }}
-          spacingX="40px"
-          spacingY="20px"
-          mt="10px"
-          // spacing={{ base: "12px", md: "40px" }}
-        >
-          <TractorCard
-            name="John Deere 5075E"
-            capacity=" 105 to 135 HP"
-            location="Yola"
-            status="pending"
-          />
+             <SkeletonCircle size="10" /> 
+          
+          </Box>
+        ))}
+      </SimpleGrid> */}
 
-          <TractorCard
-            name="John Deere 5075E"
-            capacity=" 105 to 135 HP"
-            location="Yola"
-            status="verified"
-          />
+      {/* {error ? (
+        <EmptyTractorsPlaceholder />
+      ) : ( */}
+        <Box mx="20px" my="12px" py="20px">
+          <Flex justifyContent="space-between" mb="20px">
+            <Stack>
+              <Text fontSize="24px" fontWeight={700} lineHeight="24px">
+                Enlisted tractors.
+              </Text>
+              <Text color="#323232">
+                Below is the list of tractors you&apos;ve enlisted on TracTrac
+              </Text>
+            </Stack>
+            <Button
+              bgColor="#FA9411"
+              height="42px"
+              borderRadius="4px"
+              width="200px"
+              color="white"
+              as="a"
+              href="/home/enlist-tractor"
+              _hover={{
+                opacity: 0.8,
+              }}
+            >
+              Enlist a new tractor
+            </Button>
+          </Flex>
 
-          <TractorCard
-            name="John Deere 5075E"
-            capacity=" 105 to 135 HP"
-            location="Yola"
-            status="in_use"
-          />
+          {isLoading ? (
+            <SimpleGrid
+              columns={{ base: 2, md: 4 }}
+              spacingX="40px"
+              spacingY="20px"
+            >
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((index) => (
+                <Box key={index} boxShadow="lg" bg="white" borderRadius="4px">
+                  <Skeleton height="120px" />
+                  <Box p="12px">
+                    <SkeletonText
+                      my="12px"
+                      noOfLines={3}
+                      spacing="3"
+                      skeletonHeight="6px"
+                    />
 
-          <TractorCard
-            name="John Deere 5075E"
-            capacity=" 105 to 135 HP"
-            location="Yola"
-            status="in_use"
-          />
-        </SimpleGrid>
+                    <Skeleton
+                      mt="12px"
+                      height="30px"
+                      borderRadius="4px"
+                      w="111px"
+                    />
+                  </Box>
 
-        <PersonalOverview />
-      </Box>
+                  {/* <SkeletonCircle size="10" /> */}
+                  {/* */}
+                </Box>
+              ))}
+              </SimpleGrid>
+          ) : error ? (
+            <EmptyTractorsPlaceholder />
+          ) : (
+            <SimpleGrid
+              columns={{ base: 2, md: 4 }}
+              spacingX="40px"
+              spacingY="20px"
+              mt="10px"
+              // spacing={{ base: "12px", md: "40px" }}
+            >
+              {result?.data.map((tractor: any) => (
+              <TractorCard
+              key={tractor?.id}
+                name={`${tractor?.brand} ${tractor?.model}`}
+                capacity=" 105 to 135 HP"
+                type={tractor?.tractor_type}
+                location={tractor?.state}
+                image={tractor?.image}
+                status={tractor?.status}
+              />
+              ))}
+
+            
+
+             
+            </SimpleGrid>
+          )}
+
+          <PersonalOverview />
+        </Box>
+      
     </SidebarWithHeader>
   );
 }
 
-function TractorCard({ name, capacity, location, status }: ITractorCard) {
+function TractorCard({ name, type, location, status, image }: ITractorCard) {
   return (
     <Box boxShadow="md" borderRadius="4px">
       <Box h="200px">
         <Image
           borderTopRadius="4px"
-          src="/images/man-with-tractor.svg"
+          // src="/images/man-with-tractor.svg"
+          src={
+            image?.startsWith("https") ? image : "/images/man-with-tractor.svg"
+          }
           alt="Man with a tractor image"
           height="100%"
           width="100%"
@@ -131,15 +200,27 @@ function TractorCard({ name, capacity, location, status }: ITractorCard) {
           mt="8px"
           lineHeight="12.1px"
         >
+          Type:{" "}
+          <Box fontWeight={500} as="span">
+            {type}
+          </Box>
+        </Text>
+        {/* <Text
+          fontSize="12px"
+          color="#323232"
+          fontWeight={700}
+          mt="8px"
+          lineHeight="12.1px"
+        >
           Capacity:
           <Box fontWeight={500} as="span">
             {capacity}
           </Box>
-        </Text>
+        </Text> */}
         <Text fontSize="12px" color="#323232" fontWeight={700} mt="8px">
           Location:{" "}
           <Box fontWeight={500} as="span">
-            {location}
+            {location?.length < 1 ? "Nil" : location}
           </Box>
         </Text>
         {statusTypes[status]?.color && (
@@ -164,7 +245,8 @@ function TractorCard({ name, capacity, location, status }: ITractorCard) {
 function EmptyTractorsPlaceholder() {
   return (
     <Flex justifyContent="center" alignItems="center">
-      <Box bgColor="white" width="400px" p="60px" textAlign="center" mt="40px">
+      <Box bgColor="white" width="100%" p="60px" textAlign="center" mt="20px">
+      {/* <Box bgColor="white" width="400px" p="60px" textAlign="center" mt="40px"> */}
         <Center>
           <Image src="/images/empty-state.svg" alt="Empty state image icon" />
         </Center>
@@ -176,7 +258,7 @@ function EmptyTractorsPlaceholder() {
           All Enlisted Tractors will be listed in this page
         </Text>
 
-        <Button
+        {/* <Button
           as="a"
           mt="50px"
           href="/home/enlist-tractor"
@@ -186,7 +268,7 @@ function EmptyTractorsPlaceholder() {
           color="white"
         >
           Enlist your tractor
-        </Button>
+        </Button> */}
       </Box>
     </Flex>
   );

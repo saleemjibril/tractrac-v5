@@ -1,10 +1,12 @@
 "use client";
 import { Box, Image, SimpleGrid, Flex, Text, Link, Icon, ComponentWithAs, IconProps } from "@chakra-ui/react";
 import { SidebarWithHeader } from "../components/Sidenav";
-import { Tractor, Wrench, Money_2, TractorPlus, Agent2, Vendor, Measure, Track, IconWhite6, Tractor_2, TractorPlusWhite } from "../components/Icons";
+import { Tractor, Wrench, Money_2, TractorPlus, Agent2, Vendor, Measure, Track, IconWhite6, Tractor_2, TractorPlusWhite, Machinery, MachineryWhite } from "../components/Icons";
 import { IconBaseProps } from "react-icons";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { createElement, useState } from "react";
+import LoginRequiredModal from "../components/LoginRequiredModal";
+import { useAppSelector } from "@/redux/hooks";
 
 interface ItemProps {
   name: string;
@@ -13,11 +15,15 @@ interface ItemProps {
   iconActive?: ComponentWithAs<"svg", IconProps>;
   imageLight: string;
   imageDark: string;
+  requiredLogin: boolean
 }
 
 export default function Dashboard() {
  const path =   usePathname()
+ const router =   useRouter()
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [modalState, setModalState] = useState<boolean>(false);
+  const { profileInfo } = useAppSelector((state) => state.auth);
   
   const PageItems: Array<ItemProps> = [
     {
@@ -27,14 +33,17 @@ export default function Dashboard() {
       icon: TractorPlus,
       iconActive: TractorPlusWhite,
       path: `${path}/issam`,
+      requiredLogin: true,
     },
     {
       name: "Women in Mechanization",
       imageLight: "pay-light",
       imageDark: "pay-dark",
       // icon: Tractor ,
-      icon: Tractor_2,
+      icon: Machinery,
+      iconActive: MachineryWhite,
       path: `${path}/women-in-mech`,
+      requiredLogin: true,
     },
     {
       name: "Tractor Onboarding",
@@ -44,6 +53,7 @@ export default function Dashboard() {
       icon: Agent2,
       iconActive: IconWhite6,
       path: `${path}/tractor-onboarding`,
+      requiredLogin: true,
     },
     {
       name: "Collaborate with Us",
@@ -51,6 +61,7 @@ export default function Dashboard() {
       imageDark: "user-dark",
       icon: Money_2 ,
       path: `${path}/collaborate`,
+      requiredLogin: false,
     }
   ];
 
@@ -66,11 +77,21 @@ export default function Dashboard() {
           return (
             <Flex
               key={pageItem.path}
+              cursor="pointer"
               onMouseEnter={() => setHoveredIndex(index)} // Set hoveredIndex on mouse enter
               onMouseLeave={() => setHoveredIndex(null)} 
               flexDir="column"
-              as="a"
-              href={pageItem.path}
+              // as="a"
+              onClick={()=>{
+
+                if(pageItem.requiredLogin && !profileInfo?.id){
+                  setModalState(true);
+                }else{
+                  router.push(pageItem.path);
+                }
+
+              }}
+              // href={pageItem.path}
               px="15px"
               py="35px"
               alignItems="center"
@@ -103,6 +124,7 @@ export default function Dashboard() {
           );
         })}
       </SimpleGrid>
+      <LoginRequiredModal title="" isOpen={modalState} setModalState={setModalState} />
     </SidebarWithHeader>
   );
 }

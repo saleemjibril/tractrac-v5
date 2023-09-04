@@ -35,12 +35,18 @@ export const tractorApi = createApi({
 
     getTractors: builder.query({
       query: () => ({
-        url: '/tractors',
-        method: 'GET',
+        url: "/tractors",
+        method: "GET",
       }),
     }),
 
-   
+    getEnlistedTractors: builder.query({
+      query: (user_id) => ({
+        url: `/enlisted_tractors/${user_id}`,
+        method: "GET",
+      }),
+    }),
+
     hireTractor: builder.mutation({
       query: (data: any) => ({
         url: "/hire_a_tractor",
@@ -48,14 +54,13 @@ export const tractorApi = createApi({
         body: transformRequest(data),
       }),
     }),
-    
-   
   }),
 });
 
 // export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
 export const {
-    useGetTractorsQuery,
+  useGetTractorsQuery,
+  useGetEnlistedTractorsQuery,
   useHireTractorMutation,
 } = tractorApi;

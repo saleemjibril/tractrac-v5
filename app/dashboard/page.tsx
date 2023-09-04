@@ -11,8 +11,6 @@ import {
 import { SidebarWithHeader } from "../components/Sidenav";
 import {
   TaskList,
-  TractorIcon,
-  Track,
   Tractor_2,
   Money_2,
   Demand,
@@ -21,6 +19,7 @@ import {
 import { createElement, useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import { usePathname } from "next/navigation";
+import { useGetDashboardStatsQuery } from "@/redux/services/userApi";
 
 interface ItemProps {
   name: string;
@@ -115,6 +114,24 @@ export default function Dashboard() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const { profileInfo } = useAppSelector((state) => state.auth);
+
+  const {
+    data: result,
+    // isFetching,
+    isLoading,
+  } = useGetDashboardStatsQuery({});
+
+  console.log(result?.data);
+
+  /**
+   * 
+   *    "data": {
+        "": null,
+        "": null,
+        "": null
+    }
+
+   */
 
   return (
     <SidebarWithHeader>
@@ -211,38 +228,80 @@ export default function Dashboard() {
           );
         })}
       </SimpleGrid>
-      <Box bgColor="#FFFFFF" mt="50px"  mr={{ base: "0px", lg: "120px" }} px="66px" py="43px" borderRadius="6px">
+      <Box
+        bgColor="#FFFFFF"
+        mt="50px"
+        mr={{ base: "0px", lg: "120px" }}
+        px="66px"
+        py="43px"
+        borderRadius="6px"
+      >
         <Text color="#333333" fontWeight={700} fontSize="28px">
           Engagement Overview
         </Text>
 
         <SimpleGrid
-        mt="20px"
-        columns={{ base: 2, lg: 3 }}
-        spacingX={{ base: "24px" }}
-        spacingY="20px"
+          mt="20px"
+          columns={{ base: 2, lg: 3 }}
+          spacingX={{ base: "24px" }}
+          spacingY="20px"
         >
-
-          <StatisticsCard title="Total Amount Invested" amount="2904" />
+          <StatisticsCard
+            title="Total Amount Invested"
+            amount={result?.data?.total_investments || 0}
+          />
           <StatisticsCard title="Total Farmers Registered" amount="2904" />
-          <StatisticsCard title="Total Tractors Hired" amount="150" />
-          <StatisticsCard title="Total Agent Registered" amount="150" />
-          <StatisticsCard title="Total Tractors Enlisted" amount="300" />
-          <StatisticsCard title="Total Number of Demand Fulfilled" amount="300" />
-
-
-
+          <StatisticsCard
+            title="Total Tractors Hired"
+            amount={result?.data?.total_hired_tractors || 0}
+          />
+          <StatisticsCard
+            title="Total Agents Registered"
+            amount={result?.data?.total_agents || 0}
+          />
+          <StatisticsCard
+            title="Total Tractors Enlisted"
+            amount={result?.data?.total_tractors_enlisted || 0}
+          />
+          <StatisticsCard
+            title="Total Number of Demand Fulfilled"
+            amount="300"
+          />
         </SimpleGrid>
-
-
       </Box>
     </SidebarWithHeader>
   );
 }
 
-function StatisticsCard({amount, title}:{amount: string, title: string}){
-  return <Box border="1px" borderColor="#F8A730" p="20px" textAlign="center">
-      <Text fontWeight={700} fontSize={amount?.length > 9 ? "24px": "28px"}>{amount}</Text>
-      <Text fontSize="14px" mt="10px">{title}</Text>
-  </Box>
+function StatisticsCard({ amount, title }: { amount: string; title: string }) {
+  return (
+    <Box border="1px" borderColor="#F8A730" p="20px" textAlign="center">
+      <Text fontWeight={700} fontSize={amount?.length > 9 ? "24px" : "28px"}>
+        {formatNumber(amount)}
+      </Text>
+      <Text fontSize="14px" mt="10px">
+        {title}
+      </Text>
+    </Box>
+  );
+}
+
+function formatNumber(numberString: string) {
+  const number = parseFloat(numberString); // Convert the string to a number
+
+  if (isNaN(number)) {
+    // Handle invalid input (e.g., non-numeric strings)
+    return '0';
+  }
+
+  if (number >= 1000000) {
+    // Format numbers in millions as "X.Xm"
+    return (number / 1000000).toFixed(1) + 'm';
+  } else if (number >= 99999) {
+    // Format numbers in thousands with commas
+    return (number / 1000).toLocaleString() + 'k';
+  } else {
+    // Numbers below 1000 remain the same with commas
+    return number.toLocaleString();
+  }
 }
