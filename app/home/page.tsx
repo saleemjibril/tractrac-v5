@@ -111,7 +111,7 @@ export default function Dashboard() {
       imageDark: "user-dark",
       icon: Vendor,
       iconActive: CrawlerHandDrawnTransportWhite,
-      path: "/reg",
+      path: `${path}/register-as-vendor`,
       loginRequired: true,
     },
     {
@@ -138,7 +138,7 @@ export default function Dashboard() {
       imageDark: "user-dark",
       icon: Track,
       iconActive: TrackWhite,
-      path: "#",
+      path: `${path}/track-tractor`,
       loginRequired: true,
     },
   ];

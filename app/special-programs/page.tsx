@@ -33,7 +33,7 @@ export default function Dashboard() {
       icon: TractorPlus,
       iconActive: TractorPlusWhite,
       path: `${path}/issam`,
-      requiredLogin: true,
+      requiredLogin: false,
     },
     {
       name: "Women in Mechanization",
@@ -43,7 +43,7 @@ export default function Dashboard() {
       icon: Machinery,
       iconActive: MachineryWhite,
       path: `${path}/women-in-mech`,
-      requiredLogin: true,
+      requiredLogin: false,
     },
     {
       name: "Tractor Onboarding",

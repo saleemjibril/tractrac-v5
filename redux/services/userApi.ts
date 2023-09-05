@@ -43,6 +43,12 @@ export const userApi = createApi({
     //   }),
     // //   providesTags: ['users'],
     // }),
+    getPersonalStats: builder.query({
+      query: (user_id) => ({
+        url: `/personal_stats/${user_id}`,
+        method: "GET",
+      }),
+    }),
     getDashboardStats: builder.query({
       query: () => ({
         url: "/dashboard_stats",
@@ -89,6 +95,13 @@ export const userApi = createApi({
         // },
       }),
     }),
+    makePayment: builder.mutation({
+      query: (data: any) => ({
+        url: "/make_payment",
+        method: "POST",
+        body: transformRequest(data),
+      }),
+    }),
   }),
 });
 
@@ -96,12 +109,13 @@ export const userApi = createApi({
 // auto-generated based on the defined endpoints
 export const {
   //   useLazyGetActiveUsersQuery,
-  //   useLazyGetInActiveUsersQuery,
+  useGetPersonalStatsQuery,
   useGetDashboardStatsQuery,
   useBecomeAnAgentMutation,
   useInvestInTractorMutation,
   useValidateIssamIdMutation,
   useCollaborateMutation,
   useBecomeAnOpOrMechMutation,
+  useMakePaymentMutation,
 } = userApi;
 // export const { useGetActiveUsersQuery } = userApi

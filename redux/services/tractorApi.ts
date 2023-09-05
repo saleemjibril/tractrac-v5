@@ -47,9 +47,24 @@ export const tractorApi = createApi({
       }),
     }),
 
+    getHiredTractors: builder.query({
+      query: (user_id) => ({
+        url: `/hired_tractors/${user_id}`,
+        method: "GET",
+      }),
+    }),
+
     hireTractor: builder.mutation({
       query: (data: any) => ({
         url: "/hire_a_tractor",
+        method: "POST",
+        body: transformRequest(data),
+      }),
+    }),
+
+    registerAsVendor: builder.mutation({
+      query: (data: any) => ({
+        url: "/become_a_vendor",
         method: "POST",
         body: transformRequest(data),
       }),
@@ -62,5 +77,7 @@ export const tractorApi = createApi({
 export const {
   useGetTractorsQuery,
   useGetEnlistedTractorsQuery,
+  useGetHiredTractorsQuery,
   useHireTractorMutation,
+  useRegisterAsVendorMutation,
 } = tractorApi;

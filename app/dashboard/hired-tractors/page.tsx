@@ -19,25 +19,38 @@ import {
   Th,
   Thead,
   Tr,
+  Skeleton,
+  SkeletonText,
 } from "@chakra-ui/react";
 import { SidebarWithHeader } from "../../components/Sidenav";
 import { createElement, useEffect, useState } from "react";
 import PersonalOverview from "@/app/components/PersonalOverview";
 import { ArrowRight } from "iconsax-react";
 import { AddIcon, PlusSquareIcon } from "@chakra-ui/icons";
+import { useGetHiredTractorsQuery } from "@/redux/services/tractorApi";
+import { useAppSelector } from "@/redux/hooks";
 
 const statusTypes: Record<string, { title: string; color: string }> = {
   pending: { title: "Pending", color: "#FA9411" },
-  verified: { title: "Verified", color: "#27AE60" },
+  approved: { title: "Approved", color: "#27AE60" },
+  completed: { title: "Completed", color: "#27AE60" },
   in_use: { title: "In Use", color: "#F03B13" },
   not_approved: { title: "Not Approved", color: "#FE391E" },
 };
 
 export default function HiredTractors() {
+  const { profileInfo } = useAppSelector((state) => state.auth);
+
+  const {
+    data: result,
+    error,
+    // isFetching,
+    isLoading,
+  // } = useGetHiredTractorsQuery("3");
+  } = useGetHiredTractorsQuery(profileInfo?.id);
+
   return (
     <SidebarWithHeader>
-      {/* <EmptyTractorsPlaceholder /> */}
-
       <Box mx="20px" my="12px" py="20px">
         <Flex justifyContent="space-between" mb="10px" alignContent="center">
           <Text
@@ -69,127 +82,90 @@ export default function HiredTractors() {
           </Button>
         </Flex>
 
-        <TableContainer border="1px" borderColor="#32323220" borderRadius="12px">
-          <Table variant="simple" bgColor="white">
-            <Thead color="#323232" bgColor="#E2E8F0">
-              <Tr>
-                <Th>State</Th>
-                <Th>LGA</Th>
-                <Th>Address</Th>
-                <Th>Farm Size</Th>
-                <Th>Type of Service</Th>
-                <Th>Amount Paid (₦)</Th>
-                <Th>Start Date</Th>
-                <Th>End Date</Th>
-                <Th>Status</Th>
-                {/* <Th isNumeric>multiply by</Th> */}
-              </Tr>
-            </Thead>
-            <Tbody>
-              <Tr>
-                <Td>Kano</Td>
-                <Td>Dala</Td>
-                <Td>Dala Hill, Kano</Td>
-                <Td>10 Hectares</Td>
-                <Td>Harrowing</Td>
-                <Td>10,000</Td>
-                <Td>29/03/2021</Td>
-                <Td>10/05/2021</Td>
-                <Td>
-                  {" "}
-                  {statusTypes["pending"]?.color && (
-                    <Box
-                      mt="10px"
-                      bgColor={statusTypes["pending"].color}
-                      py="4px"
-                      textAlign="center"
-                      borderRadius="4px"
-                      w="80px"
-                    >
-                      <Text fontSize="14px" color="white">
-                        {statusTypes["pending"].title}
-                      </Text>
-                    </Box>
-                  )}
-                </Td>
-                {/* <Td isNumeric>25.4</Td> */}
-              </Tr>
-
-              <Tr>
-                <Td>Kano</Td>
-                <Td>Dala</Td>
-                <Td>Dala Hill, Kano</Td>
-                <Td>10 Hectares</Td>
-                <Td>Harrowing</Td>
-                <Td>10,000</Td>
-                <Td>29/03/2021</Td>
-                <Td>10/05/2021</Td>
-                <Td>
-                  {" "}
-                  {statusTypes["not_approved"]?.color && (
-                    <Box
-                      mt="10px"
-                      bgColor={statusTypes["not_approved"].color}
-                      py="4px"
-                      px="4px"
-                      textAlign="center"
-                      borderRadius="4px"
-                      w="80px"
-                    >
-                      <Text fontSize="14px" color="white" whiteSpace="break-spaces" lineHeight="12px">
-                        {statusTypes["not_approved"].title}
-                      </Text>
-                    </Box>
-                  )}
-                </Td>
-                {/* <Td isNumeric>25.4</Td> */}
-              </Tr>
-
-              <Tr>
-                <Td>Kano</Td>
-                <Td>Dala</Td>
-                <Td>Dala Hill, Kano</Td>
-                <Td>10 Hectares</Td>
-                <Td>Harrowing</Td>
-                <Td>10,000</Td>
-                <Td>29/03/2021</Td>
-                <Td>10/05/2021</Td>
-                <Td>
-                  {" "}
-                  {statusTypes["not_approved"]?.color && (
-                    <Box
-                      mt="10px"
-                      bgColor={statusTypes["not_approved"].color}
-                      py="4px"
-                      px="4px"
-                      textAlign="center"
-                      borderRadius="4px"
-                      w="80px"
-                    >
-                      <Text fontSize="14px" color="white" whiteSpace="break-spaces" lineHeight="12px">
-                        {statusTypes["not_approved"].title}
-                      </Text>
-                    </Box>
-                  )}
-                </Td>
-                {/* <Td isNumeric>25.4</Td> */}
-              </Tr>
-            </Tbody>
-            <Tfoot>
-              <Tr>
-                <Th>State</Th>
-                <Th>LGA</Th>
-                <Th>Address</Th>
-                <Th>Farm Size</Th>
-                <Th>Type of Service</Th>
-                <Th>Amount Paid (₦)</Th>
-                <Th>Start Date</Th>
-                <Th>End Date</Th>
-                <Th>Status</Th>
-              </Tr>
-            </Tfoot>
-          </Table>
-        </TableContainer>
+        {isLoading ? (
+          <Box boxShadow="lg" bg="white" borderRadius="12px">
+            <Skeleton height="80px" />
+            <Box p="12px">
+              <SkeletonText
+                my="12px"
+                noOfLines={8}
+                spacing="3"
+                skeletonHeight="24px"
+              />
+            </Box>
+          </Box>
+        ) : error ? (
+          <EmptyTractorsPlaceholder />
+        ) : (
+          <TableContainer
+            border="1px"
+            borderColor="#32323220"
+            borderRadius="12px"
+          >
+            <Table variant="simple" bgColor="white">
+              <Thead color="#323232" bgColor="#E2E8F0">
+                <Tr>
+                  <Th>State</Th>
+                  <Th>LGA</Th>
+                  <Th>Address</Th>
+                  <Th>Farm Size</Th>
+                  <Th>Type of Service</Th>
+                  <Th>Amount Paid (₦)</Th>
+                  <Th>Start Date</Th>
+                  <Th>End Date</Th>
+                  <Th>Status</Th>
+                  {/* <Th isNumeric>multiply by</Th> */}
+                </Tr>
+              </Thead>
+              <Tbody>
+                {result?.data.map((tractor: any) => (
+                  <Tr key={tractor?.id}>
+                    <Td>{tractor?.state ?? "Nil"}</Td>
+                    <Td>{tractor?.lga ?? "Nil"}</Td>
+                    <Td>{tractor?.address ?? "Nil"}</Td>
+                    <Td>
+                      {parseFloat(tractor?.farm_size ?? 0).toLocaleString()}
+                    </Td>
+                    <Td>{tractor?.tractor_type ?? "Nil"}</Td>
+                    <Td>{parseFloat(tractor?.amount ?? 0).toLocaleString()}</Td>
+                    <Td>{tractor?.start_date}</Td>
+                    <Td>{tractor?.end_date}</Td>
+                    <Td>
+                      {statusTypes[tractor?.status]?.color && (
+                        <Box
+                          mt="10px"
+                          bgColor={statusTypes[tractor?.status].color}
+                          py="4px"
+                          textAlign="center"
+                          borderRadius="4px"
+                          w="80px"
+                        >
+                          <Text fontSize="14px" color="white">
+                            {statusTypes[tractor?.status].title}
+                          </Text>
+                        </Box>
+                      )}
+                    </Td>
+                    {/* <Td isNumeric>25.4</Td> */}
+                  </Tr>
+                ))}
+              </Tbody>
+              <Tfoot>
+                <Tr>
+                  <Th>State</Th>
+                  <Th>LGA</Th>
+                  <Th>Address</Th>
+                  <Th>Farm Size</Th>
+                  <Th>Type of Service</Th>
+                  <Th>Amount Paid (₦)</Th>
+                  <Th>Start Date</Th>
+                  <Th>End Date</Th>
+                  <Th>Status</Th>
+                </Tr>
+              </Tfoot>
+            </Table>
+          </TableContainer>
+        )}
 
         <PersonalOverview />
       </Box>
@@ -200,7 +176,8 @@ export default function HiredTractors() {
 function EmptyTractorsPlaceholder() {
   return (
     <Flex justifyContent="center" alignItems="center">
-      <Box bgColor="white" width="400px" p="60px" textAlign="center" mt="40px">
+      <Box bgColor="white" width="100%" p="60px" textAlign="center" mt="20px">
+        {/* <Box bgColor="white" width="400px" p="60px" textAlign="center" mt="40px"> */}
         <Center>
           <Image src="/images/empty-state.svg" alt="Empty state image icon" />
         </Center>
@@ -212,7 +189,7 @@ function EmptyTractorsPlaceholder() {
           All Hired tractors will be listed in this page
         </Text>
 
-        <Button
+        {/* <Button
           as="a"
           mt="50px"
           href="/home/enlist-tractor"
@@ -222,7 +199,7 @@ function EmptyTractorsPlaceholder() {
           color="white"
         >
           Enlist your tractor
-        </Button>
+        </Button> */}
       </Box>
     </Flex>
   );

@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useRef, useState } from "react";
 import {
   Alert,
   AlertIcon,
@@ -24,10 +25,10 @@ import {
   Center,
   InputGroup,
 } from "@chakra-ui/react";
+import * as nigerianStates from "nigerian-states-and-lgas";
 import { SidebarWithHeader } from "../../components/Sidenav";
 import { Formik, Form, Field } from "formik";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
 import {
   ArrowForwardIcon,
   ArrowRightIcon,
@@ -51,7 +52,6 @@ const fileTypes = ["JPG", "PNG", "JPEG"];
 //     loading: () => <p>Loading...</p>,
 //   })
 
-
 const MAX_IMAGE_SIZE_BYTES = 2 * 1024 * 1024;
 
 export default function BecomeAnAgent() {
@@ -60,7 +60,7 @@ export default function BecomeAnAgent() {
   const [tractorImageError, setTractorImageError] = useState<string | null>(
     null
   );
-
+  const [lgas, setLgas] = useState<string[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
 
@@ -484,33 +484,6 @@ export default function BecomeAnAgent() {
                     )}
                   </Field>
 
-                  <Field name="insurance_company">
-                    {/* <Field name="insurance_company" validate={validateEmpty}> */}
-                    {({ field, form }: { [x: string]: any }) => (
-                      <FormControl
-                        isInvalid={
-                          form.errors.insurance_company &&
-                          form.touched.insurance_company
-                        }
-                      >
-                        <FormLabel fontSize="12px" color="#323232">
-                          Insurance company
-                        </FormLabel>
-                        <Input
-                          {...field}
-                          bgColor="#3232320D"
-                          fontSize="12px"
-                          color="#323232"
-                        />
-                        <FormErrorMessage>
-                          {form.errors.insurance_company}
-                        </FormErrorMessage>
-                      </FormControl>
-                    )}
-                  </Field>
-                </Flex>
-
-                <Flex my="40px" columnGap="30px">
                   <Field name="insurance_expiry">
                     {({ field, form }: { [x: string]: any }) => (
                       <FormControl
@@ -543,6 +516,32 @@ export default function BecomeAnAgent() {
                     )}
                   </Field>
 
+                  {/* <Field name="insurance_company">
+                    {({ field, form }: { [x: string]: any }) => (
+                      <FormControl
+                        isInvalid={
+                          form.errors.insurance_company &&
+                          form.touched.insurance_company
+                        }
+                      >
+                        <FormLabel fontSize="12px" color="#323232">
+                          Insurance company
+                        </FormLabel>
+                        <Input
+                          {...field}
+                          bgColor="#3232320D"
+                          fontSize="12px"
+                          color="#323232"
+                        />
+                        <FormErrorMessage>
+                          {form.errors.insurance_company}
+                        </FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field> */}
+                </Flex>
+
+                <Flex mt="20px" columnGap="30px">
                   <Field name="tracker" validate={validateEmpty}>
                     {({ field, form }: { [x: string]: any }) => (
                       <FormControl
@@ -567,6 +566,136 @@ export default function BecomeAnAgent() {
                       </FormControl>
                     )}
                   </Field>
+
+                  <Field name="state" validate={validateEmpty}>
+                    {({ field, form }: { [x: string]: any }) => (
+                      <FormControl
+                        isInvalid={form.errors.state && form.touched.state}
+                        mb="20px"
+                      >
+                        <FormLabel fontSize="12px" color="#323232">
+                          State of residence
+                        </FormLabel>
+                        <Select
+                          // {...field}
+                          placeholder="State of residence"
+                          color="#929292"
+                          fontSize="12px"
+                          bgColor="#3232320D"
+                          _focusVisible={{
+                            borderColor: "#929292",
+                          }}
+                          onChange={(v) => {
+                            const state = v.currentTarget.value || "";
+                            form.setFieldValue(
+                              field.name,
+                              v.currentTarget.value
+                            );
+                            // alert(props.values.state);
+                            setLgas(nigerianStates.lgas(state) ?? []);
+                          }}
+                        >
+                          {states.map((state) => (
+                            <option key={state} value={state.toLowerCase()}>
+                              {state}
+                            </option>
+                          ))}
+                        </Select>
+                        <FormErrorMessage>{form.errors.state}</FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+                </Flex>
+
+                <Flex columnGap="30px">
+                  <Field name="lga" validate={validateEmpty}>
+                    {({ field, form }: { [x: string]: any }) => (
+                      <FormControl
+                        // my={4}
+                        isInvalid={form.errors.lga && form.touched.lga}
+                      >
+                        <FormLabel fontSize="12px" color="#323232">
+                          Local Government Area
+                        </FormLabel>
+                        <Select
+                          // {...field}
+                          placeholder="Local Government Area"
+                          color="#929292"
+                          bgColor="#3232320D"
+                          fontSize="12px"
+                          // borderColor="#929292"
+                          _focusVisible={{
+                            borderColor: "#929292",
+                          }}
+                          onChange={(v) => {
+                            // const state = v.currentTarget.value || "";
+                            form.setFieldValue(
+                              field.name,
+                              v.currentTarget.value
+                            );
+                            // alert(props.values.state);
+                            // setLgas(NaijaStates.lgas(state) ?? []);
+                          }}
+                        >
+                          {lgas.map((state) => (
+                            <option key={state} value={state.toLowerCase()}>
+                              {state}
+                            </option>
+                          ))}
+                        </Select>
+
+                        <FormErrorMessage>{form.errors.lga}</FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+
+
+                  <Field name="address">
+                    {({ field, form }: { [x: string]: any }) => (
+                      <FormControl
+                        // my={4}
+                        isInvalid={form.errors.address && form.touched.address}
+                      >
+                        <FormLabel fontSize="12px" color="#323232">
+                          Tractor Address
+                        </FormLabel>
+                        <Input
+                          bgColor="#3232320D"
+                          color="#929292"
+                          fontSize="12px"
+                          _focusVisible={{
+                            borderColor: "#929292",
+                          }}
+                          {...field}
+                        />
+                        <FormErrorMessage>{form.errors.address}</FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+
+                  {/* <Field name="town">
+                    {({ field, form }: { [x: string]: any }) => (
+                      <FormControl
+                        // my={4}
+                        isInvalid={form.errors.town && form.touched.town}
+                      >
+                        <FormLabel fontSize="12px" color="#323232">
+                          Town (Optional)
+                        </FormLabel>
+                        <Input
+                          bgColor="#3232320D"
+                          color="#929292"
+                          _focusVisible={{
+                            borderColor: "#929292",
+                          }}
+                          {...field}
+                          //  ref={initialRef}
+                          placeholder="Town (optional)"
+                        />
+                        <FormErrorMessage>{form.errors.town}</FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field> */}
                 </Flex>
 
                 {/* <FileUploader
@@ -625,7 +754,7 @@ export default function BecomeAnAgent() {
                 </FileUploader> */}
                 {/* </Flex> */}
 
-                <Flex my="20px" columnGap="30px">
+                <Flex my="30px" columnGap="30px">
                   <Field name="image" validate={(e: any) => validateImage(e)}>
                     {({ field, form }: { [x: string]: any }) => (
                       <FormControl
@@ -651,7 +780,9 @@ export default function BecomeAnAgent() {
                               if (files) {
                                 const file = files[0];
                                 if (file.size > MAX_IMAGE_SIZE_BYTES) {
-                                  toast.error('Image size exceeds the maximum allowed size (2MB). Please select a smaller image.');
+                                  toast.error(
+                                    "Image size exceeds the maximum allowed size (2MB). Please select a smaller image."
+                                  );
                                   return;
                                 }
                                 form.setFieldValue(field.name, file);

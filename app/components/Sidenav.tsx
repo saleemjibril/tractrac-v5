@@ -51,6 +51,10 @@ import {
   Payment,
   User,
   TractorPlusDark,
+  ClarityHomeLine,
+  ClarityHomeLineWhite,
+  TractorPlus,
+  TractorPlusWhite,
 } from "../components/Icons";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useEffect, useState, useId } from "react";
@@ -63,14 +67,16 @@ interface LinkItemProps {
   path: string;
   imageLight?: string;
   imageDark: string;
-  icon: ComponentWithAs<"svg", IconProps> | IconSax;
+  iconLight: ComponentWithAs<"svg", IconProps> | IconSax;
+  iconDark: ComponentWithAs<"svg", IconProps> | IconSax;
 }
 
 interface NavItemProps extends FlexProps {
-  icon: ComponentWithAs<"svg", IconProps> | IconSax;
   image?: string;
   path: string;
   children: React.ReactNode;
+  iconLight: ComponentWithAs<"svg", IconProps> | IconSax;
+  iconDark: ComponentWithAs<"svg", IconProps> | IconSax;
 }
 
 interface MobileProps extends FlexProps {
@@ -87,44 +93,48 @@ const LinkItems: Array<LinkItemProps> = [
     imageLight: "home-light",
     imageDark: "home-dark",
     path: "/home",
-    icon: Home2,
+    iconLight: ClarityHomeLineWhite,
+    iconDark: ClarityHomeLine,
   },
   {
     name: "Dashboard",
     imageLight: "dashboard-light",
     imageDark: "dashboard-dark",
     path: "/dashboard",
-    icon: Element4,
+    iconLight: Element4,
+    iconDark: Element4,
   },
-  {
-    name: "Overview",
-    imageLight: "user-light",
-    imageDark: "user-dark",
-    path: "#",
-    icon: User,
-  },
+  // {
+  //   name: "Overview",
+  //   imageLight: "user-light",
+  //   imageDark: "user-dark",
+  //   path: "#",
+  //   iconLight: User,
+  //   iconDark: User,
+  // },
   {
     name: "Special Programs",
     imageLight: "pay-light",
     imageDark: "pay-dark",
     path: "/special-programs",
-    icon: TractorPlusDark,
+    iconLight: TractorPlusWhite,
+    iconDark: TractorPlusDark,
   },
   {
     name: "Payment",
     imageLight: "pay-light",
     imageDark: "pay-dark",
-    path: "#",
-    icon: Payment,
+    path: "/payment",
+    iconLight: Payment,
+    iconDark: Payment,
   },
-
-  //   { name: 'Favourites', icon: FiStar },
   {
     name: "Account",
     imageLight: "user-light",
     imageDark: "user-dark",
     path: "#",
-    icon: User,
+    iconLight: User,
+    iconDark: User,
   },
 ];
 
@@ -171,7 +181,8 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
             key={link.name}
             image={image}
             path={link.path}
-            icon={link.icon}
+            iconLight={link.iconLight}
+            iconDark={link.iconDark}
           >
             <Text fontSize="14px">{link.name}</Text>
           </NavItem>
@@ -205,8 +216,17 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   );
 };
 
-const NavItem = ({ image, path, icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({
+  image,
+  path,
+  iconDark,
+  iconLight,
+  children,
+  ...rest
+}: NavItemProps) => {
   const pathname = usePathname();
+  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const icon = pathname == path || isHovered ? iconLight : iconDark;
 
   return (
     <Box
@@ -214,6 +234,8 @@ const NavItem = ({ image, path, icon, children, ...rest }: NavItemProps) => {
       href={path}
       style={{ textDecoration: "none" }}
       _focus={{ boxShadow: "none" }}
+      onMouseEnter={() => setIsHovered(true)} // Set hoveredIndex on mouse enter
+      onMouseLeave={() => setIsHovered(false)}
     >
       <Flex
         align="center"
@@ -255,7 +277,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const [mounted, setMounted] = useState(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const pathLength = usePathname().split('/').length;
+  const pathLength = usePathname().split("/").length;
   useEffect(() => {
     // console.log(profileInfo)
     setMounted(true);
@@ -288,22 +310,23 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         alt="Logo"
       />
 
-     { pathLength > 2 && <Show above="sm">
-        <Button
-          mr="auto"
-          border="1px"
-          bgColor="transparent"
-          onClick={() => {
-            router.back();
-          }}
-        >
-          <ArrowBackIcon boxSize="20px" mr="14px" />
-          <Text fontSize="14px" fontWeight={400}>
-            Back 
-          </Text>
-        </Button>
-      </Show>
-}
+      {pathLength > 2 && (
+        <Show above="sm">
+          <Button
+            mr="auto"
+            border="1px"
+            bgColor="transparent"
+            onClick={() => {
+              router.back();
+            }}
+          >
+            <ArrowBackIcon boxSize="20px" mr="14px" />
+            <Text fontSize="14px" fontWeight={400}>
+              Back
+            </Text>
+          </Button>
+        </Show>
+      )}
 
       <HStack spacing={{ base: "0", md: "6" }}>
         {/* <IconButton size="lg" variant="ghost" aria-label="open menu" icon={<FiBell />} /> */}
@@ -331,7 +354,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   ml="2"
                 >
                   {mounted && (
-                    <Text fontSize="sm">Hello, {profileInfo?.fname ?? "Guest"}</Text>
+                    <Text fontSize="sm">
+                      Hello, {profileInfo?.fname ?? "Guest"}
+                    </Text>
                   )}
                   {/* <Text fontSize="xs" color="gray.600">
                     Admin

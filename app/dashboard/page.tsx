@@ -20,6 +20,7 @@ import { createElement, useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import { usePathname } from "next/navigation";
 import { useGetDashboardStatsQuery } from "@/redux/services/userApi";
+import LoginRequiredModal from "../components/LoginRequiredModal";
 
 interface ItemProps {
   name: string;
@@ -111,6 +112,7 @@ export default function Dashboard() {
     setMounted(true);
   }, []);
 
+  const [modalState, setModalState] = useState<boolean>(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const { profileInfo } = useAppSelector((state) => state.auth);
@@ -176,6 +178,12 @@ export default function Dashboard() {
               justifyContent="start"
               gap="10px"
               bgColor="white"
+              onClick={(e) => {
+                if (!profileInfo?.id) {
+                  setModalState(true);
+                  e.preventDefault();
+                }
+              }}
               onMouseEnter={() => setHoveredIndex(index)} // Set hoveredIndex on mouse enter
               onMouseLeave={() => setHoveredIndex(null)} // Clear hoveredIndex on mouse leave
               _hover={{
@@ -232,7 +240,7 @@ export default function Dashboard() {
         bgColor="#FFFFFF"
         mt="50px"
         mr={{ base: "0px", lg: "120px" }}
-        px="66px"
+        px={{base: "24px", lg: "66px"}}
         py="43px"
         borderRadius="6px"
       >
@@ -242,7 +250,7 @@ export default function Dashboard() {
 
         <SimpleGrid
           mt="20px"
-          columns={{ base: 2, lg: 3 }}
+          columns={{ base: 1, lg: 3 }}
           spacingX={{ base: "24px" }}
           spacingY="20px"
         >
@@ -269,6 +277,7 @@ export default function Dashboard() {
           />
         </SimpleGrid>
       </Box>
+      <LoginRequiredModal title="" isOpen={modalState} setModalState={setModalState} />
     </SidebarWithHeader>
   );
 }
@@ -296,10 +305,10 @@ function formatNumber(numberString: string) {
 
   if (number >= 1000000) {
     // Format numbers in millions as "X.Xm"
-    return (number / 1000000).toFixed(1) + 'm';
+    return (number / 1000000).toFixed(1) + 'M';
   } else if (number >= 99999) {
     // Format numbers in thousands with commas
-    return (number / 1000).toLocaleString() + 'k';
+    return (number / 1000).toLocaleString() + 'K';
   } else {
     // Numbers below 1000 remain the same with commas
     return number.toLocaleString();

@@ -49,7 +49,7 @@ interface ITractorCard {
   setTractorId: Dispatch<SetStateAction<string | null>>;
 }
 
-export default function HireTractor() {
+export default function TrackATractor() {
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -133,11 +133,11 @@ export default function HireTractor() {
               <Flex
                 mt="20px"
                 columnGap="30px"
-                justifyContent="center"
-                alignItems="center"
-                alignContent="center"
+                // justifyContent="center"
+                alignItems="end"
+                // alignContent="center"
               >
-                <Field name="tracker_code" validate={validateEmpty}>
+                <Field name="tracker_code">
                   {({ field, form }: { [x: string]: any }) => (
                     <FormControl
                       isInvalid={
@@ -166,7 +166,8 @@ export default function HireTractor() {
                   width={{ base: "100%", md: "50%" }}
                   fontSize="16px"
                   fontWeight={600}
-                  minH="100%"
+                  // mt="16px"
+                  // minH="100%"
                   isLoading={props.isSubmitting}
                   isDisabled={props.isSubmitting}
                   type="submit"

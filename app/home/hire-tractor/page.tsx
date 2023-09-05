@@ -97,7 +97,7 @@ export default function HireTractor() {
           </Stack>
           <Box mt="50px">
             <Stack direction="row" gap="20px">
-              <InputGroup
+              {/* <InputGroup
                 width="140px"
                 border="1px"
                 borderColor="#FA9411"
@@ -122,7 +122,7 @@ export default function HireTractor() {
                 >
                   <option>All filters</option>
                 </Select>
-              </InputGroup>
+              </InputGroup> */}
               <Select
                 width="130px"
                 placeholder="State"
@@ -140,6 +140,20 @@ export default function HireTractor() {
               <Select
                 width="150px"
                 placeholder="Tractor Type"
+                icon={<ArrowDown2 />}
+                color="#FA9411"
+                border="1px"
+                borderColor="#FA9411"
+                _focus={{
+                  borderColor: "#FA9411",
+                }}
+                _focusVisible={{
+                  borderColor: "#FA9411",
+                }}
+              />
+               <Select
+                width="130px"
+                placeholder="Brand"
                 icon={<ArrowDown2 />}
                 color="#FA9411"
                 border="1px"
