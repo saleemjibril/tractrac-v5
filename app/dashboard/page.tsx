@@ -21,6 +21,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { usePathname } from "next/navigation";
 import { useGetDashboardStatsQuery } from "@/redux/services/userApi";
 import LoginRequiredModal from "../components/LoginRequiredModal";
+import { toast } from "react-toastify";
 
 interface ItemProps {
   name: string;
@@ -102,7 +103,7 @@ export default function Dashboard() {
       // imageDark: "pay-dark",
       icon: TaskList,
       iconActive: TaskListWhite,
-      path: "#",
+      path:  `${path}/agent`,
     },
   ];
   const [mounted, setMounted] = useState(false);
@@ -182,6 +183,10 @@ export default function Dashboard() {
                 if (!profileInfo?.id) {
                   setModalState(true);
                   e.preventDefault();
+                }
+
+                if(pageItem.path.includes("#")){
+                  toast.info("This page is coming soon")
                 }
               }}
               onMouseEnter={() => setHoveredIndex(index)} // Set hoveredIndex on mouse enter

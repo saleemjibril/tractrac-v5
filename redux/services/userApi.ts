@@ -28,6 +28,7 @@ export const userApi = createApi({
       return headers;
     },
   }),
+  tagTypes: ['farmers'],
   endpoints: (builder) => ({
     // getActiveUsers: builder.query({
     //   query: (page) => ({
@@ -36,13 +37,13 @@ export const userApi = createApi({
     //   }),
     // //   providesTags: ['users'],
     // }),
-    // getInActiveUsers: builder.query({
-    //   query: (page) => ({
-    //     url: `/api/system/admin-app/inactive-users?page=${page}`,
-    //     method: 'GET',
-    //   }),
-    // //   providesTags: ['users'],
-    // }),
+    getFarmers: builder.query({
+      query: (user_id) => ({
+        url: `/get_farmers/${user_id}`,
+        method: 'GET',
+      }),
+      providesTags: ['farmers'],
+    }),
     getPersonalStats: builder.query({
       query: (user_id) => ({
         url: `/personal_stats/${user_id}`,
@@ -83,6 +84,13 @@ export const userApi = createApi({
         body: transformRequest(data),
       }),
     }),
+    subscribe: builder.mutation({
+      query: (data: any) => ({
+        url: "/subscribe",
+        method: "POST",
+        body: transformRequest(data),
+      }),
+    }),
     becomeAnOpOrMech: builder.mutation({
       query: (data: any) => ({
         url: "/become_an_operator_or_mech",
@@ -102,6 +110,14 @@ export const userApi = createApi({
         body: transformRequest(data),
       }),
     }),
+    addFarmer: builder.mutation({
+      query: (data: any) => ({
+        url: "/add_farmer",
+        method: "POST",
+        body: transformRequest(data),
+      }),
+      invalidatesTags: ['farmers']
+    }),
   }),
 });
 
@@ -109,13 +125,16 @@ export const userApi = createApi({
 // auto-generated based on the defined endpoints
 export const {
   //   useLazyGetActiveUsersQuery,
+  useGetFarmersQuery,
   useGetPersonalStatsQuery,
   useGetDashboardStatsQuery,
   useBecomeAnAgentMutation,
   useInvestInTractorMutation,
   useValidateIssamIdMutation,
   useCollaborateMutation,
+  useSubscribeMutation,
   useBecomeAnOpOrMechMutation,
   useMakePaymentMutation,
+  useAddFarmerMutation,
 } = userApi;
 // export const { useGetActiveUsersQuery } = userApi

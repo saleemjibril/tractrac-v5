@@ -43,6 +43,7 @@ import { usePathname } from "next/navigation";
 import { useState, createElement } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import LoginRequiredModal from "../components/LoginRequiredModal";
+import { toast } from "react-toastify";
 
 interface ItemProps {
   name: string;
@@ -165,6 +166,9 @@ export default function Dashboard() {
                 if (pageItem.loginRequired && !profileInfo?.id) {
                   setModalState(true);
                   e.preventDefault();
+                }
+                if(pageItem.path.includes("#")){
+                  toast.info("This page is coming soon")
                 }
               }}
               py="35px"

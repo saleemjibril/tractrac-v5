@@ -25,6 +25,8 @@ import {
   SimpleGrid,
   InputGroup,
   InputLeftElement,
+  Skeleton,
+  SkeletonText,
 } from "@chakra-ui/react";
 import { SidebarWithHeader } from "../../components/Sidenav";
 import { Formik, Form, Field } from "formik";
@@ -40,6 +42,7 @@ import {
   useGetTractorsQuery,
   useHireTractorMutation,
 } from "@/redux/services/tractorApi";
+import Map from "../../components/Map";
 
 const fileTypes = ["JPG", "PNG", "JPEG"];
 
@@ -83,6 +86,8 @@ export default function HireTractor() {
     return error;
   }
 
+  const addresses = ["Coogee Beach", "Bondi Beach", "Cronulla Beach"];
+
   return (
     <SidebarWithHeader>
       {tractorId ? (
@@ -93,7 +98,17 @@ export default function HireTractor() {
             <Text fontSize="24px" fontWeight={700} mb="20px">
               Hire a Tractor
             </Text>
-            <Image src="/images/map.svg" alt="map image" />
+            {isLoading ? (
+              <Skeleton
+                mt="12px"
+                height="300px"
+                borderRadius="4px"
+                // w="111px"
+              />
+            ) : (
+              <Map addresses={result?.data.map((item: any) => item.address)} />
+            )}
+            {/* <Image src="/images/map.svg" alt="map image" /> */}
           </Stack>
           <Box mt="50px">
             <Stack direction="row" gap="20px">
@@ -151,7 +166,7 @@ export default function HireTractor() {
                   borderColor: "#FA9411",
                 }}
               />
-               <Select
+              <Select
                 width="130px"
                 placeholder="Brand"
                 icon={<ArrowDown2 />}
@@ -166,30 +181,63 @@ export default function HireTractor() {
                 }}
               />
             </Stack>
-            <SimpleGrid
-              columns={{ base: 2, md: 4 }}
-              spacingX="20px"
-              spacingY="15px"
-              mt="30px"
-              // spacing={{ base: "12px", md: "40px" }}
-            >
-              {result?.data?.length < 0 ? (
-                <Text>Empty</Text>
-              ) : (
-                result?.data.map((tractor: any) => (
-                  <TractorCard
-                    key={tractor?.id}
-                    setTractorId={setTractorId}
-                    id={tractor?.id}
-                    name={`${tractor?.brand} ${tractor?.model}`}
-                    image={tractor?.image}
-                    capacity=" 105 to 135 HP"
-                    location={tractor?.state}
-                    tractor_type={tractor?.tractor_type}
-                  />
-                ))
-              )}
-            </SimpleGrid>
+            {isLoading ? (
+              <SimpleGrid
+                columns={{ base: 2, md: 4 }}
+                spacingX="20px"
+                spacingY="15px"
+                mt="30px"
+              >
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((index) => (
+                  <Box key={index} boxShadow="lg" bg="white" borderRadius="4px">
+                    <Skeleton height="120px" />
+                    <Box p="12px">
+                      <SkeletonText
+                        my="12px"
+                        noOfLines={3}
+                        spacing="3"
+                        skeletonHeight="6px"
+                      />
+
+                      <Skeleton
+                        mt="12px"
+                        height="30px"
+                        borderRadius="4px"
+                        w="111px"
+                      />
+                    </Box>
+
+                    {/* <SkeletonCircle size="10" /> */}
+                    {/* */}
+                  </Box>
+                ))}
+              </SimpleGrid>
+            ) : (
+              <SimpleGrid
+                columns={{ base: 2, md: 4 }}
+                spacingX="20px"
+                spacingY="15px"
+                mt="30px"
+                // spacing={{ base: "12px", md: "40px" }}
+              >
+                {result?.data?.length < 0 ? (
+                  <Text>Empty</Text>
+                ) : (
+                  result?.data.map((tractor: any) => (
+                    <TractorCard
+                      key={tractor?.id}
+                      setTractorId={setTractorId}
+                      id={tractor?.id}
+                      name={`${tractor?.brand} ${tractor?.model}`}
+                      image={tractor?.image}
+                      capacity=" 105 to 135 HP"
+                      location={tractor?.state}
+                      tractor_type={tractor?.tractor_type}
+                    />
+                  ))
+                )}
+              </SimpleGrid>
+            )}
           </Box>
         </Box>
       )}

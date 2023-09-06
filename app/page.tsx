@@ -33,9 +33,19 @@ import {
   DrawerContent,
   FlexProps,
   CloseButton,
+  Alert,
+  AlertIcon,
+  AlertTitle,
   // NavItem,
 } from "@chakra-ui/react";
-import { ReactNode, useRef, MutableRefObject, useEffect } from "react";
+import {
+  ReactNode,
+  useRef,
+  MutableRefObject,
+  useEffect,
+  useState,
+  ChangeEventHandler,
+} from "react";
 // import { MdCheckCircle } from "@chakra-ui/icons";
 import {
   FaFacebookF,
@@ -48,10 +58,15 @@ import {
   FaArrowUp,
 } from "react-icons/fa";
 import { openModal } from "@/redux/features/modalSlice";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { LoginModal, SignupModal } from "./constants";
 import { useRouter } from "next/navigation";
 import { FiMenu } from "react-icons/fi";
+import {
+  useCollaborateMutation,
+  useSubscribeMutation,
+} from "@/redux/services/userApi";
+import { toast } from "react-toastify";
 
 // import Image from "next/image";
 // import styles from './page.module.css'
@@ -64,7 +79,7 @@ interface SidebarProps extends FlexProps {
   onClose: () => void;
 }
 
-const LinkItems: Array<{ name: string; path: string, active: boolean }> = [
+const LinkItems: Array<{ name: string; path: string; active: boolean }> = [
   {
     name: "Home",
     path: `/`,
@@ -246,7 +261,7 @@ function ServicesComponent() {
           <Flex gap="20px" mt="20px" flexDir={{ base: "column", md: "row" }}>
             <Flex direction="row" alignItems="center" gap={"14px"}>
               <Image
-                src="images/solid-circle.svg"
+                src="images/user-icon-avatar.svg"
                 alt=""
                 width={{ base: "30px", md: "50px" }}
               />
@@ -256,7 +271,7 @@ function ServicesComponent() {
             </Flex>
             <Stack direction="row" alignItems="center" gap={"14px"}>
               <Image
-                src="images/solid-circle.svg"
+                src="images/tractor-icon-avatar.svg"
                 alt=""
                 width={{ base: "30px", md: "50px" }}
               />
@@ -321,7 +336,11 @@ function ServicesComponent() {
             mx={{ base: "12px", md: "24px" }}
           >
             <Box bgColor="#CC6D02" p="20px">
-              <Image src="icons/tractor.svg" alt=""></Image>
+              <Image
+                src="icons/tractor-2.svg"
+                alt="Tractor image icon"
+                width="110px"
+              ></Image>
               <Text fontSize="16px" mt="18px" fontWeight={600}>
                 Hire a Tractor
               </Text>
@@ -392,6 +411,11 @@ function ServicesComponent() {
 }
 function NavbarComponent({ onOpen }: MobileProps) {
   const router = useRouter();
+  const { profileInfo } = useAppSelector((state) => state.auth);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <Box bg={"#F8F8F0"} p={0}>
@@ -415,7 +439,12 @@ function NavbarComponent({ onOpen }: MobileProps) {
         >
           Contact Us
         </Text>
-        <Box pb="4px" display={"flex"} gap={"12px"} mr={{base: "16px", md: "0px"}}>
+        <Box
+          pb="4px"
+          display={"flex"}
+          gap={"12px"}
+          mr={{ base: "16px", md: "0px" }}
+        >
           {/* <Stack height={"20px"} width={"20px"} direction={"row"}> */}
           <IconButton
             size={"sm"}
@@ -503,8 +532,12 @@ function NavbarComponent({ onOpen }: MobileProps) {
               width={{ base: "20px", lg: "40px" }}
               // height={40}
             />
-            <Box pl={{base: "4px", lg: "10px"}}>
-              <Text fontSize="xs" opacity={0.8} display={{base: "none", sm: "flex"}}>
+            <Box pl={{ base: "4px", lg: "10px" }}>
+              <Text
+                fontSize="xs"
+                opacity={0.8}
+                display={{ base: "none", sm: "flex" }}
+              >
                 Call Now
               </Text>
               <Text fontWeight={[400, 700]} fontSize="12px">
@@ -521,11 +554,15 @@ function NavbarComponent({ onOpen }: MobileProps) {
               // width={40}
               // height={40}
             />
-            <Box pl={{base: "4px", lg: "10px"}}>
-              <Text fontSize="xs" opacity={0.8} display={{base: "none", sm: "flex"}}>
+            <Box pl={{ base: "4px", lg: "10px" }}>
+              <Text
+                fontSize="xs"
+                opacity={0.8}
+                display={{ base: "none", sm: "flex" }}
+              >
                 Open Hours
               </Text>
-              <Text fontWeight={[400, 700]} fontSize="12px" >
+              <Text fontWeight={[400, 700]} fontSize="12px">
                 24 Hours
               </Text>
             </Box>
@@ -539,8 +576,12 @@ function NavbarComponent({ onOpen }: MobileProps) {
               // width={40}
               // height={40}
             />
-            <Box pl={{base: "4px", lg: "10px"}}>
-              <Text fontSize="xs" opacity={0.8} display={{base: "none", sm: "flex"}}>
+            <Box pl={{ base: "4px", lg: "10px" }}>
+              <Text
+                fontSize="xs"
+                opacity={0.8}
+                display={{ base: "none", sm: "flex" }}
+              >
                 Address
               </Text>
               <Text fontWeight={[400, 700]} fontSize="12px">
@@ -647,27 +688,42 @@ function NavbarComponent({ onOpen }: MobileProps) {
             </Stack>
           </Box>
           <Box pt="5px" display={{ base: "none", md: "flex" }}>
-            <ButtonGroup>
-              <Button
-                bg="#FFF5E8"
-                width={"190px"}
-                height={"40px"}
-                color="#FA9411"
-                onClick={() => router.push("/login")}
-              >
-                Login
-              </Button>
-              <Button
-                bg="#FA9411"
-                width={"190px"}
-                height={"40px"}
-                _hover={{ opacity: 0.8 }}
-                color="#FFFFFF"
-                onClick={() => router.push("/signup")}
-              >
-                Sign up
-              </Button>
-            </ButtonGroup>
+            {profileInfo?.id && mounted ? (
+              <ButtonGroup>
+                <Button
+                  bg="#FA9411"
+                  width={"190px"}
+                  height={"40px"}
+                  _hover={{ opacity: 0.8 }}
+                  color="#FFFFFF"
+                  onClick={() => router.push("/home")}
+                >
+                  Dashboard
+                </Button>
+              </ButtonGroup>
+            ) : (
+              <ButtonGroup>
+                <Button
+                  bg="#FFF5E8"
+                  width={"190px"}
+                  height={"40px"}
+                  color="#FA9411"
+                  onClick={() => router.push("/login")}
+                >
+                  Login
+                </Button>
+                <Button
+                  bg="#FA9411"
+                  width={"190px"}
+                  height={"40px"}
+                  _hover={{ opacity: 0.8 }}
+                  color="#FFFFFF"
+                  onClick={() => router.push("/signup")}
+                >
+                  Sign up
+                </Button>
+              </ButtonGroup>
+            )}
           </Box>
 
           <IconButton
@@ -922,10 +978,11 @@ function FaqComponent() {
           FAQ
         </Text>
         <Text fontSize="28px" fontWeight={700}>
-        Please Do you have any question
+          Please Do you have any question
         </Text>
         <Text>
-        Get answers to common questions about our services. Contact us for further assistance.
+          Get answers to common questions about our services. Contact us for
+          further assistance.
         </Text>
 
         <Accordion defaultIndex={[0]} mt="20px">
@@ -979,7 +1036,7 @@ function FaqComponent() {
                 <AccordionIcon color="white" />
               </AccordionButton>
             </h2>
-            <AccordionPanel  px={1} pt="20px">
+            <AccordionPanel px={1} pt="20px">
               There is no limit to Tractor enlistment.
             </AccordionPanel>
           </AccordionItem>
@@ -1006,7 +1063,9 @@ function FaqComponent() {
                 <AccordionIcon color="white" />
               </AccordionButton>
             </h2>
-            <AccordionPanel  px={1} pt="20px">9 month (On site)</AccordionPanel>
+            <AccordionPanel px={1} pt="20px">
+              9 month (On site)
+            </AccordionPanel>
           </AccordionItem>
         </Accordion>
       </Stack>
@@ -1015,6 +1074,29 @@ function FaqComponent() {
 }
 
 function ContactUsComponent() {
+  const initialDataState = {
+    name: "",
+    message: "",
+    email: "",
+    type: "support",
+  };
+  const [data, setData] = useState(initialDataState);
+  // Function to update the object state
+  const handleInputChange = (e: any) => {
+    const { name, value } = e?.target;
+    // alert(value)
+
+    // Use the spread operator to create a new object with updated property
+    setData({
+      ...data,
+      [name]: value,
+    });
+  };
+  const [contact] = useCollaborateMutation();
+  const [error, setError] = useState<string | null>("");
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   return (
     <Flex
       width={"100%"}
@@ -1042,25 +1124,104 @@ function ContactUsComponent() {
           Contact Us
         </Text>
 
+        {error && (
+          <Alert status="error" mb="16px">
+            <AlertIcon />
+            <AlertTitle>{error}</AlertTitle>
+          </Alert>
+        )}
+
         <Box mb="20px">
           <Text mb="8px" fontSize={"14px"}>
             Name
           </Text>
-          <Input placeholder="Name" />
+          <Input
+            name="name"
+            placeholder="Name"
+            value={data.name}
+            onChange={handleInputChange}
+          />
         </Box>
         <Box mb="20px">
           <Text mb="8px" fontSize={"14px"}>
             Email Address
           </Text>
-          <Input placeholder="Enter your email address" />
+          <Input
+            name="email"
+            placeholder="Enter your email address"
+            value={data.email}
+            onChange={handleInputChange}
+          />
         </Box>
         <Box mb="20px">
           <Text mb="8px" fontSize={"14px"}>
             Message
           </Text>
-          <Textarea placeholder="Message" />
+          <Textarea placeholder="Message" name="message"  value={data.message} onChange={handleInputChange} />
         </Box>
-        <Button bgColor="#FA9411" color="white" borderRadius="4px" width="100%">
+        <Button
+          bgColor="#FA9411"
+          color="white"
+          borderRadius="4px"
+          width="100%"
+          onClick={async () => {
+            try {
+              setLoading(true);
+              if (success) {
+                toast.error("You have already contacted us, please wait for a while  before trying again!");
+                return;
+              }
+              const emailRegex =
+                /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+                if (data.name.length < 3) {
+                  toast.error("Please enter a valid name");
+                  return;
+                }
+
+                if (data.message.length < 15) {
+                  toast.error("Message must have at least 15 characters");
+                  return;
+                }
+
+              if (data.email.length < 1 || !emailRegex.test(data.email)) {
+                toast.error("Please enter a valid email");
+                return;
+              }
+              const response = await contact({
+                ...data,
+              }).unwrap();
+
+              if (response.status == "success") {
+                toast.success(
+                  response.message ?? "Received, thanks for contacting us!"
+                );
+                setData({
+                  ...data,
+                  email: "",
+                  name: "",
+                  message: "",
+                });
+                setSuccess(true);
+              } else {
+                toast.error("An unknown error occured");
+              }
+            } catch (err) {
+              const error = err as any;
+              // alert('error')
+              if (error?.data?.errors) {
+                // setError(error?.data?.errors[0])
+              } else if (error?.data?.message) {
+                setError(error?.data?.message);
+              }
+              console.error("rejected", error);
+            } finally {
+              setLoading(false);
+            }
+          }}
+          disabled={success}
+          isLoading={loading}
+        >
           Send
         </Button>
       </Box>
@@ -1128,6 +1289,12 @@ function GetMobileAppComponent() {
 }
 
 function FooterComponent() {
+  const [subscribe] = useSubscribeMutation();
+  // const [error, setError] = useState<string | null>(null);
+  const [email, setEmail] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   return (
     <Flex
       bgColor="#FA9411"
@@ -1156,10 +1323,53 @@ function FooterComponent() {
           bgColor="white"
           color="black"
           placeholder="Email address"
+          disabled={success}
+          onChange={(e) => setEmail(e?.currentTarget.value)}
         />
         <Button
           width={{ base: "100px", md: "150px" }}
           height={{ base: "40px", md: "50px" }}
+          onClick={async () => {
+            try {
+              setLoading(true);
+              if (success) {
+                toast.error("You have already subscribed");
+                return;
+              }
+              const emailRegex =
+                /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+              if (email.length < 1 || !emailRegex.test(email)) {
+                toast.error("Please enter a valid email");
+                return;
+              }
+              const response = await subscribe({
+                email,
+              }).unwrap();
+
+              if (response.status == "success") {
+                toast.success(
+                  response.message ?? "Received, thanks for subscribing!"
+                );
+                setSuccess(true);
+              } else {
+                toast.error("An unknown error occured");
+              }
+            } catch (err) {
+              const error = err as any;
+              // alert('error')
+              if (error?.data?.errors) {
+                // setError(error?.data?.errors[0])
+              } else if (error?.data?.message) {
+                toast.error(error?.data?.message);
+              }
+              console.error("rejected", error);
+            } finally {
+              setLoading(false);
+            }
+          }}
+          disabled={success}
+          isLoading={loading}
           borderRadius="90px"
           bgColor="black"
           position="absolute"
@@ -1216,8 +1426,7 @@ function TabContent({
         bgRepeat="no-repeat"
         // height="400px"
         bgColor="#FFFFFF"
-
-        ml={{base: "0px", md: "-30px"}}
+        ml={{ base: "0px", md: "-30px" }}
         borderRadius="10px"
         color="black"
         alignItems="center"
