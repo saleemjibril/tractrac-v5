@@ -86,7 +86,7 @@ export default function HireTractor() {
     return error;
   }
 
-  const addresses = ["Coogee Beach", "Bondi Beach", "Cronulla Beach"];
+  // const addresses = ["Coogee Beach", "Bondi Beach", "Cronulla Beach"];
 
   return (
     <SidebarWithHeader>
@@ -95,13 +95,13 @@ export default function HireTractor() {
       ) : (
         <Box bgColor="white" mx="20px" my="12px" px="34px" py="20px">
           <Stack>
-            <Text fontSize="24px" fontWeight={700} mb="20px">
+            <Text fontSize="24px" fontWeight={700} mb="15px">
               Hire a Tractor
             </Text>
             {isLoading ? (
               <Skeleton
                 mt="12px"
-                height="300px"
+                height="360px"
                 borderRadius="4px"
                 // w="111px"
               />
@@ -110,7 +110,7 @@ export default function HireTractor() {
             )}
             {/* <Image src="/images/map.svg" alt="map image" /> */}
           </Stack>
-          <Box mt="50px">
+          <Box mt="40px">
             <Stack direction="row" gap="20px">
               {/* <InputGroup
                 width="140px"

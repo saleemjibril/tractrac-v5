@@ -13,9 +13,8 @@ import {
   Stack,
   Text,
   Box,
-  Select,
+  Skeleton,
   Modal as ChakraModal,
-  ModalHeader,
   ModalOverlay,
   useDisclosure,
   ModalBody,
@@ -26,7 +25,7 @@ import { SidebarWithHeader } from "../../components/Sidenav";
 import { saveLoginInfo } from "@/redux/features/auth/authActions";
 import { Formik, Form, Field } from "formik";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import dynamic from "next/dynamic";
 import { useAppSelector } from "@/redux/hooks";
@@ -141,15 +140,23 @@ export default function BecomeAnAgent() {
               perspectives. We are always excited to explore new opportunities
               and partnerships.
             </Text>
-          { !hidden && <Text>
-              That&apos;s why we invite you to collaborate on a journey toward
-              innovation, growth, and mutual success. Together, we can achieve
-              remarkable things and make a lasting impact in our respective
-              industries
-            </Text> }
+            {!hidden && (
+              <Text>
+                That&apos;s why we invite you to collaborate on a journey toward
+                innovation, growth, and mutual success. Together, we can achieve
+                remarkable things and make a lasting impact in our respective
+                industries
+              </Text>
+            )}
             {/*  */}
-            <Box as="button" color="#FA9411" fontWeight={600} mt="4px" onClick={()=> setHidden(!hidden)}>
-              { hidden ? 'Read more' :'See less'} <ArrowForwardIcon />
+            <Box
+              as="button"
+              color="#FA9411"
+              fontWeight={600}
+              mt="4px"
+              onClick={() => setHidden(!hidden)}
+            >
+              {hidden ? "Read more" : "See less"} <ArrowForwardIcon />
             </Box>
           </Box>
           <Text fontWeight={500} my="24px">
@@ -199,7 +206,7 @@ export default function BecomeAnAgent() {
                   </Alert>
                 )}
 
-                <FormControl isDisabled>
+                {/* <FormControl isDisabled>
                   <FormLabel fontSize="14px">Name</FormLabel>
                   <Input
                     variant="flushed"
@@ -210,9 +217,29 @@ export default function BecomeAnAgent() {
                     }}
                     placeholder="Enter your L.G.A."
                   />
-                </FormControl>
+                </FormControl> */}
 
-                <FormControl isDisabled mt="30px">
+                <CustomInput
+                  label="Name"
+                  fieldName="name"
+                  placeHolder="Name"
+                  type="text"
+                  defaultValue={`${profileInfo?.fname} ${profileInfo?.lname}`}
+                  defaultCheck={profileInfo?.fname}
+                  validate={validateEmpty}
+                />
+
+                <CustomInput
+                  label="Email"
+                  fieldName="email"
+                  placeHolder="Email Address"
+                  type="email"
+                  defaultValue={profileInfo?.email}
+                  defaultCheck={profileInfo?.email}
+                  validate={validateEmpty}
+                />
+
+                {/* <FormControl isDisabled mt="30px">
                   <FormLabel fontSize="14px">Email</FormLabel>
                   <Input
                     variant="flushed"
@@ -223,12 +250,12 @@ export default function BecomeAnAgent() {
                     }}
                     placeholder="Enter your email"
                   />
-                </FormControl>
+                </FormControl> */}
 
                 <Field name="organization" validate={validateEmpty}>
                   {({ field, form }: { [x: string]: any }) => (
                     <FormControl
-                      mt="30px"
+                      mt="20px"
                       isInvalid={
                         form.errors.organization && form.touched.organization
                       }
@@ -254,7 +281,7 @@ export default function BecomeAnAgent() {
                 <Field name="position" validate={validateEmpty}>
                   {({ field, form }: { [x: string]: any }) => (
                     <FormControl
-                      mt="30px"
+                      mt="20px"
                       isInvalid={form.errors.position && form.touched.position}
                     >
                       {/* <FormLabel fontSize="14px">Town (Optional)</FormLabel> */}
@@ -279,7 +306,7 @@ export default function BecomeAnAgent() {
                 <Field name="phone" validate={validateEmpty}>
                   {({ field, form }: { [x: string]: any }) => (
                     <FormControl
-                      mt="30px"
+                      mt="20px"
                       isInvalid={form.errors.phone && form.touched.phone}
                     >
                       {/* <FormLabel fontSize="14px">Town (Optional)</FormLabel> */}
@@ -303,7 +330,7 @@ export default function BecomeAnAgent() {
                 <Field name="message" validate={validateEmpty}>
                   {({ field, form }: { [x: string]: any }) => (
                     <FormControl
-                      mt="30px"
+                      mt="20px"
                       isInvalid={form.errors.message && form.touched.message}
                     >
                       <FormLabel fontSize="16px" color="#929292">
@@ -403,42 +430,72 @@ export default function BecomeAnAgent() {
   );
 }
 
-const states = [
-  "Abia",
-  "Adamawa",
-  "Akwa Ibom",
-  "Anambra",
-  "Bauchi",
-  "Bayelsa",
-  "Benue",
-  "Borno",
-  "Cross River",
-  "Delta",
-  "Ebonyi",
-  "Edo",
-  "Ekiti",
-  "Enugu",
-  "FCT - Abuja",
-  "Gombe",
-  "Imo",
-  "Jigawa",
-  "Kaduna",
-  "Kano",
-  "Katsina",
-  "Kebbi",
-  "Kogi",
-  "Kwara",
-  "Lagos",
-  "Nasarawa",
-  "Niger",
-  "Ogun",
-  "Ondo",
-  "Osun",
-  "Oyo",
-  "Plateau",
-  "Rivers",
-  "Sokoto",
-  "Taraba",
-  "Yobe",
-  "Zamfara",
-];
+interface CustomInputProps {
+  defaultCheck?: string;
+  defaultValue?: string;
+  label: string;
+  fieldName: string;
+  placeHolder: string;
+  type: string;
+  validate?: (value: any) => string | undefined;
+}
+
+const CustomInput: FC<CustomInputProps> = ({
+  defaultCheck,
+  defaultValue,
+  label,
+  fieldName,
+  placeHolder,
+  type,
+  validate,
+}) => {
+  const [mounted, setMounted] = useState(false);
+  useEffect(()=>{
+    setMounted(true);
+  }, [])
+
+  if(!mounted) return <Skeleton height="30px" mt="16px" />
+
+  return defaultCheck ? (
+    <FormControl mb="20px" isDisabled>
+      <FormLabel fontSize="14px">{label}</FormLabel>
+      <Input
+        variant="flushed"
+        borderColor="#929292"
+        value={defaultValue}
+        _focus={{
+          borderColor: "orange",
+          boxShadow: 0,
+        }}
+        placeholder={placeHolder}
+      />
+    </FormControl>
+  ) : (
+    <Field name={fieldName} validate={validate}>
+      {({ field, form }: { [x: string]: any }) => (
+        <FormControl
+          isInvalid={form.errors[fieldName] && form.touched[fieldName]}
+          mb="20px"
+        >
+          <Input
+            {...field}
+            variant="flushed"
+            type={type}
+            borderColor="#929292"
+            color="#929292"
+            _focus={{
+              borderColor: "orange",
+              boxShadow: 0,
+            }}
+            _focusVisible={{
+              borderColor: "#929292",
+            }}
+            placeholder={placeHolder}
+          />
+          <FormErrorMessage>{form.errors[fieldName]}</FormErrorMessage>
+        </FormControl>
+      )}
+    </Field>
+  );
+};
+

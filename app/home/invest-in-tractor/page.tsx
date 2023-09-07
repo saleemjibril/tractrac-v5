@@ -22,12 +22,13 @@ import {
   InputLeftAddon,
   InputGroup,
   InputLeftElement,
+  Skeleton,
 } from "@chakra-ui/react";
 import { SidebarWithHeader } from "../../components/Sidenav";
 import { saveLoginInfo } from "@/redux/features/auth/authActions";
 import { Formik, Form, Field } from "formik";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { ArrowForwardIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import dynamic from "next/dynamic";
 import { useAppSelector } from "@/redux/hooks";
@@ -130,7 +131,8 @@ export default function InvestInTractor() {
           </Text>
         </Stack>
 
-        <Box pr={{ base: "0px", lg: "80px" }} pt="16px" flex="1">
+        <Box pr={{ base: "0px", lg: "60px" }} pt="16px" flex="1">
+          {/* <Box pr={{ base: "0px", lg: "80px" }} pt="16px" flex="1"> */}
           <Box
             p="10px"
             fontSize="13px"
@@ -161,7 +163,7 @@ export default function InvestInTractor() {
                 console.log(values);
                 const response = await investInTractor({
                   ...values,
-                  user_id: profileInfo?.id,
+                  user_id: profileInfo?.id ?? 0,
                 }).unwrap();
                 if (response.status == "success") {
                   setSuccess(true);
@@ -241,7 +243,7 @@ export default function InvestInTractor() {
                       my={4}
                       isInvalid={form.errors.units && form.touched.units}
                     >
-                       <FormLabel fontSize="12px" color="#929292" mb="0px">
+                      <FormLabel fontSize="12px" color="#929292" mb="0px">
                         How many Tractors do you want
                       </FormLabel>
                       {/* <Input
@@ -255,26 +257,26 @@ export default function InvestInTractor() {
                         placeholder=""
                         type="number"
                       /> */}
-                     
-                        <Input
-                          variant="flushed"
-                          color="#929292"
-                          borderColor="#929292"
-                          _focusVisible={{
-                            borderColor: "#929292",
-                          }}
-                          value={formatAmount(tractorAmount)}
-                          onChange={(valueString) => {
-                            setTractorAmount(valueString.currentTarget.value);
-                            form.setFieldValue(
-                              field.name,
-                              parseAmount(valueString.currentTarget.value)
-                            );
-                          }}
-                          type="text"
-                          placeholder="How much do you want to invest"
-                        />
-                     
+
+                      <Input
+                        variant="flushed"
+                        color="#929292"
+                        borderColor="#929292"
+                        _focusVisible={{
+                          borderColor: "#929292",
+                        }}
+                        value={formatAmount(tractorAmount)}
+                        onChange={(valueString) => {
+                          setTractorAmount(valueString.currentTarget.value);
+                          form.setFieldValue(
+                            field.name,
+                            parseAmount(valueString.currentTarget.value)
+                          );
+                        }}
+                        type="text"
+                        placeholder="How much do you want to invest"
+                      />
+
                       <FormErrorMessage>{form.errors.units}</FormErrorMessage>
                     </FormControl>
                   )}
@@ -290,8 +292,11 @@ export default function InvestInTractor() {
                       <Select
                         {...field}
                         color="#929292"
-                        placeholder="What brand of Tractor are you
-                        interested in?"
+                        placeholder="What brand of Tractor are you interested in?"
+                        sx={{
+                          whiteSpace: "pre-line",
+                          // Add any additional styles as needed
+                        }}
                         // _placeholder={{
                         //   fontSize: "12px",
                         //   color: "red"
@@ -336,20 +341,67 @@ export default function InvestInTractor() {
                   )}
                 </Field> */}
 
-                <FormControl mb="16px" isDisabled>
-                  <FormLabel fontSize="14px">Firstname</FormLabel>
-                  <Input
-                    variant="flushed"
-                    borderColor="#929292"
-                    value={profileInfo?.fname}
-                    _focus={{
-                      borderColor: "orange",
-                      boxShadow: 0,
-                    }}
-                    //  ref={initialRef}
-                    placeholder="Enter your L.G.A."
-                  />
-                </FormControl>
+                <CustomInput
+                  label="Firstname"
+                  fieldName="fname"
+                  placeHolder="First Name"
+                  type="text"
+                  defaultValue={profileInfo?.fname}
+                  validate={validateEmpty}
+                />
+
+                <CustomInput
+                  label="Lastname"
+                  fieldName="lname"
+                  placeHolder="Last Name"
+                  type="text"
+                  defaultValue={profileInfo?.lname}
+                  validate={validateEmpty}
+                />
+
+                <CustomInput
+                  label="Email"
+                  fieldName="email"
+                  placeHolder="Email Address"
+                  type="email"
+                  defaultValue={profileInfo?.email}
+                  validate={validateEmpty}
+                />
+
+                <CustomInput
+                  label="Phone Number"
+                  fieldName="phone"
+                  placeHolder="Phone Number"
+                  type="number"
+                  defaultValue={profileInfo?.phone}
+                  validate={validateEmpty}
+                />
+
+                {/* <Field name="fname" validate={validateEmpty}>
+                  {({ field, form }: { [x: string]: any }) => (
+                    <FormControl
+                      isInvalid={form.errors.fname && form.touched.fname}
+                      mb="20px"
+                    >
+                      <FormControl mb="16px" isDisabled>
+                        <FormLabel fontSize="14px">Firstname</FormLabel>
+                        <Input
+                          variant="flushed"
+                          borderColor="#929292"
+                          value={profileInfo?.fname}
+                          _focus={{
+                            borderColor: "orange",
+                            boxShadow: 0,
+                          }}
+                          //  ref={initialRef}
+                          placeholder="First Name"
+                        />
+                      </FormControl>
+                      <FormErrorMessage>{form.errors.fname}</FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
+
                 <FormControl mb="16px" isDisabled>
                   <FormLabel fontSize="14px">Lastname</FormLabel>
                   <Input
@@ -360,7 +412,7 @@ export default function InvestInTractor() {
                       borderColor: "orange",
                       boxShadow: 0,
                     }}
-                    placeholder="Enter your L.G.A."
+                    placeholder="Last Name"
                   />
                 </FormControl>
 
@@ -375,7 +427,7 @@ export default function InvestInTractor() {
                       borderColor: "orange",
                       boxShadow: 0,
                     }}
-                    placeholder="Phone number"
+                    placeholder="Phone Number"
                   />
                 </FormControl>
 
@@ -390,9 +442,9 @@ export default function InvestInTractor() {
                       boxShadow: 0,
                     }}
                     //  ref={initialRef}
-                    placeholder="Enter your L.G.A."
+                    placeholder="Email Address"
                   />
-                </FormControl>
+                </FormControl> */}
 
                 <FormControl my="20px" isDisabled>
                   <Flex>
@@ -403,8 +455,12 @@ export default function InvestInTractor() {
                       width="108px"
                       cursor="pointer"
                       onClick={() => {
-                        if (!gender || gender?.length < 1) {
+                        if (!profileInfo?.gender) {
                           setGender("male");
+                        } else {
+                          if (!gender || gender?.length < 1) {
+                            setGender("male");
+                          }
                         }
                       }}
                       px="16px"
@@ -438,9 +494,13 @@ export default function InvestInTractor() {
                       minW="108px"
                       cursor="pointer"
                       onClick={() => {
+                        if (!profileInfo?.gender) {
+                          setGender("female");
+                        } else {
                         if (!gender || gender?.length < 1) {
                           setGender("female");
                         }
+                      }
                       }}
                       // height="37px"
                       px="16px"
@@ -548,5 +608,74 @@ export default function InvestInTractor() {
     </SidebarWithHeader>
   );
 }
+
+interface CustomInputProps {
+  defaultValue?: string;
+  label: string;
+  fieldName: string;
+  placeHolder: string;
+  type: string;
+  validate?: (value: any) => string | undefined;
+  // children: React.ReactNode;
+}
+
+const CustomInput: FC<CustomInputProps> = ({
+  defaultValue,
+  label,
+  fieldName,
+  placeHolder,
+  type,
+  validate,
+}) => {
+  const [mounted, setMounted] = useState(false);
+  useEffect(()=>{
+    setMounted(true);
+  }, [])
+
+  if(!mounted) return <Skeleton height="30px" mt="16px" />
+
+  return defaultValue ? (
+    <FormControl mb="16px" isDisabled>
+      <FormLabel fontSize="14px">{label}</FormLabel>
+      <Input
+        variant="flushed"
+        borderColor="#929292"
+        value={defaultValue}
+        _focus={{
+          borderColor: "orange",
+          boxShadow: 0,
+        }}
+        placeholder={placeHolder}
+      />
+    </FormControl>
+  ) : (
+    <Field name={fieldName} validate={validate}>
+      {({ field, form }: { [x: string]: any }) => (
+        <FormControl
+          isInvalid={form.errors[fieldName] && form.touched[fieldName]}
+          mb="16px"
+        >
+          <Input
+            {...field}
+            variant="flushed"
+            type={type}
+            borderColor="#929292"
+            color="#929292"
+            // value={defaultValue}
+            _focus={{
+              borderColor: "orange",
+              boxShadow: 0,
+            }}
+            _focusVisible={{
+              borderColor: "#929292",
+            }}
+            placeholder={placeHolder}
+          />
+          <FormErrorMessage>{form.errors[fieldName]}</FormErrorMessage>
+        </FormControl>
+      )}
+    </Field>
+  );
+};
 
 const brands = ["case_ih", "sonalika", "john_deere", "mahindra", "others"];

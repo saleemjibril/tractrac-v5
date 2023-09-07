@@ -13,9 +13,8 @@ import {
   Stack,
   Text,
   Box,
-  Select,
+  Skeleton,
   Modal as ChakraModal,
-  ModalHeader,
   ModalOverlay,
   useDisclosure,
   ModalBody,
@@ -26,7 +25,7 @@ import { SidebarWithHeader } from "../../components/Sidenav";
 import { saveLoginInfo } from "@/redux/features/auth/authActions";
 import { Formik, Form, Field } from "formik";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { ArrowForwardIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import dynamic from "next/dynamic";
 import { useAppSelector } from "@/redux/hooks";
@@ -143,30 +142,25 @@ export default function BecomeAnAgent() {
               </AlertDescription> */}
                   </Alert>
                 )}
-                <FormControl mb="16px" isDisabled>
-                  <FormLabel fontSize="14px">Name</FormLabel>
-                  <Input
-                    variant="flushed"
-                    borderColor="929292"
-                    value={`${profileInfo?.fname} ${profileInfo?.lname}`}
-                    _focusVisible={{
-                      borderColor: "#929292",
-                    }}
-                    placeholder="Enter your L.G.A."
-                  />
-                </FormControl>
-                <FormControl mb="16px" isDisabled>
-                  <FormLabel fontSize="14px">Email</FormLabel>
-                  <Input
-                    variant="flushed"
-                    borderColor="#929292"
-                    value={profileInfo?.email}
-                    _focusVisible={{
-                      borderColor: "#929292",
-                    }}
-                    placeholder="Enter your L.G.A."
-                  />
-                </FormControl>
+                <CustomInput
+                  label="Name"
+                  fieldName="name"
+                  placeHolder="Name"
+                  type="text"
+                  defaultValue={`${profileInfo?.fname} ${profileInfo?.lname}`}
+                  defaultCheck={profileInfo?.fname}
+                  validate={validateEmpty}
+                />
+
+                <CustomInput
+                  label="Email"
+                  fieldName="email"
+                  placeHolder="Email Address"
+                  type="email"
+                  defaultValue={profileInfo?.email}
+                  defaultCheck={profileInfo?.email}
+                  validate={validateEmpty}
+                />
 
                 {/* <Field name="state" validate={validateEmpty}>
                   {({ field, form }: { [x: string]: any }) => (
@@ -372,42 +366,71 @@ export default function BecomeAnAgent() {
   );
 }
 
-const states = [
-  "Abia",
-  "Adamawa",
-  "Akwa Ibom",
-  "Anambra",
-  "Bauchi",
-  "Bayelsa",
-  "Benue",
-  "Borno",
-  "Cross River",
-  "Delta",
-  "Ebonyi",
-  "Edo",
-  "Ekiti",
-  "Enugu",
-  "FCT - Abuja",
-  "Gombe",
-  "Imo",
-  "Jigawa",
-  "Kaduna",
-  "Kano",
-  "Katsina",
-  "Kebbi",
-  "Kogi",
-  "Kwara",
-  "Lagos",
-  "Nasarawa",
-  "Niger",
-  "Ogun",
-  "Ondo",
-  "Osun",
-  "Oyo",
-  "Plateau",
-  "Rivers",
-  "Sokoto",
-  "Taraba",
-  "Yobe",
-  "Zamfara",
-];
+interface CustomInputProps {
+  defaultCheck?: string;
+  defaultValue?: string;
+  label: string;
+  fieldName: string;
+  placeHolder: string;
+  type: string;
+  validate?: (value: any) => string | undefined;
+}
+
+const CustomInput: FC<CustomInputProps> = ({
+  defaultCheck,
+  defaultValue,
+  label,
+  fieldName,
+  placeHolder,
+  type,
+  validate,
+}) => {
+  const [mounted, setMounted] = useState(false);
+  useEffect(()=>{
+    setMounted(true);
+  }, [])
+
+  if(!mounted) return <Skeleton height="30px" mt="16px" />
+
+  return defaultCheck ? (
+    <FormControl mb="20px" isDisabled>
+      <FormLabel fontSize="14px">{label}</FormLabel>
+      <Input
+        variant="flushed"
+        borderColor="#929292"
+        value={defaultValue}
+        _focus={{
+          borderColor: "orange",
+          boxShadow: 0,
+        }}
+        placeholder={placeHolder}
+      />
+    </FormControl>
+  ) : (
+    <Field name={fieldName} validate={validate}>
+      {({ field, form }: { [x: string]: any }) => (
+        <FormControl
+          isInvalid={form.errors[fieldName] && form.touched[fieldName]}
+          mb="20px"
+        >
+          <Input
+            {...field}
+            variant="flushed"
+            type={type}
+            borderColor="#929292"
+            color="#929292"
+            _focus={{
+              borderColor: "orange",
+              boxShadow: 0,
+            }}
+            _focusVisible={{
+              borderColor: "#929292",
+            }}
+            placeholder={placeHolder}
+          />
+          <FormErrorMessage>{form.errors[fieldName]}</FormErrorMessage>
+        </FormControl>
+      )}
+    </Field>
+  );
+};
