@@ -170,6 +170,7 @@ export default function BecomeAnAgent() {
                 formData.append("insurance_company", values?.insurance_company);
                 formData.append("tracker", values?.tracker);
                 formData.append("insurance_expiry", values?.insurance_expiry);
+                formData.append("address", values?.address);
                 formData.append("image", values?.image);
                 console.log(formData);
 
