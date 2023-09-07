@@ -51,8 +51,8 @@ export default function EnlistedTractors() {
     error,
     // isFetching,
     isLoading,
-    } = useGetEnlistedTractorsQuery("3");
-  // } = useGetEnlistedTractorsQuery(profileInfo?.id);
+    //} = useGetEnlistedTractorsQuery("3");
+  } = useGetEnlistedTractorsQuery(profileInfo?.id);
 
   console.log(error, result);
 
