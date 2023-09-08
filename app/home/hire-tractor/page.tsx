@@ -691,7 +691,7 @@ function HireTractorForm({ id }: { id: string }) {
                 mb="4px"
                 onClick={() => {
                   onClose();
-                  router.replace("/dashboard");
+                  router.replace("/dashboard/hired-tractors");
                 }}
                 width="100%"
                 height="45px"

@@ -652,6 +652,11 @@ function NavbarComponent({ onOpen }: MobileProps) {
                 fontSize={"sm"}
                 fontWeight={700}
                 // color={linkColor}
+                onClick={(e) => {
+                  e.preventDefault()
+                  let contact = document.getElementById("contact");
+                  contact && contact.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
                 _hover={{
                   textDecoration: "none",
                   // color: linkHoverColor,
@@ -1099,6 +1104,7 @@ function ContactUsComponent() {
 
   return (
     <Flex
+    id="contact"
       width={"100%"}
       // height={"535px"}
       bgImage="url('images/contact-us.svg')"

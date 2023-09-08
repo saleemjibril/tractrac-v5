@@ -530,7 +530,7 @@ function NavbarComponent({ onOpen }: MobileProps) {
               </Link>
               <Link
                 // p={2}
-                href={"#"}
+                href={"/#contact"}
                 fontSize={"sm"}
                 fontWeight={700}
                 // color={linkColor}
@@ -760,8 +760,8 @@ function FooterComponent() {
         flexWrap="wrap"
         justifyContent="center"
       >
-        <Link href="#">About us</Link>
-        <Link href="#">Contact us</Link>
+        <Link href="/about">About us</Link>
+        <Link href="/#contact">Contact us</Link>
         <Link href="#">Facebook</Link>
         <Link href="#">Twitter</Link>
         <Link href="#">Instagram</Link>

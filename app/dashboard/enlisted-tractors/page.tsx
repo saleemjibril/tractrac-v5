@@ -51,7 +51,7 @@ export default function EnlistedTractors() {
     error,
     // isFetching,
     isLoading,
-    //} = useGetEnlistedTractorsQuery("3");
+    // } = useGetEnlistedTractorsQuery("3");
   } = useGetEnlistedTractorsQuery(profileInfo?.id);
 
   console.log(error, result);
@@ -209,6 +209,8 @@ export default function EnlistedTractors() {
                       <Box
                         mt="10px"
                         bgColor="#FFD900"
+                        as="a"
+                        href="/home/track-tractor"
                         py="4px"
                         textAlign="center"
                         borderRadius="4px"

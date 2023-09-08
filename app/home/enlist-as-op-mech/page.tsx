@@ -223,7 +223,16 @@ export default function BecomeAnAgent() {
                               v.currentTarget.value
                             );
                             // alert(props.values.state);
-                            setLgas(nigerianStates.lgas(state) ?? []);
+                            if (state.includes("abuja")) {
+                              // Federal Capital Territory
+                              setLgas(
+                                nigerianStates.lgas(
+                                  "Federal Capital Territory"
+                                ) ?? []
+                              );
+                            } else {
+                              setLgas(nigerianStates.lgas(state) ?? []);
+                            }
                           }}
                         >
                           {states.map((state) => (

@@ -22,7 +22,7 @@ import {
   ModalBody,
   ModalContent,
   Textarea,
-  Center,
+  Icon,
   InputGroup,
 } from "@chakra-ui/react";
 import * as nigerianStates from "nigerian-states-and-lgas";
@@ -43,7 +43,7 @@ import { toast } from "react-toastify";
 
 import { FileUploader } from "react-drag-drop-files";
 import { FaFileUpload, FaUpload } from "react-icons/fa";
-import { FiUpload } from "react-icons/fi";
+import { FiFile, FiUpload } from "react-icons/fi";
 import { enlistTractor } from "@/redux/features/user/userActions";
 
 const fileTypes = ["JPG", "PNG", "JPEG"];
@@ -83,7 +83,10 @@ export default function BecomeAnAgent() {
     if (requestSuccessful && !isOpen) {
       onOpen();
     }
-  }, [requestSuccessful, isOpen, onOpen]);
+    if (enlistTractorError) {
+      toast.error(enlistTractorError);
+    }
+  }, [requestSuccessful, isOpen, onOpen, enlistTractorError]);
 
   function validateEmpty(value: any) {
     let error;
@@ -144,9 +147,11 @@ export default function BecomeAnAgent() {
               setError(null);
 
               if (values?.insured == "yes") {
-                if (!values?.insurance_company || !values?.insurance_expiry) {
+                if (!values?.insurance_expiry) {
+                  // if (!values?.insurance_company || !values?.insurance_expiry) {
                   toast.error(
-                    "Please fill in insurance company and expiry if tractor is ensured!"
+                    "Please fill in insurance expiry if tractor is ensured!"
+                    // "Please fill in insurance company and expiry if tractor is ensured!"
                   );
                   // alert(values?.insurance_company)
                   return;
@@ -160,6 +165,7 @@ export default function BecomeAnAgent() {
                 formData.append("user_id", profileInfo?.id);
                 formData.append("brand", values?.brand);
                 formData.append("model", values?.model);
+                formData.append("address", values?.address);
                 formData.append("tractor_type", values?.tractor_type);
                 formData.append("purchase_year", values?.purchase_year);
                 formData.append("plate_number", values?.plate_number);
@@ -170,7 +176,6 @@ export default function BecomeAnAgent() {
                 formData.append("insurance_company", values?.insurance_company);
                 formData.append("tracker", values?.tracker);
                 formData.append("insurance_expiry", values?.insurance_expiry);
-                formData.append("address", values?.address);
                 formData.append("image", values?.image);
                 console.log(formData);
 
@@ -592,8 +597,16 @@ export default function BecomeAnAgent() {
                               field.name,
                               v.currentTarget.value
                             );
-                            // alert(props.values.state);
-                            setLgas(nigerianStates.lgas(state) ?? []);
+                            if (state.includes("abuja")) {
+                              // Federal Capital Territory
+                              setLgas(
+                                nigerianStates.lgas(
+                                  "Federal Capital Territory"
+                                ) ?? []
+                              );
+                            } else {
+                              setLgas(nigerianStates.lgas(state) ?? []);
+                            }
                           }}
                         >
                           {states.map((state) => (
@@ -650,7 +663,6 @@ export default function BecomeAnAgent() {
                     )}
                   </Field>
 
-
                   <Field name="address">
                     {({ field, form }: { [x: string]: any }) => (
                       <FormControl
@@ -669,7 +681,9 @@ export default function BecomeAnAgent() {
                           }}
                           {...field}
                         />
-                        <FormErrorMessage>{form.errors.address}</FormErrorMessage>
+                        <FormErrorMessage>
+                          {form.errors.address}
+                        </FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
@@ -761,6 +775,7 @@ export default function BecomeAnAgent() {
                       <FormControl
                         isInvalid={form.errors.image && form.touched.image}
                         isRequired
+                        width="100%"
                       >
                         <InputGroup>
                           {/*<InputLeftElement
@@ -792,24 +807,76 @@ export default function BecomeAnAgent() {
                             // {...field}
                             style={{ display: "none" }}
                           ></input>
-                          <Button
+                          <Box
                             onClick={() => inputRef.current?.click()}
                             borderWidth="1px"
                             borderColor="#929292"
                             borderRightWidth="0.5px"
                             borderRadius={0}
                             width="100%"
+                            py={field.value ? "0px" : "8px"}
+                            px="12px"
+                            // overflow="hidden"
+                            // height="50px"
                           >
-                            <FiUpload color="#FA9411" />
-                            <Text
-                              ml="8px"
-                              color="#929292"
-                              fontSize="16px"
-                              fontWeight={400}
-                            >
-                              {field.value ? "Image attached" : "Tractor Image"}
-                            </Text>
-                          </Button>
+                            {field.value ? (
+                              <Flex
+                                justifyContent="center"
+                                alignItems="center"
+                                alignContent="center"
+                                my="4px"
+                                columnGap="10px"
+                              >
+                                {/* <FiFile color="#FA9411" /> */}
+                                <Icon
+                                  as={FiFile}
+                                  boxSize="20px"
+                                  color="#FA9411"
+                                />
+
+                                <Stack alignItems="start" gap="2px">
+                                  <Text
+                                    // lineHeight="20px"
+                                    color="#929292"
+                                    fontSize="13px"
+                                    fontWeight={400}
+                                    // maxW="200px"
+                                    // textOverflow="ellipsis"
+                                    // wordBreak="break-word"
+                                  >
+                                    {field.value?.name}
+                                  </Text>
+                                  <Text
+                                    color="#929292"
+                                    fontSize="12px"
+                                    fontWeight={400}
+                                  >
+                                    {(
+                                      parseFloat(field.value?.size) / 1000
+                                    ).toFixed(2)}{" "}
+                                    KB
+                                  </Text>
+                                </Stack>
+                              </Flex>
+                            ) : (
+                              <Flex
+                                justifyContent="center"
+                                alignItems="center"
+                                alignContent="center"
+                              >
+                                <FiUpload color="#FA9411" />
+
+                                <Text
+                                  ml="8px"
+                                  color="#929292"
+                                  fontSize="16px"
+                                  fontWeight={400}
+                                >
+                                  Tractor Image
+                                </Text>
+                              </Flex>
+                            )}
+                          </Box>
                         </InputGroup>
                         {tractorImageError && (
                           <Text color="red" fontSize="14px" mt="2px">
@@ -824,7 +891,7 @@ export default function BecomeAnAgent() {
                     bgColor="#F8A730"
                     color="white"
                     // mr="80px"
-                    width="95%"
+                    width="100%"
                     fontSize="16px"
                     fontWeight={600}
                     // mb="16px"
@@ -883,7 +950,7 @@ export default function BecomeAnAgent() {
                 mb="4px"
                 onClick={() => {
                   onClose();
-                  router.replace("/dashboard");
+                  router.replace("/dashboard/enlisted-tractors");
                 }}
                 width="100%"
                 height="45px"
