@@ -141,8 +141,17 @@ export default function BecomeAnAgent() {
 
         <Box pr={{ base: "0px", lg: "150px", xl: "200px" }} mt="40px">
           <Formik
-            // initialValues={{ name: 'Sasuke' }}
-            initialValues={{ brand: "", model: "", tractor_type: "" }}
+            initialValues={{
+              brand: "",
+              model: "",
+              tractor_type: "",
+              rating: "",
+              purchase_year: "",
+              plate_number: "",
+              insured: "",
+              tracker: "",
+              lga: "",
+            }}
             onSubmit={async (values: any, { resetForm }) => {
               setError(null);
 

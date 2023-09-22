@@ -28,6 +28,7 @@ import {
   IconProps,
   Button,
   Show,
+  ListIcon,
 } from "@chakra-ui/react";
 import {
   FiHome,
@@ -88,35 +89,35 @@ interface SidebarProps extends BoxProps {
 }
 
 const LinkItems: Array<LinkItemProps> = [
-  {
-    name: "Home",
-    imageLight: "home-light",
-    imageDark: "home-dark",
-    path: "/home",
-    iconLight: ClarityHomeLineWhite,
-    iconDark: ClarityHomeLine,
-  },
+//   {
+//     name: "Home",
+//     imageLight: "home-light",
+//     imageDark: "home-dark",
+//     path: "/home",
+//     iconLight: ClarityHomeLineWhite,
+//     iconDark: ClarityHomeLine,
+//   },
   {
     name: "Dashboard",
     imageLight: "dashboard-light",
     imageDark: "dashboard-dark",
-    path: "/dashboard",
+    path: "/admin/dashboard",
     iconLight: Element4,
     iconDark: Element4,
   },
-  // {
-  //   name: "Overview",
-  //   imageLight: "user-light",
-  //   imageDark: "user-dark",
-  //   path: "#",
-  //   iconLight: User,
-  //   iconDark: User,
-  // },
   {
-    name: "Special Programs",
+    name: "Farmers",
     imageLight: "pay-light",
     imageDark: "pay-dark",
-    path: "/special-programs",
+    path: "/admin/farmers",
+    iconLight: TractorPlusWhite,
+    iconDark: TractorPlusDark,
+  },
+  {
+    name: "Entries",
+    imageLight: "pay-light",
+    imageDark: "pay-dark",
+    path: "/admin/entries",
     iconLight: TractorPlusWhite,
     iconDark: TractorPlusDark,
   },
@@ -124,15 +125,31 @@ const LinkItems: Array<LinkItemProps> = [
     name: "Payment",
     imageLight: "pay-light",
     imageDark: "pay-dark",
-    path: "/payment",
+    path: "/admin/payment",
     iconLight: Payment,
     iconDark: Payment,
   },
   {
-    name: "Account",
+    name: "Verification",
+    imageLight: "pay-light",
+    imageDark: "pay-dark",
+    path: "/admin/verfication",
+    iconLight: TractorPlusWhite,
+    iconDark: TractorPlusDark,
+  },
+  {
+    name: "Assign",
+    imageLight: "pay-light",
+    imageDark: "pay-dark",
+    path: "/admin/assign",
+    iconLight: TractorPlusDark,
+    iconDark: TractorPlusDark,
+  },
+  {
+    name: "Users",
     imageLight: "user-light",
     imageDark: "user-dark",
-    path: "/account",
+    path: "/admin/users",
     iconLight: User,
     iconDark: User,
   },
@@ -399,7 +416,7 @@ interface ModalProps {
   children: React.ReactNode;
 }
 
-export const SidebarWithHeader: React.FC<ModalProps> = ({ children }) => {
+export const AdminSidebarWithHeader: React.FC<ModalProps> = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   // const router = useRouter();
   // const { profileInfo } = useAppSelector((state) => state.auth);

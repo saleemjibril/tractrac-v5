@@ -118,6 +118,20 @@ export const userApi = createApi({
       }),
       invalidatesTags: ['farmers']
     }),
+    updateBioData: builder.mutation({
+      query: (data: any) => ({
+        url: "/update_biodata",
+        method: "POST",
+        body: transformRequest(data),
+      }),
+    }),
+    updatePassword: builder.mutation({
+      query: (data: any) => ({
+        url: "/update_password",
+        method: "POST",
+        body: transformRequest(data),
+      }),
+    }),
   }),
 });
 
@@ -136,5 +150,7 @@ export const {
   useBecomeAnOpOrMechMutation,
   useMakePaymentMutation,
   useAddFarmerMutation,
+  useUpdateBioDataMutation,
+  useUpdatePasswordMutation,
 } = userApi;
 // export const { useGetActiveUsersQuery } = userApi

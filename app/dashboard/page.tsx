@@ -56,7 +56,7 @@ export default function Dashboard() {
       // imageLight: "pay-light",
       // imageDark: "pay-dark",
       icon: Money_2,
-      path: "#",
+      path:`${path}/investment`,
     },
     {
       name: "Land Processed",
@@ -64,7 +64,7 @@ export default function Dashboard() {
       // imageDark: "pay-dark",
       iconActive: TaskListWhite,
       icon: TaskList,
-      path: "#",
+      path:  `${path}/land-processed`,
     },
     {
       name: "Serviced Hour",
@@ -72,14 +72,14 @@ export default function Dashboard() {
       // imageDark: "pay-dark",
       icon: TaskList,
       iconActive: TaskListWhite,
-      path: "#",
+      path: `${path}/serviced-hour`,
     },
     {
       name: "Demand Generated",
       // imageLight: "pay-light",
       // imageDark: "pay-dark",
       icon: Demand,
-      path: "#",
+      path: `${path}/demand-generated`,
     },
     {
       name: "Demand Fulfilled",
@@ -87,7 +87,7 @@ export default function Dashboard() {
       // imageDark: "pay-dark",
       icon: TaskList,
       iconActive: TaskListWhite,
-      path: "#",
+      path:`${path}/demand-fulfilled`,
     },
     {
       name: "Revenue Generated",
@@ -95,7 +95,7 @@ export default function Dashboard() {
       // imageDark: "pay-dark",
       icon: TaskList,
       iconActive: TaskListWhite,
-      path: "#",
+      path: `${path}/revenue-generated`,
     },
     {
       name: "Agent",

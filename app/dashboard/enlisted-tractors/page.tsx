@@ -208,6 +208,7 @@ export default function EnlistedTractors() {
                   <Td>
                       <Box
                         mt="10px"
+                        display="block"
                         bgColor="#FFD900"
                         as="a"
                         href="/home/track-tractor"

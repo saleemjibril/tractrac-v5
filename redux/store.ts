@@ -5,6 +5,8 @@ import userReducer from "./features/user/userSlice";
 import { authApi } from "./services/authApi";
 import { userApi } from "./services/userApi";
 import { tractorApi } from "./services/tractorApi";
+import { dashboardApi } from "./services/dashboardApi";
+import { adminApi } from "./services/adminApi";
 
 export const store = configureStore({
   reducer: {
@@ -14,12 +16,16 @@ export const store = configureStore({
     [authApi.reducerPath]: authApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
     [tractorApi.reducerPath]: tractorApi.reducer,
+    [dashboardApi.reducerPath]: dashboardApi.reducer,
+    [adminApi.reducerPath]: adminApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({}).concat(
       authApi.middleware,
       userApi.middleware,
-      tractorApi.middleware
+      tractorApi.middleware,
+      dashboardApi.middleware,
+      adminApi.middleware,
     ),
 });
 
