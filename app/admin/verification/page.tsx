@@ -24,7 +24,6 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { SidebarWithHeader } from "../../components/Sidenav";
-import { createElement, useEffect, useState } from "react";
 import PersonalOverview from "@/app/components/PersonalOverview";
 import { useAppSelector } from "@/redux/hooks";
 import { AdminSidebarWithHeader } from "@/app/components/AdminSidenav";
@@ -44,11 +43,13 @@ interface ITractorCard {
 const statusTypes: Record<string, { title: string; color: string }> = {
   pending: { title: "Pending", color: "#FA9411" },
   verified: { title: "Verified", color: "#27AE60" },
+  approved: { title: "Approved", color: "#27AE60" },
+  completed: { title: "Completed", color: "#27AE60" },
   in_use: { title: "In Use", color: "#F03B13" },
+  not_approved: { title: "Not Approved", color: "#F03B13" },
 };
 
 export default function EnlistedTractors() {
-  const { profileInfo } = useAppSelector((state) => state.auth);
 
   const {
     data: result,

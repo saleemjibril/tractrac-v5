@@ -2,22 +2,13 @@
 import {
   Box,
   Image,
-  ComponentWithAs,
   Flex,
-  IconProps,
-  SimpleGrid,
   Text,
-  Button,
   Center,
-  Stack,
-  SkeletonCircle,
-  SkeletonText,
-  Skeleton,
   Table,
   TableContainer,
   Tbody,
   Td,
-  Tfoot,
   Th,
   Thead,
   Tr,
@@ -53,7 +44,7 @@ export default function ServicedHoursPage() {
     // isFetching,
     isLoading,
     // } = useGetEnlistedTractorsQuery("3");
-  } = useGetServicedHoursQuery({});
+  } = useGetServicedHoursQuery(profileInfo?.id);
 
   console.log(error, results);
 
@@ -105,8 +96,8 @@ export default function ServicedHoursPage() {
                       {result?.downtime ?? "Nil"}
                     </Td>
                     <Td>
-                      Israel
-                      {/* {result?.current_location ?? "Nil"} */}
+                      {/* Israel */}
+                      {result?.agent ?? "Nil"}
                     </Td>
                     <Td>{result?.created_at}</Td>
                     <Td>

@@ -52,6 +52,14 @@ export const authApi = createApi({
       }),
       //   invalidatesTags: ['users'],
     }),
+    loginAdmin: builder.mutation({
+      query: ({ phone, password }) => ({
+        url: "/admin_login",
+        method: "POST",
+        body: transformRequest({ phone, password }),
+      }),
+      //   invalidatesTags: ['users'],
+    }),
     registerUser: builder.mutation({
       query: (data: any) => ({
         url: "/register",
@@ -101,6 +109,7 @@ export const {
   //   useLazyGetActiveUsersQuery,
   //   useLazyGetUserQuery,
   useLoginUserMutation,
+  useLoginAdminMutation,
   useRegisterUserMutation,
   useVerifyOtpMutation,
   useSendOtpMutation,

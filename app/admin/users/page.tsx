@@ -1,5 +1,5 @@
 "use client";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useMemo } from "react";
 import {
   Box,
   Image,
@@ -20,12 +20,17 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Avatar,
+  Button,
+  Icon,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { SearchIcon } from "@chakra-ui/icons";
 import { useAppSelector } from "@/redux/hooks";
 import { useGetUsersQuery } from "@/redux/services/adminApi";
 import { AdminSidebarWithHeader } from "@/app/components/AdminSidenav";
+import { Table as CTable, createColumn } from "react-chakra-pagination";
+import { FiTrash2, FiUser } from "react-icons/fi";
 
 const statusTypes: Record<string, { title: string; color: string }> = {
   pending: { title: "Pending", color: "#FA9411" },
@@ -35,9 +40,91 @@ const statusTypes: Record<string, { title: string; color: string }> = {
   not_approved: { title: "Not Approved", color: "#FE391E" },
 };
 
-export default function UsersPage() {
-  const { profileInfo } = useAppSelector((state) => state.auth);
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  birthday: string;
+  avatar_url: string;
+};
 
+// Example list of users
+// Generated using https://www.mockaroo.com/
+const users: User[] = [
+  {
+    id: 10,
+    name: "Alf Ibbotson",
+    email: "aibbotson9@mozilla.com",
+    phone: "(739) 4103240",
+    birthday: "02/28/2007",
+    avatar_url:
+      "https://robohash.org/temporibussintmollitia.png?size=50x50&set=set1",
+  },
+  {
+    id: 11,
+    name: "Aurel McCamish",
+    email: "amccamisha@soup.io",
+    phone: "(352) 9149861",
+    birthday: "03/13/1993",
+    avatar_url: "https://robohash.org/laboreteneturut.png?size=50x50&set=set1",
+  },
+  {
+    id: 12,
+    name: "Jarrad Jerrans",
+    email: "jjerransb@mail.ru",
+    phone: "(568) 7793952",
+    birthday: "05/25/1989",
+    avatar_url:
+      "https://robohash.org/voluptasoditrepellendus.png?size=50x50&set=set1",
+  },
+  {
+    id: 13,
+    name: "Adams Swyer-Sexey",
+    email: "aswyersexeyc@meetup.com",
+    phone: "(682) 4005822",
+    birthday: "12/31/1984",
+    avatar_url:
+      "https://robohash.org/molestiaeatqueincidunt.png?size=50x50&set=set1",
+  },
+  {
+    id: 14,
+    name: "Gladi Coxhell",
+    email: "gcoxhelld@sciencedaily.com",
+    phone: "(321) 6811254",
+    birthday: "10/21/2009",
+    avatar_url:
+      "https://robohash.org/perspiciatissitreprehenderit.png?size=50x50&set=set1",
+  },
+  {
+    id: 15,
+    name: "Felecia Yitzovicz",
+    email: "fyitzovicze@cnet.com",
+    phone: "(465) 9054540",
+    birthday: "04/30/1982",
+    avatar_url: "https://robohash.org/undevelitdolor.png?size=50x50&set=set1",
+  },
+  {
+    id: 1,
+    name: "Carlin Gwinn",
+    email: "cgwinn0@buzzfeed.com",
+    phone: "(684) 9842794",
+    birthday: "04/11/2009",
+    avatar_url:
+      "https://robohash.org/assumendanihilodio.png?size=50x50&set=set1",
+  },
+  {
+    id: 2,
+    name: "Yetta Snape",
+    email: "ysnape1@princeton.edu",
+    phone: "(645) 8617506",
+    birthday: "06/08/1989",
+    avatar_url:
+      "https://robohash.org/liberorationequasi.png?size=50x50&set=set1",
+  },
+];
+
+export default function UsersPage() {
   const {
     data: result,
     error,
@@ -49,6 +136,7 @@ export default function UsersPage() {
   const [search, setSearchInput] = useState("");
 
   function filterUsers(users: any[], searchString: string): any[] {
+    if (!users) return [];
     if (searchString.trim() === "") {
       return users; // If the search string is empty, return all farmers
     }
@@ -65,6 +153,48 @@ export default function UsersPage() {
           : user.fname.toLowerCase().includes(searchValue.toLowerCase()) // Search by name if it's not a number
     );
   }
+
+  const tableData = useMemo(() => {
+    return filterUsers(result?.data, search).map((user: any) => ({
+      fname: user.fname,
+      lname: user.lname,
+      phone: user.phone,
+      gender: user.gender,
+      email: user.email,
+      state: user.state,
+    }));
+  }, [result, search]);
+
+  // Need pass type of `tableDate` for ts autocomplete
+  const columnHelper = createColumn<any>();
+  //   const columnHelper = createColumn<(typeof tableData)[0]>();
+
+  const columns = [
+    columnHelper.accessor("fname", {
+      cell: (info) => info.getValue(),
+      header: "First Name",
+    }),
+    columnHelper.accessor("lname", {
+      cell: (info) => info.getValue(),
+      header: "Last Name",
+    }),
+    columnHelper.accessor("phone", {
+      cell: (info) => info.getValue(),
+      header: "Phone Number",
+    }),
+    columnHelper.accessor("gender", {
+      cell: (info) => info.getValue(),
+      header: "Gender",
+    }),
+    columnHelper.accessor("email", {
+      cell: (info) => info.getValue(),
+      header: "Email",
+    }),
+    columnHelper.accessor("state", {
+      cell: (info) => info.getValue(),
+      header: "State",
+    }),
+  ];
 
   return (
     <AdminSidebarWithHeader>
@@ -121,7 +251,23 @@ export default function UsersPage() {
                 borderColor="#32323220"
                 borderRadius="12px"
               >
-                <Table variant="simple" bgColor="white">
+                <CTable
+                  colorScheme="orange"
+                  // Fallback component when list is empty
+                  emptyData={{
+                    icon: FiUser,
+                    text: "Empty",
+                  }}
+                  // Control registers to show
+                  // Exemple: show 10 registers of 15
+                  totalRegisters={result?.data.length || 10}
+                  itemsPerPage={50}
+                  // Listen change page event and control the current page using state
+                  onPageChange={(page: any) => console.log(page)}
+                  columns={columns}
+                  data={tableData}
+                />
+                {/* <Table variant="simple" bgColor="white">
                   <Thead color="#323232" bgColor="#E2E8F0">
                     <Tr>
                       <Th>First Name</Th>
@@ -132,7 +278,6 @@ export default function UsersPage() {
                       <Th>State</Th>
                     </Tr>
                   </Thead>
-                  {/* { JSON.stringify(result?.data)} */}
                   <Tbody>
                     {filterUsers(result?.data, search).map((user: any) => (
                       <Tr key={user?.id}>
@@ -145,10 +290,30 @@ export default function UsersPage() {
                       </Tr>
                     ))}
                   </Tbody>
-                </Table>
+                </Table> */}
               </TableContainer>
             )}
           </Box>
+
+          {/* Test */}
+          {/* <Box mt="6">
+            <CTable
+              colorScheme="orange"
+              // Fallback component when list is empty
+              emptyData={{
+                icon: FiUser,
+                text: "Empty",
+              }}
+              // Control registers to show
+              // Exemple: show 10 registers of 15
+              totalRegisters={20}
+              itemsPerPage={4}
+              // Listen change page event and control the current page using state
+              onPageChange={(page: any) => console.log(page)}
+              columns={columns}
+              data={tableData}
+            />
+          </Box> */}
         </Box>
       </Box>
     </AdminSidebarWithHeader>

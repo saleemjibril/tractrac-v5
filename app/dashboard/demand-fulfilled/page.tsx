@@ -9,10 +9,6 @@ import {
   Text,
   Button,
   Center,
-  Stack,
-  SkeletonCircle,
-  SkeletonText,
-  Skeleton,
   Table,
   TableContainer,
   Tbody,
@@ -27,34 +23,22 @@ import { createElement, useEffect, useState } from "react";
 import PersonalOverview from "@/app/components/PersonalOverview";
 import { useGetEnlistedTractorsQuery } from "@/redux/services/tractorApi";
 import { useAppSelector } from "@/redux/hooks";
+import { useGetDemandFulfilledQuery } from "@/redux/services/dashboardApi";
 
-interface ITractorCard {
-  name: string;
-  capacity: string;
-  type: string;
-  location: string;
-  status: string;
-  image: string;
-}
 
-const statusTypes: Record<string, { title: string; color: string }> = {
-  pending: { title: "Pending", color: "#FA9411" },
-  verified: { title: "Verified", color: "#27AE60" },
-  in_use: { title: "In Use", color: "#F03B13" },
-};
 
-export default function EnlistedTractors() {
+export default function DemandFulfilledPage() {
   const { profileInfo } = useAppSelector((state) => state.auth);
 
   const {
-    data: result,
+    data: results,
     error,
     // isFetching,
     isLoading,
     // } = useGetEnlistedTractorsQuery("3");
-  } = useGetEnlistedTractorsQuery(profileInfo?.id);
+  } = useGetDemandFulfilledQuery(profileInfo?.id);
 
-  console.log(error, result);
+  console.log(error, results);
 
   // const skeletons = [1,2,3,4,5,6];
 
@@ -92,25 +76,24 @@ export default function EnlistedTractors() {
                 </Tr>
               </Thead>
               <Tbody>
-                {result?.data.map((tractor: any) => (
-                  <Tr key={tractor?.id}>
-                    <Td>{`${tractor?.brand} ${tractor?.model}`}</Td>
+                {results?.data.map((result: any) => (
+                  <Tr key={result?.id}>
+                    <Td>{result?.tractor_name}</Td>
                     <Td>
-                      &#8358;{parseFloat(tractor?.amount ?? 0).toLocaleString()}
+                      &#8358;{parseFloat(result?.revenue ?? 0).toLocaleString()}
                     </Td>
                     <Td>
-                      Soliu
-                      {/* {tractor?.current_location ?? "Nil"} */}
+                      {result?.agent ?? "Nil"}
                     </Td>
                     <Td>
-                      10-09-2023
-                      {/* {tractor?.current_location ?? "Nil"} */}
+                      {result?.uptime ?? "Nil"}
                     </Td>
                     <Td>
-                      10-12-2023
-                      {/* {tractor?.current_location ?? "Nil"} */}
+                      {result?.downtime ?? "Nil"}
                     </Td>
-                    <Td>15-08-2023</Td>
+                    <Td>
+                      {result?.created_at ?? "Nil"}
+                    </Td>
                 
                   </Tr>
                 ))}
@@ -122,81 +105,6 @@ export default function EnlistedTractors() {
         <PersonalOverview />
       </Box>
     </SidebarWithHeader>
-  );
-}
-
-function TractorCard({ name, type, location, status, image }: ITractorCard) {
-  return (
-    <Box boxShadow="md" borderRadius="4px">
-      <Box h="200px">
-        <Image
-          borderTopRadius="4px"
-          // src="/images/man-with-tractor.svg"
-          src={
-            image?.startsWith("https") ? image : "/images/man-with-tractor.svg"
-          }
-          alt="Man with a tractor image"
-          height="100%"
-          width="100%"
-          objectFit="cover"
-        />
-      </Box>
-
-      <Box p="12px" bgColor="white">
-        <Text
-          fontSize="13px"
-          color="#FA9411"
-          fontWeight={500}
-          lineHeight="14.52px"
-        >
-          {name}
-        </Text>
-        <Text
-          fontSize="12px"
-          color="#323232"
-          fontWeight={700}
-          mt="8px"
-          lineHeight="12.1px"
-        >
-          Type:{" "}
-          <Box fontWeight={500} as="span">
-            {type}
-          </Box>
-        </Text>
-        {/* <Text
-          fontSize="12px"
-          color="#323232"
-          fontWeight={700}
-          mt="8px"
-          lineHeight="12.1px"
-        >
-          Capacity:
-          <Box fontWeight={500} as="span">
-            {capacity}
-          </Box>
-        </Text> */}
-        <Text fontSize="12px" color="#323232" fontWeight={700} mt="8px">
-          Location:{" "}
-          <Box fontWeight={500} as="span">
-            {location?.length < 1 ? "Nil" : location}
-          </Box>
-        </Text>
-        {statusTypes[status]?.color && (
-          <Box
-            mt="10px"
-            bgColor={statusTypes[status].color}
-            py="2px"
-            textAlign="center"
-            borderRadius="4px"
-            w="111px"
-          >
-            <Text fontSize="14px" color="white">
-              {statusTypes[status].title}
-            </Text>
-          </Box>
-        )}
-      </Box>
-    </Box>
   );
 }
 

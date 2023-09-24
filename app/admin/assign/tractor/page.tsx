@@ -48,10 +48,11 @@ const statusTypes: Record<string, { title: string; color: string }> = {
   completed: { title: "Completed", color: "#27AE60" },
   in_use: { title: "In Use", color: "#F03B13" },
   not_approved: { title: "Not Approved", color: "#FE391E" },
+  verified: { title: "Verified", color: "#27AE60" },
 };
 
 export default function AssignSingleTractorPage() {
-  const { profileInfo } = useAppSelector((state) => state.auth);
+  const { adminInfo } = useAppSelector((state) => state.auth);
 
   const [requestId, setRequestId] = useState("");
 
@@ -180,7 +181,7 @@ export default function AssignSingleTractorPage() {
                   <Text fontSize="20px" fontWeight={400}>
                     Tractor Specification
                   </Text>
-                  <ButtonGroup spacing="20px">
+                  <ButtonGroup spacing="40px">
                     <Button
                       color="white"
                       bgColor="#F03B13"
@@ -193,7 +194,7 @@ export default function AssignSingleTractorPage() {
                         try {
                           setLoading("disapproved");
                           const response = await assignTractor({
-                            user_id: profileInfo?.id,
+                            user_id: adminInfo?.id,
                             request_id: requestId,
                             status: "disapproved",
                           }).unwrap();
@@ -227,7 +228,21 @@ export default function AssignSingleTractorPage() {
                     >
                       Not Approved
                     </Button>
-                    <Button
+                    {statusTypes[result?.data?.data?.status]?.color && (
+                      <Box
+                        // mt="10px"
+                        bgColor={statusTypes[result?.data?.data?.status].color}
+                        py="6px"
+                        textAlign="center"
+                        borderRadius="6px"
+                        w="120px"
+                      >
+                        <Text fontSize="14px" color="white">
+                          {statusTypes[result?.data?.data?.status].title}
+                        </Text>
+                      </Box>
+                    )}
+                    {/* <Button
                       color="white"
                       bgColor="#FA9411"
                       width="120px"
@@ -235,7 +250,7 @@ export default function AssignSingleTractorPage() {
                       fontSize="14px"
                     >
                       Pending
-                    </Button>
+                    </Button> */}
                   </ButtonGroup>
                 </Flex>
                 <Table variant="striped" bgColor="white">
@@ -317,7 +332,7 @@ export default function AssignSingleTractorPage() {
                 try {
                   setLoading("approved");
                   const response = await assignTractor({
-                    user_id: profileInfo?.id,
+                    user_id: adminInfo?.id,
                     request_id: requestId,
                     status: "approved",
                     amount: parseAmount(formattedValue),

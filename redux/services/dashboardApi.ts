@@ -34,25 +34,47 @@ export const dashboardApi = createApi({
     // }),
 
     getInvestments: builder.query({
-      query: () => ({
-        url: "/get_investments",
+      query: (user_id) => ({
+        // url: `/get_investments`,
+        url: `/get_investments/${user_id}`,
         method: "GET",
       }),
     }),
 
     getLandsProcessed: builder.query({
-      query: () => ({
-        url: '/get_land_processed',
+      query: (user_id) => ({
+        url: `/get_land_processed/${user_id}`,
         method: "GET",
       }),
     }),
 
     getServicedHours: builder.query({
-      query: () => ({
-        url: '/get_serviced_hour',
+      query: (user_id) => ({
+        url: `/get_serviced_hour/${user_id}`,
         method: "GET",
       }),
     }),
+
+    getDemandGenerated: builder.query({
+        query: (user_id) => ({
+          url: `/get_demand_generated/${user_id}`,
+          method: "GET",
+        }),
+      }),
+
+      getDemandFulfilled: builder.query({
+        query: (user_id) => ({
+          url: `/get_demand_fulfilled/${user_id}`,
+          method: "GET",
+        }),
+      }),
+
+      getRevenueGenerated: builder.query({
+        query: (user_id) => ({
+          url: `/get_revenue_generated/${user_id}`,
+          method: "GET",
+        }),
+      }),
 
     hireTractor: builder.mutation({
       query: (data: any) => ({
@@ -70,5 +92,8 @@ export const {
   useGetInvestmentsQuery,
   useGetLandsProcessedQuery,
   useGetServicedHoursQuery,
+  useGetDemandFulfilledQuery,
+  useGetDemandGeneratedQuery,
+  useGetRevenueGeneratedQuery,
 //   useHireTractorMutation,
 } = dashboardApi;

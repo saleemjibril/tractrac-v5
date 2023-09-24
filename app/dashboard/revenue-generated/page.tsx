@@ -27,6 +27,7 @@ import { createElement, useEffect, useState } from "react";
 import PersonalOverview from "@/app/components/PersonalOverview";
 import { useGetEnlistedTractorsQuery } from "@/redux/services/tractorApi";
 import { useAppSelector } from "@/redux/hooks";
+import { useGetRevenueGeneratedQuery } from "@/redux/services/dashboardApi";
 
 interface ITractorCard {
   name: string;
@@ -47,14 +48,14 @@ export default function EnlistedTractors() {
   const { profileInfo } = useAppSelector((state) => state.auth);
 
   const {
-    data: result,
+    data: results,
     error,
     // isFetching,
     isLoading,
     // } = useGetEnlistedTractorsQuery("3");
-  } = useGetEnlistedTractorsQuery(profileInfo?.id);
+  } = useGetRevenueGeneratedQuery(profileInfo?.id);
 
-  console.log(error, result);
+  console.log(error, results);
 
   // const skeletons = [1,2,3,4,5,6];
 
@@ -92,26 +93,16 @@ export default function EnlistedTractors() {
                 </Tr>
               </Thead>
               <Tbody>
-                {result?.data.map((tractor: any) => (
-                  <Tr key={tractor?.id}>
-                    <Td>{`${tractor?.brand} ${tractor?.model}`}</Td>
+                {results?.data.map((result: any) => (
+                  <Tr key={result?.id}>
+                    <Td>{result?.tractor_name}</Td>
                     <Td>
-                      &#8358;{parseFloat(tractor?.amount ?? 0).toLocaleString()}
+                      &#8358;{parseFloat(result?.revenue ?? 0).toLocaleString()}
                     </Td>
-                    <Td>
-                      Soliu
-                      {/* {tractor?.current_location ?? "Nil"} */}
-                    </Td>
-                    <Td>
-                      10-09-2023
-                      {/* {tractor?.current_location ?? "Nil"} */}
-                    </Td>
-                    <Td>
-                      10-12-2023
-                      {/* {tractor?.current_location ?? "Nil"} */}
-                    </Td>
-                    <Td>15-08-2023</Td>
-                
+                    <Td>{result?.agent ?? "Nil"}</Td>
+                    <Td>{result?.uptime ?? "Nil"}</Td>
+                    <Td>{result?.downtime ?? "Nil"}</Td>
+                    <Td>{result?.created_at ?? "Nil"}</Td>
                   </Tr>
                 ))}
               </Tbody>

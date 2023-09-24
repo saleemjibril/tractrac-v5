@@ -59,7 +59,7 @@ const statusTypes: Record<string, { title: string; color: string }> = {
 };
 
 export default function FarmersPage() {
-  const { profileInfo } = useAppSelector((state) => state.auth);
+  const { adminInfo } = useAppSelector((state) => state.auth);
 
   const {
     data: result,
@@ -187,7 +187,7 @@ export default function FarmersPage() {
                           {parseFloat(farmer?.farm_size ?? 0).toLocaleString()}
                         </Td>
                         <Td>{farmer?.location}</Td>
-                        <Td>{profileInfo?.fname ?? "Nil"}</Td>
+                        <Td>{adminInfo?.fname ?? "Nil"}</Td>
                       </Tr>
                     ))}
                   </Tbody>
@@ -228,7 +228,7 @@ const AddFarmerModal: React.FC<ModalProps> = ({ isOpen, setModalState }) => {
     }
     return error;
   }
-  const { profileInfo } = useAppSelector((state) => state.auth);
+  const { adminInfo } = useAppSelector((state) => state.auth);
   const [addFarmer] = useAddFarmerMutation();
 
   return (
@@ -268,7 +268,7 @@ const AddFarmerModal: React.FC<ModalProps> = ({ isOpen, setModalState }) => {
                 console.log("nn", values);
                 const response = await addFarmer({
                   ...values,
-                  user_id: profileInfo?.id,
+                  user_id: adminInfo?.id,
                 }).unwrap();
                 if (response.status == "success") {
                   //   resetForm();

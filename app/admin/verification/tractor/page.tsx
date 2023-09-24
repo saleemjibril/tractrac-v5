@@ -40,15 +40,16 @@ import { AdminSidebarWithHeader } from "@/app/components/AdminSidenav";
 import { useGetTractorsQuery } from "@/redux/services/tractorApi";
 
 const statusTypes: Record<string, { title: string; color: string }> = {
-  pending: { title: "Pending", color: "#FA9411" },
-  approved: { title: "Approved", color: "#27AE60" },
-  completed: { title: "Completed", color: "#27AE60" },
-  in_use: { title: "In Use", color: "#F03B13" },
-  not_approved: { title: "Not Approved", color: "#FE391E" },
+    pending: { title: "Pending", color: "#FA9411" },
+    verified: { title: "Verified", color: "#27AE60" },
+    approved: { title: "Approved", color: "#27AE60" },
+    completed: { title: "Completed", color: "#27AE60" },
+    in_use: { title: "In Use", color: "#F03B13" },
+    not_approved: { title: "Not Approved", color: "#F03B13" },
 };
 
 export default function PaymentPage() {
-  const { profileInfo } = useAppSelector((state) => state.auth);
+  const { adminInfo } = useAppSelector((state) => state.auth);
 
   const [tractorId, setTractorId] = useState("");
 
@@ -129,7 +130,7 @@ export default function PaymentPage() {
                 <Text my="20px" fontSize="24px" fontWeight={500}>
                   Tractor Specification
                 </Text>
-                <ButtonGroup mb="20px" spacing="20px">
+                <ButtonGroup mb="20px" spacing="40px">
                   <Button
                     color="white"
                     bgColor="#27AE60"
@@ -142,7 +143,7 @@ export default function PaymentPage() {
                       try {
                         setLoading("approved");
                         const response = await verifyTractor({
-                          user_id: profileInfo?.id,
+                          user_id: adminInfo?.id,
                           tractor_id: tractorId,
                           status: "approved",
                         }).unwrap();
@@ -182,7 +183,7 @@ export default function PaymentPage() {
                       try {
                         setLoading("disapproved");
                         const response = await verifyTractor({
-                          user_id: profileInfo?.id,
+                          user_id: adminInfo?.id,
                           tractor_id: tractorId,
                           status: "disapproved",
                         }).unwrap();
@@ -212,9 +213,23 @@ export default function PaymentPage() {
                       }
                     }}
                   >
-                    Not Approved
+                    Unapprove
                   </Button>
-                  <Button
+                  {statusTypes[result?.data?.data?.status]?.color && (
+                      <Box
+                        // mt="10px"
+                        bgColor={statusTypes[result?.data?.data?.status].color}
+                        py="6px"
+                        textAlign="center"
+                        borderRadius="6px"
+                        w="120px"
+                      >
+                        <Text fontSize="14px" color="white">
+                          {statusTypes[result?.data?.data?.status].title}
+                        </Text>
+                      </Box>
+                    )}
+                  {/* <Button
                     color="white"
                     bgColor="#FA9411"
                     width="120px"
@@ -222,7 +237,7 @@ export default function PaymentPage() {
                     fontSize="14px"
                   >
                     Pending
-                  </Button>
+                  </Button> */}
                 </ButtonGroup>
                 <Table variant="striped" bgColor="white">
                   <Tbody>

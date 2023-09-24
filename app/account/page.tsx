@@ -137,7 +137,7 @@ export default function AccountPage() {
                     name={`${profileInfo?.fname} ${profileInfo?.lname}`}
                     src={undefined}
                   >
-                    <AvatarBadge
+                    {/* <AvatarBadge
                       cursor="pointer"
                       boxSize="1.1em"
                       bg="#F8A730"
@@ -146,7 +146,7 @@ export default function AccountPage() {
                       }}
                     >
                       <Edit2 color="white" size="18px" />
-                    </AvatarBadge>
+                    </AvatarBadge> */}
                   </Avatar> }
 
                   <Formik

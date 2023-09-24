@@ -57,7 +57,6 @@ const statusTypes: Record<string, { title: string; color: string }> = {
 };
 
 export default function PaymentPage() {
-  const { profileInfo } = useAppSelector((state) => state.auth);
 
   const {
     data: result,
@@ -151,36 +150,42 @@ export default function PaymentPage() {
                       <Th>Purpose of payment</Th>
                       <Th>Date</Th>
                       <Th>Invoice Number</Th>
-                      {/* <Th>Status</Th> */}
+                      <Th>Amount</Th>
+                      <Th>Status</Th>
                       <Th>Actions</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {filterPayments(result?.data, search).map((payment: any) => (
-                      <Tr key={payment?.id}>
-                        <Td>{payment?.name || "N/A"}</Td>
-                        <Td>{payment?.phone ?? "N/A"}</Td>
-                        <Td>{payment?.purpose || 'N/A'}</Td>
-                        <Td>{payment?.created_at}</Td>
-                        <Td>{payment?.invoiceID}</Td>
-                        {/* <Td>{payment?.status ?? "Nil"}</Td> */}
-                        <Td>
-                          <Box
-                            mt="10px"
-                            display="block"
-                            bgColor="#FFD900"
-                            as="a"
-                            href={`/admin/payment/tractor?id=${payment?.tractor_id}`}
-                            py="4px"
-                            textAlign="center"
-                            borderRadius="4px"
-                            w="80px"
-                          >
-                            <Text fontSize="14px">View</Text>
-                          </Box>
-                        </Td>
-                      </Tr>
-                    ))}
+                    {filterPayments(result?.data, search).map(
+                      (payment: any) => (
+                        <Tr key={payment?.id}>
+                          <Td>{payment?.name || "N/A"}</Td>
+                          <Td>{payment?.phone ?? "N/A"}</Td>
+                          <Td>{payment?.purpose || "N/A"}</Td>
+                          <Td>{payment?.created_at}</Td>
+                          <Td>{payment?.invoiceID}</Td>
+                          <Td>
+                          &#8358;{parseFloat(payment?.amount ?? 0).toLocaleString()}
+                          </Td>
+                          <Td>{payment?.status ?? "Nil"}</Td>
+                          <Td>
+                            <Box
+                              mt="10px"
+                              display="block"
+                              bgColor="#FFD900"
+                              as="a"
+                              href={`/admin/payment/tractor?id=${payment?.tractor_id}`}
+                              py="4px"
+                              textAlign="center"
+                              borderRadius="4px"
+                              w="80px"
+                            >
+                              <Text fontSize="14px">View</Text>
+                            </Box>
+                          </Td>
+                        </Tr>
+                      )
+                    )}
                   </Tbody>
                 </Table>
               </TableContainer>

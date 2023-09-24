@@ -104,7 +104,7 @@ export default function Investments() {
                   <Th>Agent</Th>
                   <Th>Start Date</Th>
                   <Th>End Date</Th>
-                  <Th>Track</Th>
+                  {/* <Th>Track</Th> */}
                 </Tr>
               </Thead>
               <Tbody>
@@ -121,7 +121,7 @@ export default function Investments() {
                       {investment?.start_date ?? "Nil"}
                     </Td>
                     <Td>{investment?.end_date ?? "Nil"}</Td>
-                    <Td>
+                    {/* <Td>
                       <Box
                         mt="10px"
                         display="block"
@@ -135,11 +135,11 @@ export default function Investments() {
                       >
                         <Text fontSize="14px">Track</Text>
                       </Box>
-                    </Td>
+                    </Td> */}
                   </Tr>
                 ))}
               </Tbody>
-              <Tfoot>
+              {/* <Tfoot>
                 <Tr>
                   <Th>Name of Tractor</Th>
                   <Th>Hours Used</Th>
@@ -148,7 +148,7 @@ export default function Investments() {
                   <Th>Status</Th>
                   <Th>Track</Th>
                 </Tr>
-              </Tfoot>
+              </Tfoot> */}
             </Table>
           </TableContainer>
         </Box>

@@ -1,18 +1,14 @@
 "use client";
 import {
-  Box,
-  Image,
+  
   SimpleGrid,
   Flex,
   Text,
-  Link,
-  Icon,
   ComponentWithAs,
   IconProps,
 } from "@chakra-ui/react";
 import { SidebarWithHeader } from "../components/Sidenav";
 import {
-  Tractor,
   Wrench,
   Money_2,
   TractorPlus,
@@ -20,25 +16,16 @@ import {
   Vendor,
   Measure,
   Track,
-  // IconWhite1,
-  // IconWhite2,
-  // IconWhite3,
-  // IconWhite4,
-  // IconWhite5,
   IconWhite6,
-  // IconWhite7,
   IconWhite8,
   Tractor_2,
-  TractorPlusDark,
   TractorPlusWhite,
   CrawlerHandDrawnTransportWhite,
   ToolsWhite,
   TrackWhite,
-  TaskList,
   TaskListColored,
   TaskListWhite,
 } from "../components/Icons";
-import { IconBaseProps } from "react-icons";
 import { usePathname } from "next/navigation";
 import { useState, createElement } from "react";
 import { useAppSelector } from "@/redux/hooks";

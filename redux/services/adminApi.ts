@@ -35,9 +35,9 @@ export const adminApi = createApi({
       providesTags: ["farmers"],
     }),
 
-    getPersonalStats: builder.query({
-      query: (user_id) => ({
-        url: `/personal_stats/${user_id}`,
+    getDashboardStats: builder.query({
+      query: () => ({
+        url: '/get_admin_dashboard_overview',
         method: "GET",
       }),
     }),
@@ -143,7 +143,7 @@ export const adminApi = createApi({
 // auto-generated based on the defined endpoints
 export const {
   useGetFarmersQuery,
-  useGetPersonalStatsQuery,
+  useGetDashboardStatsQuery,
   useGetEntriesQuery,
   useGetPaymentsQuery,
   useGetEnlistedTractorsQuery,

@@ -53,7 +53,7 @@ export default function LandProcessed() {
     // isFetching,
     isLoading,
     // } = useGetEnlistedTractorsQuery("3");
-  } = useGetLandsProcessedQuery({});
+  } = useGetLandsProcessedQuery(profileInfo?.id);
 
   console.log(error, results);
 
@@ -103,8 +103,7 @@ export default function LandProcessed() {
                       {result?.lname ?? "Nil"}
                     </Td>
                     <Td>
-                      Israel
-                      {/* {tractor?.current_location ?? "Nil"} */}
+                      {result?.agent ?? "Nil"}
                     </Td>
                     
                     <Td>{result?.tractor_name}</Td>

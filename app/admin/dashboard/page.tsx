@@ -19,9 +19,8 @@ import {
 import { createElement, useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import { usePathname } from "next/navigation";
-import { useGetDashboardStatsQuery } from "@/redux/services/userApi";
 import { toast } from "react-toastify";
-import { useGetPersonalStatsQuery } from "@/redux/services/adminApi";
+import { useGetDashboardStatsQuery } from "@/redux/services/adminApi";
 
 interface ItemProps {
   name: string;
@@ -41,13 +40,13 @@ export default function Dashboard() {
     setMounted(true);
   }, []);
 
-  const { profileInfo } = useAppSelector((state) => state.auth);
+  const { adminInfo } = useAppSelector((state) => state.auth);
 
   const {
     data: result,
     // isFetching,
     isLoading,
-  } = useGetPersonalStatsQuery({user_id: profileInfo?.id});
+  } = useGetDashboardStatsQuery({});
 
   return (
     <AdminSidebarWithHeader>
@@ -57,7 +56,7 @@ export default function Dashboard() {
           <Text fontSize="24px" color="#929292" fontWeight={400}>
             Good day,{" "}
             <Box as="span" fontWeight={600} color="#929292">
-              {profileInfo?.fname || "Admin"}
+              {adminInfo?.fname || "Admin"}
             </Box>
           </Text>
         </Flex>
@@ -85,7 +84,8 @@ export default function Dashboard() {
             title="Total Amount Invested"
             amount={result?.data?.total_investments || 0}
           />
-          <StatisticsCard title="Total Farmers Registered" amount="2904" />
+          <StatisticsCard title="Total Farmers Registered" amount={result?.data?.total_farmers || 0}/>
+
           <StatisticsCard
             title="Total Tractors Hired"
             amount={result?.data?.total_hired_tractors || 0}
@@ -100,19 +100,19 @@ export default function Dashboard() {
           />
           <StatisticsCard
             title="Total Number of Demand Fulfilled"
-            amount="300"
+            amount={result?.data?.total_demand_fulfilled || 0}
           />
             <StatisticsCard
             title="Total Number of leasing requests"
-            amount="300"
+            amount={result?.data?.total_tractor_leasing || 0}
           />
             <StatisticsCard
             title="Total Number of Enlisting requests"
-            amount="300"
+            amount={result?.data?.total_tractor_enlisting || 0}
           />
             <StatisticsCard
             title="Total Number of Demand Fulfilled"
-            amount="300"
+            amount={result?.data?.total_demand_fulfilled || 0}
           />
         </SimpleGrid>
       </Box>
@@ -122,7 +122,7 @@ export default function Dashboard() {
 
 function StatisticsCard({ amount, title }: { amount: string; title: string }) {
   return (
-    <Box border="1px" borderColor="#F8A730" p="20px" textAlign="center">
+    <Box border="1px" borderColor="#F8A730" p="20px" textAlign="center" borderRadius="6px">
       <Text fontWeight={700} fontSize={amount?.length > 9 ? "24px" : "28px"}>
         {formatNumber(amount)}
       </Text>

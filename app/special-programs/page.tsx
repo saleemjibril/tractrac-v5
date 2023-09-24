@@ -1,7 +1,7 @@
 "use client";
 import { Box, Image, SimpleGrid, Flex, Text, Link, Icon, ComponentWithAs, IconProps } from "@chakra-ui/react";
 import { SidebarWithHeader } from "../components/Sidenav";
-import { Tractor, Wrench, Money_2, TractorPlus, Agent2, Vendor, Measure, Track, IconWhite6, Tractor_2, TractorPlusWhite, Machinery, MachineryWhite } from "../components/Icons";
+import { Wrench, Money_2, TractorPlus, Agent2, Vendor, Measure, Track, IconWhite6, Tractor_2, TractorPlusWhite, Machinery, MachineryWhite } from "../components/Icons";
 import { IconBaseProps } from "react-icons";
 import { usePathname, useRouter } from "next/navigation";
 import { createElement, useState } from "react";

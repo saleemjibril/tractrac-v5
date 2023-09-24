@@ -59,7 +59,6 @@ const statusTypes: Record<string, { title: string; color: string }> = {
 };
 
 export default function PaymentPage() {
-  const { profileInfo } = useAppSelector((state) => state.auth);
 
   const [tractorId, setTractorId] = useState("");
 

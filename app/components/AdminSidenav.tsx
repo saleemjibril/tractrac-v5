@@ -56,10 +56,15 @@ import {
   ClarityHomeLineWhite,
   TractorPlus,
   TractorPlusWhite,
+  Assign,
+  Verification,
+  Farmers,
+  Entries,
+  Wallet,
 } from "../components/Icons";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { useEffect, useState, useId } from "react";
-import { userLogout } from "@/redux/features/auth/authActions";
+import { useEffect, useState } from "react";
+import { adminLogout } from "@/redux/features/auth/authActions";
 import { Home2, Element4, Icon as IconSax } from "iconsax-react";
 import { toast } from "react-toastify";
 
@@ -89,14 +94,6 @@ interface SidebarProps extends BoxProps {
 }
 
 const LinkItems: Array<LinkItemProps> = [
-//   {
-//     name: "Home",
-//     imageLight: "home-light",
-//     imageDark: "home-dark",
-//     path: "/home",
-//     iconLight: ClarityHomeLineWhite,
-//     iconDark: ClarityHomeLine,
-//   },
   {
     name: "Dashboard",
     imageLight: "dashboard-light",
@@ -110,40 +107,40 @@ const LinkItems: Array<LinkItemProps> = [
     imageLight: "pay-light",
     imageDark: "pay-dark",
     path: "/admin/farmers",
-    iconLight: TractorPlusWhite,
-    iconDark: TractorPlusDark,
+    iconLight: Farmers,
+    iconDark: Farmers,
   },
   {
     name: "Entries",
     imageLight: "pay-light",
     imageDark: "pay-dark",
     path: "/admin/entries",
-    iconLight: TractorPlusWhite,
-    iconDark: TractorPlusDark,
+    iconLight: Entries,
+    iconDark: Entries,
   },
   {
     name: "Payment",
     imageLight: "pay-light",
     imageDark: "pay-dark",
     path: "/admin/payment",
-    iconLight: Payment,
-    iconDark: Payment,
+    iconLight: Wallet,
+    iconDark: Wallet,
   },
   {
     name: "Verification",
     imageLight: "pay-light",
     imageDark: "pay-dark",
     path: "/admin/verification",
-    iconLight: TractorPlusWhite,
-    iconDark: TractorPlusDark,
+    iconLight: Verification,
+    iconDark: Verification,
   },
   {
     name: "Assign",
     imageLight: "pay-light",
     imageDark: "pay-dark",
     path: "/admin/assign",
-    iconLight: TractorPlusDark,
-    iconDark: TractorPlusDark,
+    iconLight: Assign,
+    iconDark: Assign,
   },
   {
     name: "Users",
@@ -210,7 +207,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         mx="8"
         as="button"
         onClick={() => {
-          dispatch(userLogout());
+          dispatch(adminLogout());
           router.replace("/");
         }}
         position="absolute"
@@ -290,7 +287,7 @@ const NavItem = ({
 };
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
-  const { loading, profileInfo } = useAppSelector((state) => state.auth);
+  const { loading, adminInfo } = useAppSelector((state) => state.auth);
   const [mounted, setMounted] = useState(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -372,7 +369,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                 >
                   {mounted && (
                     <Text fontSize="sm">
-                      Hello, {profileInfo?.fname ?? "Guest"}
+                      Hello, {adminInfo?.fname ?? "Guest"}
                     </Text>
                   )}
                   {/* <Text fontSize="xs" color="gray.600">
@@ -395,7 +392,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <MenuItem
                 key="3"
                 onClick={() => {
-                  dispatch(userLogout());
+                  dispatch(adminLogout());
                   toast.success("You have been logged out successfully");
                   router.replace("/");
                 }}
@@ -418,14 +415,14 @@ interface ModalProps {
 
 export const AdminSidebarWithHeader: React.FC<ModalProps> = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const router = useRouter();
-  // const { profileInfo } = useAppSelector((state) => state.auth);
+  const router = useRouter();
+  const { adminInfo } = useAppSelector((state) => state.auth);
 
-  // useEffect(() => {
-  //   if (!profileInfo) {
-  //     router.replace("/login");
-  //   }
-  // });
+  useEffect(() => {
+    if (!adminInfo) {
+      router.replace("/admin/login");
+    }
+  });
 
   return (
     <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")} p={0}>
