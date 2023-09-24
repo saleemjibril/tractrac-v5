@@ -133,7 +133,7 @@ const LinkItems: Array<LinkItemProps> = [
     name: "Verification",
     imageLight: "pay-light",
     imageDark: "pay-dark",
-    path: "/admin/verfication",
+    path: "/admin/verification",
     iconLight: TractorPlusWhite,
     iconDark: TractorPlusDark,
   },

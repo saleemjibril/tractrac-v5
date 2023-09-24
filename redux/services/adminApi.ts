@@ -25,14 +25,14 @@ export const adminApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['farmers'],
+  tagTypes: ["farmers", "all_enlisted_tractors", "all_hired_tractors"],
   endpoints: (builder) => ({
     getFarmers: builder.query({
       query: () => ({
         url: `/get_farmers`,
-        method: 'GET',
+        method: "GET",
       }),
-      providesTags: ['farmers'],
+      providesTags: ["farmers"],
     }),
 
     getPersonalStats: builder.query({
@@ -50,26 +50,75 @@ export const adminApi = createApi({
     }),
 
     getPayments: builder.query({
-        query: () => ({
-          url: '/get_admin_payment',
-          method: "GET",
-        }),
+      query: () => ({
+        url: "/get_admin_payment",
+        method: "GET",
       }),
+    }),
 
-      getSingleTractor: builder.query({
-        query: (tractorId) => ({
-          url: `/tractors/${tractorId}`,
-          method: "GET",
-        }),
+    getUsers: builder.query({
+      query: () => ({
+        url: "/users",
+        method: "GET",
       }),
- 
+    }),
+
+    getSingleTractor: builder.query({
+      query: (tractorId) => ({
+        url: `/tractors/${tractorId}`,
+        method: "GET",
+      }),
+    }),
+
+    getEnlistedTractors: builder.query({
+      query: () => ({
+        url: "all_enlisted_tractors",
+        method: "GET",
+      }),
+      providesTags: ["all_enlisted_tractors"],
+    }),
+
+    getHiredTractors: builder.query({
+      query: () => ({
+        url: "get_all_hired_tractors",
+        method: "GET",
+      }),
+      providesTags: ["all_hired_tractors"],
+    }),
+
+    getSingleHiredTractor: builder.query({
+      query: (tractorId) => ({
+        url: `/admin_single_tractor/${tractorId}`,
+        method: "GET",
+      }),
+      providesTags: ["all_hired_tractors"],
+    }),
+
+    verifyTractor: builder.mutation({
+      query: (data: any) => ({
+        url: "/verify_tractor",
+        method: "POST",
+        body: transformRequest(data),
+      }),
+      invalidatesTags: ["all_enlisted_tractors"],
+    }),
+
+    assignTractor: builder.mutation({
+      query: (data: any) => ({
+        url: "/assign_tractor",
+        method: "POST",
+        body: transformRequest(data),
+      }),
+      invalidatesTags: ["all_hired_tractors"],
+    }),
+
     addFarmer: builder.mutation({
       query: (data: any) => ({
         url: "/add_farmer",
         method: "POST",
         body: transformRequest(data),
       }),
-      invalidatesTags: ['farmers']
+      invalidatesTags: ["farmers"],
     }),
 
     updateBioData: builder.mutation({
@@ -97,9 +146,14 @@ export const {
   useGetPersonalStatsQuery,
   useGetEntriesQuery,
   useGetPaymentsQuery,
+  useGetEnlistedTractorsQuery,
+  useGetHiredTractorsQuery,
+  useGetUsersQuery,
+  useLazyGetSingleHiredTractorQuery,
   useLazyGetSingleTractorQuery,
-  
 
+  useAssignTractorMutation,
+  useVerifyTractorMutation,
   useAddFarmerMutation,
   useUpdateBioDataMutation,
   useUpdatePasswordMutation,

@@ -25,30 +25,19 @@ import {
   Skeleton,
   SkeletonText,
   Divider,
-  Input,
-  Spacer,
-  InputGroup,
-  InputLeftElement,
-  ModalBody,
-  ModalContent,
-  ModalOverlay,
-  IconButton,
+  ButtonGroup,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { CloseIcon, SearchIcon } from "@chakra-ui/icons";
 import { useAppSelector } from "@/redux/hooks";
 import {
-  useAddFarmerMutation,
-  useGetFarmersQuery,
-  useGetPaymentsQuery,
   useLazyGetSingleTractorQuery,
+  useVerifyTractorMutation,
 } from "@/redux/services/adminApi";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Formik, Form, Field } from "formik";
 import { toast } from "react-toastify";
 import { AdminSidebarWithHeader } from "@/app/components/AdminSidenav";
 import { useGetTractorsQuery } from "@/redux/services/tractorApi";
-// import { useSearchParams } from "next/navigation";
 
 const statusTypes: Record<string, { title: string; color: string }> = {
   pending: { title: "Pending", color: "#FA9411" },
@@ -64,14 +53,10 @@ export default function PaymentPage() {
   const [tractorId, setTractorId] = useState("");
 
   const [trigger, result, lastPromiseInfo] = useLazyGetSingleTractorQuery();
-
-  //   const {
-  //     data: result,
-  //     error,
-  //     // isFetching,
-  //     isLoading,
-  //     // } = useGetHiredTractorsQuery("3");
-  //   } = useGetTractorsQuery(tractorId);
+  const [verifyTractor] = useVerifyTractorMutation();
+  const [loading, setLoading] = useState<"approved" | "disapproved" | null>(
+    null
+  );
 
   const [modalState, setModalState] = useState(false);
 
@@ -80,7 +65,6 @@ export default function PaymentPage() {
 
   useEffect(() => {
     const tractorId = params.get("id");
-    // const [phoneNumber, userId, dd] = params.getAll("data");
     if (!tractorId) {
       router.back();
       return;
@@ -104,7 +88,7 @@ export default function PaymentPage() {
           </Text>
           <Divider />
 
-            {/* { result?.data} */}
+          {/* { result?.data} */}
           <Box pl="32px" pr={{ base: "32px", lg: "250px" }} pb="32px">
             {result?.isLoading || result.status === "uninitialized" ? (
               <>
@@ -142,66 +126,106 @@ export default function PaymentPage() {
                     objectFit="cover"
                   />
                 </Box>
-                <Text my="20px" fontSize="24px">
+                <Text my="20px" fontSize="24px" fontWeight={500}>
                   Tractor Specification
                 </Text>
+                <ButtonGroup mb="20px" spacing="20px">
+                  <Button
+                    color="white"
+                    bgColor="#27AE60"
+                    width="120px"
+                    height="34px"
+                    fontSize="14px"
+                    isLoading={loading == "approved"}
+                    onClick={async () => {
+                      if (loading) return;
+                      try {
+                        setLoading("approved");
+                        const response = await verifyTractor({
+                          user_id: profileInfo?.id,
+                          tractor_id: tractorId,
+                          status: "approved",
+                        }).unwrap();
+                        if (response.status == "success") {
+                          toast.success(response?.message || "success");
+                          router.back()
+                        } else {
+                          toast.error(
+                            response?.message || "Unknown error occured"
+                          );
+                        }
+                      } catch (e) {
+                        const error = e as any;
+                        if (error?.data?.errors) {
+                          // setError(error?.data?.errors[0])
+                        } else if (error?.data?.message) {
+                          toast.error(error?.data?.message);
+                        }else{
+                            toast.error( "Server error occured, please contact support");
+                        }
+                      } finally {
+                        setLoading(null);
+                      }
+                    }}
+                  >
+                    Verify listing
+                  </Button>
+                  <Button
+                    color="white"
+                    bgColor="#F03B13"
+                    width="120px"
+                    height="34px"
+                    fontSize="14px"
+                    isLoading={loading == "disapproved"}
+                    onClick={async () => {
+                      if (loading) return;
+                      try {
+                        setLoading("disapproved");
+                        const response = await verifyTractor({
+                          user_id: profileInfo?.id,
+                          tractor_id: tractorId,
+                          status: "disapproved",
+                        }).unwrap();
+                        if (response.status == "success") {
+                          toast.success(response?.message || "success");
+                          router.back()
+                        } else {
+                          toast.error(
+                            response?.message || "Unknown error occured"
+                          );
+                        }
+                        // alert("lld");
+                      } catch (e) {
+                        const error = e as any;
+                        // alert(JSON.stringify(error))
+                        // alert('error')
+                        if (error?.data?.errors) {
+                          // setError(error?.data?.errors[0])
+                        } else if (error?.data?.message) {
+                          toast.error(error?.data?.message);
+                          // setError(error?.data?.message);
+                        }else{
+                            toast.error( "Server error occured, please contact support");
+                        }
+                      } finally {
+                        setLoading(null);
+                      }
+                    }}
+                  >
+                    Not Approved
+                  </Button>
+                  <Button
+                    color="white"
+                    bgColor="#FA9411"
+                    width="120px"
+                    height="34px"
+                    fontSize="14px"
+                  >
+                    Pending
+                  </Button>
+                </ButtonGroup>
                 <Table variant="striped" bgColor="white">
-                  {/* <Thead color="#323232" bgColor="#E2E8F0">
-                    <Tr>
-                      <Th>Name</Th>
-                      <Th>Phone Number</Th>
-                      <Th>Purpose of payment</Th>
-                      <Th>Date</Th>
-                      <Th>Invoice Number</Th>
-                      <Th>Actions</Th>
-                    </Tr>
-                  </Thead> */}
                   <Tbody>
-                    <Tr>
-                      <Td>Name of Hirer</Td>
-                      <Td>{result?.data?.data?.hirer || "N/A"}</Td>
-                    </Tr>
-
-                    <Tr>
-                      <Td>State</Td>
-                      <Td>{result?.data?.data?.state || "N/A"}</Td>
-                    </Tr>
-
-                    <Tr>
-                      <Td>LGA</Td>
-                      <Td>{result?.data?.data?.lga || "N/A"}</Td>
-                    </Tr>
-
-                    <Tr>
-                      <Td>Address</Td>
-                      <Td>{result?.data?.data?.address || "N/A"}</Td>
-                    </Tr>
-
-                    <Tr>
-                      <Td>Farm size (units in hectare)</Td>
-                      <Td>{result?.data?.data?.farm_size || "N/A"}</Td>
-                    </Tr>
-
-                    <Tr>
-                      <Td>Implement</Td>
-                      <Td>{result?.data?.implement?.purpose || "N/A"}</Td>
-                    </Tr>
-
-                    {/* <Tr>
-                      <Td>Start Date</Td>
-                      <Td>{result?.data?.purpose || "N/A"}</Td>
-                    </Tr>
-
-                    <Tr>
-                      <Td>End Date</Td>
-                      <Td>{result?.data?.purpose || "N/A"}</Td>
-                    </Tr> */}
-
-                    <Tr>
-                      <Td>Tractor owner</Td>
-                      <Td>{result?.data?.data?.owner || "N/A"}</Td>
-                    </Tr>
-
                     <Tr>
                       <Td>Brand</Td>
                       <Td>{result?.data?.data?.brand || "N/A"}</Td>
@@ -244,7 +268,9 @@ export default function PaymentPage() {
 
                     <Tr>
                       <Td>Tractor Insurance</Td>
-                      <Td>{result?.data?.data?.insured || "N/A"}</Td>
+                      <Td>
+                        {result?.data?.data?.insured == "1" ? "yes" : "no"}
+                      </Td>
                     </Tr>
 
                     <Tr>
