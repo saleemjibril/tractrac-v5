@@ -34,6 +34,7 @@ import {
   FlexProps,
   CloseButton,
   Img,
+  Spacer,
   // NavItem,
 } from "@chakra-ui/react";
 import { ReactNode, useRef, MutableRefObject, useEffect } from "react";
@@ -52,6 +53,8 @@ import { openModal } from "@/redux/features/modalSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
 import { FiMenu } from "react-icons/fi";
+import { AddIcon } from "@chakra-ui/icons";
+import { serviceItems } from "./items";
 
 // import Image from "next/image";
 // import styles from './page.module.css'
@@ -69,8 +72,14 @@ const LinkItems: Array<{ name: string; path: string }> = [
     name: "Home",
     path: `/`,
   },
-  { name: "About", path: "#" },
-  { name: "Services", path: "/services" },
+  {
+    name: "About",
+    path: "/about",
+  },
+  {
+    name: "Services",
+    path: "#",
+  },
   {
     name: "Contact Us",
     path: "/contact",
@@ -85,7 +94,7 @@ const LinkItems: Array<{ name: string; path: string }> = [
   },
 ];
 
-export default function Home() {
+export default function ServicesPage() {
   const dispatch = useAppDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -97,19 +106,20 @@ export default function Home() {
     <>
       <Box position={"relative"}>
         <NavbarComponent onOpen={onOpen} />
-        <Center mb="30px">
+        <Center mb="40px">
           <Stack mt="60px" textAlign="center">
             <Text
               fontSize="24px"
               fontFamily="cursive"
               color="#FA9411"
               display="block"
+              fontWeight={600}
               //   mb="16px"
             >
-              About the Idea
+              Our Services
             </Text>
-            <Text fontWeight={600} lineHeight={"18px"} fontSize="20px">
-              The story and values behind <br /> our company
+            <Text fontWeight={600} lineHeight={"18px"} fontSize="32px">
+              Bridging the Gap to Mechanisation
             </Text>
           </Stack>
         </Center>
@@ -117,126 +127,49 @@ export default function Home() {
         <Box
           maxW={{ base: "100%", md: "80vw" }}
           margin={"0 auto"}
-          px={{ base: "20px", md: "0px" }}
+          //   px={{ base: "20px", md: "0px" }}
         >
-          {/* <Flex gap="24px" mb="30px" flexDir={{ base: "column", md: "row" }}>
-            <Box width={{ base: "100%", md: "60%" }}>
-              <Image
-                src="/images/about-banner-1.svg"
-                alt="About page banner one"
-                w="100%"
-                borderRadius="50px"
-              />
-            </Box>
-            <Box width={{ base: "100%", md: "40%" }}>
-              <Image src="/images/about-2.svg" alt="About page banner two" />
-            </Box>
-          </Flex> */}
-          <Text color="#858A8F" fontSize="16px" textAlign="center" mb="50px">
-            Our vision is to improve the lives of small holder farmers by
-            facilitating a convergence for private sector investments in the
-            agricultural mechanization process and technology to access
-            affordable tractor services across Africa. A convergence where
-            farmers and cooperatives-led tractor hiring services providers can
-            own their own tractors and have access to technology that improves
-            the utilization of their tractors. Ultimately, we will catalyze the
-            development of competitive and sustainable mechanization market and
-            agribusiness in Africa as a pathway to increased economic growth and
-            food security in the continent of Africa. Recognizing that
-            agriculture in Nigeria will remain a labor-intensive sector,
-            increasing agricultural productivity, facilitating value chain
-            integration, and directing investment toward the agriculture sector
-            will enhance employment opportunities for unskilled labor,
-            contribute to regional food security and stability, and provide one
-            of the most useful vehicles for moving populations out of extreme
-            poverty.
-          </Text>
-
-          <Center my="30px">
-            <Stack textAlign="center">
-              <Text
-                fontSize="24px"
-                fontFamily="cursive"
-                color="#FA9411"
-                display="block"
-                //   mb="16px"
+          {serviceItems.map((item) => (
+            <Box
+              boxShadow="lg"
+              py="38px"
+              px="70px"
+              mb="50px"
+              key={item.buttonText}
+            >
+              <Flex mb="20px">
+                <Text fontWeight={600} fontSize="28px">
+                  {item.title}
+                </Text>
+                <Spacer />
+                <Button
+                  fontSize="14px"
+                  bgColor="#FA9411"
+                  color="white"
+                  _hover={{
+                    bgColor: "#FA9411",
+                    opacity: ".8",
+                  }}
+                  as="a"
+                  href={item.buttonLink}
+                >
+                  <Box as="span" mr="30px">
+                    {item.buttonText}
+                  </Box>
+                  <AddIcon boxSize="12px" />
+                </Button>
+              </Flex>
+              <Divider mb="20px" />
+              <Box
+                color="#858A8F"
+                lineHeight="30px"
+                fontSize="16px"
+                fontWeight={500}
               >
-                Our Mission
-              </Text>
-              <Text fontWeight={600} lineHeight={"18px"} fontSize="20px">
-                Driving Growth, Cultivating <br />
-                Prosperity
-              </Text>
-            </Stack>
-          </Center>
-
-          <Flex gap="70px" mt="20px" mb="50px">
-            <Text color="#858A8F" fontSize="16px" textAlign="center">
-              Financing tractors for small holder farmers has been a daunting
-              challenge. From the rise in exchange rate to the hurdles of
-              meeting banks&apos; requirement, small holder farmers across
-              Nigeria and Africa at large are unable to own tractors. Owning one
-              is out of their league, yet they constitute 70% of farmers in Sub
-              Saharan Africa. Access to affordable finance also affects the
-              community or cooperative-led Mechanization service provider which
-              also limits the number tractors in their fleet. Ultimately, it is
-              the small holder farmer that is losing. TracTrac has worked hard
-              to create solutions for potential investors and enterprising
-              youths that are simple and intuitive. We have created a platform
-              for investors to participate in the Agric mechanization space,
-              ensure tractors are available to users and make a good return.
-            </Text>
-            {/* <Image src="/images/about-3.svg" alt="About page banner three" /> */}
-          </Flex>
-
-          <Center my="30px">
-            <Stack textAlign="center">
-              <Text
-                fontSize="24px"
-                fontFamily="cursive"
-                color="#FA9411"
-                display="block"
-                //   mb="16px"
-              >
-                Our Vision
-              </Text>
-              <Text fontWeight={600} lineHeight={"18px"} fontSize="20px">
-                Leading a Mechanization Revolution <br />
-                in Africa
-              </Text>
-            </Stack>
-          </Center>
-
-          <Flex
-            gap={{ base: "30px", md: "70px" }}
-            flexDir={{ base: "column", md: "row" }}
-          >
-            <VisionComponent
-              counter="01"
-              title="Affordable tractor financing"
-              content=" Access to low cost of funding for tractors procurement and
-            acquisition"
-            />
-            <VisionComponent
-              counter="02"
-              title="Innovation"
-              content="Enhance procurement of tractors and genuine spare parts from vendors and manufacturers."
-            />
-          </Flex>
-
-          <Flex
-            justifyContent="center"
-            mt={{ base: "30px", md: "67px" }}
-            mb="103px"
-          >
-            <Box w={{ base: "100%", md: "40vw" }}>
-              <VisionComponent
-                counter="03"
-                title="Boost Tractor density"
-                content="Increase in the number of tractors per hectare of farmland in Nigeria and Africa which is presently low."
-              />
+                {item.content}
+              </Box>
             </Box>
-          </Flex>
+          ))}
         </Box>
 
         <FooterComponent />
@@ -255,42 +188,6 @@ export default function Home() {
         </Drawer>
       </Box>
     </>
-  );
-}
-
-function VisionComponent({
-  counter,
-  title,
-  content,
-}: {
-  counter: string;
-  title: string;
-  content: string;
-}) {
-  return (
-    <Box bgColor="#F9F9F9" py="39px" px="27px" borderRadius="30px">
-      <Flex
-        gap={{ base: "20px", md: "40px" }}
-        alignItems="center"
-        flexDir={{ base: "column", md: "row" }}
-      >
-        <Box bgColor="#FA9411" borderRadius="23px" px="12px" py="18px">
-          <Center>
-            <Text fontSize="60px" fontWeight="700" color="white">
-              {counter}
-            </Text>
-          </Center>
-        </Box>
-        <Stack textAlign={{ base: "center", md: "left" }}>
-          <Text fontWeight={700} fontSize="25px" lineHeight="24px">
-            {title}
-          </Text>
-          <Text fontSize="16px" color="#797979" mt="4px">
-            {content}
-          </Text>
-        </Stack>
-      </Flex>
-    </Box>
   );
 }
 
@@ -518,7 +415,6 @@ function NavbarComponent({ onOpen }: MobileProps) {
                 href={"/about"}
                 fontSize={"sm"}
                 fontWeight={700}
-                color="#FA9411"
                 _hover={{
                   textDecoration: "none",
                   // color: linkHoverColor,
@@ -531,7 +427,7 @@ function NavbarComponent({ onOpen }: MobileProps) {
                 href={"/services"}
                 fontSize={"sm"}
                 fontWeight={700}
-                // color={linkColor}
+                color="#FA9411"
                 _hover={{
                   textDecoration: "none",
                   // color: linkHoverColor,
@@ -771,7 +667,7 @@ function FooterComponent() {
         flexWrap="wrap"
         justifyContent="center"
       >
-        <Link href="/about">About us</Link>
+      <Link href="/about">About us</Link>
         <Link href="/contact">Contact us</Link>
         <Link href="#">Facebook</Link>
         <Link href="#">Twitter</Link>

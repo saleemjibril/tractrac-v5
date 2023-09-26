@@ -31,7 +31,7 @@ import {
 import { SidebarWithHeader } from "../../components/Sidenav";
 import { Formik, Form, Field } from "formik";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { useAppSelector } from "@/redux/hooks";
 import { toast } from "react-toastify";
@@ -61,8 +61,20 @@ interface ITractorCard {
 }
 
 export default function HireTractor() {
-  const [success, setSuccess] = useState<boolean>(false);
+  const [location, setLocation] = useState<any>();
   const [tractorId, setTractorId] = useState<string | null>(null);
+
+
+  useEffect(() => {
+    if('geolocation' in navigator) {
+        // Retrieve latitude & longitude coordinates from `navigator.geolocation` Web API
+        navigator.geolocation.getCurrentPosition(({ coords }) => {
+            const { latitude, longitude } = coords;
+            alert(latitude)
+            setLocation({ latitude, longitude });
+        })
+    }
+}, []);
 
   const {
     data: result,
@@ -95,6 +107,8 @@ export default function HireTractor() {
       ) : (
         <Box bgColor="white" mx="20px" my="12px" px="34px" py="20px">
           <Stack>
+    {JSON.stringify(location)}
+
             <Text fontSize="24px" fontWeight={700} mb="15px">
               Hire a Tractor
             </Text>
@@ -213,6 +227,7 @@ export default function HireTractor() {
                 ))}
               </SimpleGrid>
             ) : (
+              // { location }
               <SimpleGrid
                 columns={{ base: 2, md: 4 }}
                 spacingX="20px"
@@ -473,7 +488,7 @@ function HireTractorForm({ id }: { id: string }) {
                     isInvalid={form.errors.service && form.touched.service}
                   >
                     <FormLabel fontSize="12px" color="#323232">
-                      Type of services
+                      Implement
                     </FormLabel>
                     <Select
                       {...field}
@@ -482,8 +497,12 @@ function HireTractorForm({ id }: { id: string }) {
                       fontSize="12px"
                       color="#323232"
                     >
-                      <option value="harrowing">Harrowing</option>
-                      <option value="ploughing">Ploughing</option>
+                      {/* Harrower, Planter, Plough, Ridger, Sprayer) */}
+                      <option value="harrower">Harrower</option>
+                      <option value="plough">Plough</option>
+                      <option value="llanter">Planter</option>
+                      <option value="ridger">Ridger</option>
+                      <option value="sprayer">Sprayer</option>
                     </Select>
                     <FormErrorMessage>{form.errors.service}</FormErrorMessage>
                   </FormControl>

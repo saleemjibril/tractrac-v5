@@ -14,30 +14,19 @@ import {
   IconButton,
   useColorModeValue,
   Divider,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
   Image,
   Input,
-  Textarea,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
   Center,
   Drawer,
   useDisclosure,
   DrawerContent,
   FlexProps,
   CloseButton,
-  Img,
-  // NavItem,
+  Textarea,
+  Alert,
+  AlertIcon,
+  AlertTitle,
 } from "@chakra-ui/react";
-import { ReactNode, useRef, MutableRefObject, useEffect } from "react";
-// import { MdCheckCircle } from "@chakra-ui/icons";
 import {
   FaFacebookF,
   FaTwitter,
@@ -45,13 +34,14 @@ import {
   FaWhatsapp,
   FaLinkedinIn,
   FaYoutube,
-  FaCheckCircle,
-  FaArrowUp,
 } from "react-icons/fa";
 import { openModal } from "@/redux/features/modalSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
 import { FiMenu } from "react-icons/fi";
+import { useState } from "react";
+import { useCollaborateMutation } from "@/redux/services/userApi";
+import { toast } from "react-toastify";
 
 // import Image from "next/image";
 // import styles from './page.module.css'
@@ -69,172 +59,216 @@ const LinkItems: Array<{ name: string; path: string }> = [
     name: "Home",
     path: `/`,
   },
-  { name: "About", path: "#" },
-  { name: "Services", path: "/services" },
+  {
+    name: "About",
+    path: "/about",
+  },
+  {name: "Services", path: "/services"},
   {
     name: "Contact Us",
-    path: "/contact",
+    path: "#",
   },
-  // {
-  //   name: "Careers",
-  //   path: "#",
-  // },
+  //   {
+  //     name: "Careers",
+  //     path: "#",
+  //   },
   {
     name: "Blog",
-    path: "/blog",
+    path: "#",
   },
 ];
 
-export default function Home() {
+export default function ContactUsPage() {
   const dispatch = useAppDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const showModal = (type: string) => {
-    dispatch(openModal(type));
+  const initialDataState = {
+    name: "",
+    message: "",
+    email: "",
+    type: "support",
   };
+  const [data, setData] = useState(initialDataState);
+  // Function to update the object state
+  const handleInputChange = (e: any) => {
+    const { name, value } = e?.target;
+    // alert(value)
+
+    // Use the spread operator to create a new object with updated property
+    setData({
+      ...data,
+      [name]: value,
+    });
+  };
+  const [contact] = useCollaborateMutation();
+  const [error, setError] = useState<string | null>("");
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   return (
     <>
       <Box position={"relative"}>
         <NavbarComponent onOpen={onOpen} />
-        <Center mb="30px">
-          <Stack mt="60px" textAlign="center">
-            <Text
-              fontSize="24px"
-              fontFamily="cursive"
-              color="#FA9411"
-              display="block"
-              //   mb="16px"
-            >
-              About the Idea
-            </Text>
-            <Text fontWeight={600} lineHeight={"18px"} fontSize="20px">
-              The story and values behind <br /> our company
-            </Text>
-          </Stack>
-        </Center>
 
         <Box
           maxW={{ base: "100%", md: "80vw" }}
           margin={"0 auto"}
           px={{ base: "20px", md: "0px" }}
+        //   mt="20px"
+        pt="20px"
         >
-          {/* <Flex gap="24px" mb="30px" flexDir={{ base: "column", md: "row" }}>
-            <Box width={{ base: "100%", md: "60%" }}>
-              <Image
-                src="/images/about-banner-1.svg"
-                alt="About page banner one"
-                w="100%"
-                borderRadius="50px"
-              />
-            </Box>
-            <Box width={{ base: "100%", md: "40%" }}>
-              <Image src="/images/about-2.svg" alt="About page banner two" />
-            </Box>
-          </Flex> */}
-          <Text color="#858A8F" fontSize="16px" textAlign="center" mb="50px">
-            Our vision is to improve the lives of small holder farmers by
-            facilitating a convergence for private sector investments in the
-            agricultural mechanization process and technology to access
-            affordable tractor services across Africa. A convergence where
-            farmers and cooperatives-led tractor hiring services providers can
-            own their own tractors and have access to technology that improves
-            the utilization of their tractors. Ultimately, we will catalyze the
-            development of competitive and sustainable mechanization market and
-            agribusiness in Africa as a pathway to increased economic growth and
-            food security in the continent of Africa. Recognizing that
-            agriculture in Nigeria will remain a labor-intensive sector,
-            increasing agricultural productivity, facilitating value chain
-            integration, and directing investment toward the agriculture sector
-            will enhance employment opportunities for unskilled labor,
-            contribute to regional food security and stability, and provide one
-            of the most useful vehicles for moving populations out of extreme
-            poverty.
-          </Text>
-
-          <Center my="30px">
-            <Stack textAlign="center">
-              <Text
-                fontSize="24px"
-                fontFamily="cursive"
-                color="#FA9411"
-                display="block"
-                //   mb="16px"
-              >
-                Our Mission
+          <Flex gap="70px" mt="20px" flexDir={{ base: "column", md: "row" }}>
+            <Stack>
+              <Text color="#000000" fontSize="32px" fontWeight={600}>
+                Let&rsquo;s Talk
               </Text>
-              <Text fontWeight={600} lineHeight={"18px"} fontSize="20px">
-                Driving Growth, Cultivating <br />
-                Prosperity
+              <Text color="#000000" fontSize="16px">
+                Tractrac are open to partnerships with organizations that share
+                our vision of a more mechanized and sustainable Nigeria.
+              </Text>
+
+              <Text color="#000000" fontSize="20px" fontWeight={600} mt="20px">
+                Email
+              </Text>
+              <Text color="#000000" fontSize="16px">
+                info@tractrac.co
+              </Text>
+
+              <Text color="#000000" fontSize="20px" fontWeight={600} mt="20px">
+                Phone Number
+              </Text>
+              <Text color="#000000" fontSize="16px">
+                08064648720
               </Text>
             </Stack>
-          </Center>
 
-          <Flex gap="70px" mt="20px" mb="50px">
-            <Text color="#858A8F" fontSize="16px" textAlign="center">
-              Financing tractors for small holder farmers has been a daunting
-              challenge. From the rise in exchange rate to the hurdles of
-              meeting banks&apos; requirement, small holder farmers across
-              Nigeria and Africa at large are unable to own tractors. Owning one
-              is out of their league, yet they constitute 70% of farmers in Sub
-              Saharan Africa. Access to affordable finance also affects the
-              community or cooperative-led Mechanization service provider which
-              also limits the number tractors in their fleet. Ultimately, it is
-              the small holder farmer that is losing. TracTrac has worked hard
-              to create solutions for potential investors and enterprising
-              youths that are simple and intuitive. We have created a platform
-              for investors to participate in the Agric mechanization space,
-              ensure tractors are available to users and make a good return.
-            </Text>
-            {/* <Image src="/images/about-3.svg" alt="About page banner three" /> */}
-          </Flex>
+            <Box
+            //   mr={{ base: "0px", md: "8em" }}
+              bgColor="white"
+              pb="80px"
+            //   px={{ base: "12px", md: "50px" }}
+              borderRadius="6px"
+              minW={{ base: "100%", md: "50%" }}
+            >
+              {/* <Text fontSize="24px" mt="4px" mb="36px">
+                Contact Us
+              </Text> */}
 
-          <Center my="30px">
-            <Stack textAlign="center">
-              <Text
-                fontSize="24px"
-                fontFamily="cursive"
-                color="#FA9411"
-                display="block"
-                //   mb="16px"
+              {error && (
+                <Alert status="error" mb="16px">
+                  <AlertIcon />
+                  <AlertTitle>{error}</AlertTitle>
+                </Alert>
+              )}
+
+              <Box mb="28px">
+                <Text mb="8px" fontSize={"14px"}>
+                  Name
+                </Text>
+                <Input
+                  name="name"
+                //   placeholder="Name"
+                border="0px"
+                bgColor="#F7F7F7"
+                  value={data.name}
+                  onChange={handleInputChange}
+                />
+              </Box>
+              <Box mb="28px">
+                <Text mb="8px" fontSize={"14px"}>
+                  Email Address
+                </Text>
+                <Input
+                  name="email"
+                  border="0px"
+                  bgColor="#F7F7F7"
+                //   placeholder="Enter your email address"
+                  value={data.email}
+                  onChange={handleInputChange}
+                />
+              </Box>
+              <Box mb="28px">
+                <Text mb="8px" fontSize={"14px"}>
+                  Message
+                </Text>
+                <Textarea
+                minH="165px"
+                //   placeholder="Message"
+                  name="message"
+                  border="0px"
+                  bgColor="#F7F7F7"
+                  value={data.message}
+                  onChange={handleInputChange}
+                />
+              </Box>
+              <Button
+                bgColor="#FA9411"
+                color="white"
+                borderRadius="4px"
+                width="100%"
+                onClick={async () => {
+                  try {
+                    setLoading(true);
+                    if (success) {
+                      toast.error(
+                        "You have already contacted us, please wait for a while  before trying again!"
+                      );
+                      return;
+                    }
+                    const emailRegex =
+                      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+                    if (data.name.length < 3) {
+                      toast.error("Please enter a valid name");
+                      return;
+                    }
+
+                    if (data.message.length < 15) {
+                      toast.error("Message must have at least 15 characters");
+                      return;
+                    }
+
+                    if (data.email.length < 1 || !emailRegex.test(data.email)) {
+                      toast.error("Please enter a valid email");
+                      return;
+                    }
+                    const response = await contact({
+                      ...data,
+                    }).unwrap();
+
+                    if (response.status == "success") {
+                      toast.success(
+                        response.message ??
+                          "Received, thanks for contacting us!"
+                      );
+                      setData({
+                        ...data,
+                        email: "",
+                        name: "",
+                        message: "",
+                      });
+                      setSuccess(true);
+                    } else {
+                      toast.error("An unknown error occured");
+                    }
+                  } catch (err) {
+                    const error = err as any;
+                    // alert('error')
+                    if (error?.data?.errors) {
+                      // setError(error?.data?.errors[0])
+                    } else if (error?.data?.message) {
+                      setError(error?.data?.message);
+                    }
+                    console.error("rejected", error);
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                disabled={success}
+                isLoading={loading}
               >
-                Our Vision
-              </Text>
-              <Text fontWeight={600} lineHeight={"18px"} fontSize="20px">
-                Leading a Mechanization Revolution <br />
-                in Africa
-              </Text>
-            </Stack>
-          </Center>
-
-          <Flex
-            gap={{ base: "30px", md: "70px" }}
-            flexDir={{ base: "column", md: "row" }}
-          >
-            <VisionComponent
-              counter="01"
-              title="Affordable tractor financing"
-              content=" Access to low cost of funding for tractors procurement and
-            acquisition"
-            />
-            <VisionComponent
-              counter="02"
-              title="Innovation"
-              content="Enhance procurement of tractors and genuine spare parts from vendors and manufacturers."
-            />
-          </Flex>
-
-          <Flex
-            justifyContent="center"
-            mt={{ base: "30px", md: "67px" }}
-            mb="103px"
-          >
-            <Box w={{ base: "100%", md: "40vw" }}>
-              <VisionComponent
-                counter="03"
-                title="Boost Tractor density"
-                content="Increase in the number of tractors per hectare of farmland in Nigeria and Africa which is presently low."
-              />
+                Send
+              </Button>
             </Box>
           </Flex>
         </Box>
@@ -518,7 +552,7 @@ function NavbarComponent({ onOpen }: MobileProps) {
                 href={"/about"}
                 fontSize={"sm"}
                 fontWeight={700}
-                color="#FA9411"
+                // color="#FA9411"
                 _hover={{
                   textDecoration: "none",
                   // color: linkHoverColor,
@@ -543,6 +577,7 @@ function NavbarComponent({ onOpen }: MobileProps) {
                 // p={2}
                 href={"/contact"}
                 fontSize={"sm"}
+                color="#FA9411"
                 fontWeight={700}
                 // color={linkColor}
                 _hover={{
@@ -554,7 +589,7 @@ function NavbarComponent({ onOpen }: MobileProps) {
               </Link>
               {/* <Link
                 // p={2}
-                href={"/"}
+                href={"#"}
                 fontSize={"sm"}
                 fontWeight={700}
                 // color={linkColor}
@@ -567,7 +602,7 @@ function NavbarComponent({ onOpen }: MobileProps) {
               </Link> */}
               <Link
                 // p={2}
-                href={"#"}
+                href={"/blog"}
                 fontSize={"sm"}
                 fontWeight={700}
                 // color={linkColor}

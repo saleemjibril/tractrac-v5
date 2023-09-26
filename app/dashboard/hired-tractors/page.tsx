@@ -15,7 +15,6 @@ import {
   TableContainer,
   Tbody,
   Td,
-  Tfoot,
   Th,
   Thead,
   Tr,
@@ -150,19 +149,7 @@ export default function HiredTractors() {
                   </Tr>
                 ))}
               </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th>State</Th>
-                  <Th>LGA</Th>
-                  <Th>Address</Th>
-                  <Th>Farm Size</Th>
-                  <Th>Type of Service</Th>
-                  <Th>Amount Paid (₦)</Th>
-                  <Th>Start Date</Th>
-                  <Th>End Date</Th>
-                  <Th>Status</Th>
-                </Tr>
-              </Tfoot>
+             
             </Table>
           </TableContainer>
         )}

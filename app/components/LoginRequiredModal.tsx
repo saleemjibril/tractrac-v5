@@ -14,7 +14,7 @@ import { RootState } from "@/redux/store";
 import { closeModal } from "@/redux/features/modalSlice";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 
 interface ModalProps {
   title: string;
@@ -22,12 +22,16 @@ interface ModalProps {
   setModalState: Dispatch<SetStateAction<boolean>>;
 }
 
-const LogoutRequiredModal: React.FC<ModalProps> = ({ isOpen, setModalState }) => {
+const LogoutRequiredModal: React.FC<ModalProps> = ({
+  isOpen,
+  setModalState,
+}) => {
+  const router = useRouter();
   return (
     <ChakraModal
       isOpen={isOpen}
       onClose={() => setModalState(false)}
-    //   closeOnOverlayClick={false}
+      //   closeOnOverlayClick={false}
       closeOnEsc={false}
       isCentered
       size="xs"

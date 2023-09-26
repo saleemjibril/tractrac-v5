@@ -17,7 +17,6 @@ import {
   TableContainer,
   Tbody,
   Td,
-  Tfoot,
   Th,
   Thead,
   Tr,
@@ -225,16 +224,7 @@ export default function EnlistedTractors() {
                 </Tr>
               ))}
             </Tbody>
-            <Tfoot>
-              <Tr>
-              <Th>Name of Tractor</Th>
-                <Th>Hours Used</Th>
-                <Th>Amount Paid (₦)</Th>
-                <Th>Current Location</Th>
-                <Th>Status</Th>
-                <Th>Track</Th>
-              </Tr>
-            </Tfoot>
+            
           </Table>
         </TableContainer>
 

@@ -61,6 +61,7 @@ import { useEffect, useState, useId } from "react";
 import { userLogout } from "@/redux/features/auth/authActions";
 import { Home2, Element4, Icon as IconSax } from "iconsax-react";
 import { toast } from "react-toastify";
+import NoSsrWrapper from "./noSsrWrapper";
 
 interface LinkItemProps {
   name: string;
@@ -432,7 +433,7 @@ export const SidebarWithHeader: React.FC<ModalProps> = ({ children }) => {
       <MobileNav onOpen={onOpen} />
       {/* <MobileNavigation /> */}
       <Box ml={{ base: 0, md: 60 }} p="4">
-        {children}
+        <NoSsrWrapper>{children}</NoSsrWrapper>
       </Box>
     </Box>
   );

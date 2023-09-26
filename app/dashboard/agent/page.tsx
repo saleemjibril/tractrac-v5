@@ -18,7 +18,6 @@ import {
   TableContainer,
   Tbody,
   Td,
-  Tfoot,
   Th,
   Thead,
   Tr,
@@ -216,16 +215,7 @@ export default function Agent() {
                       </Tr>
                     ))}
                   </Tbody>
-                  <Tfoot>
-                    <Tr>
-                      <Th>First Name</Th>
-                      <Th>Last Name</Th>
-                      <Th>Phone Number</Th>
-                      <Th>Farm Size</Th>
-                      <Th>Location</Th>
-                      <Th>Agent</Th>
-                    </Tr>
-                  </Tfoot>
+                 
                 </Table>
               </TableContainer>
             )}

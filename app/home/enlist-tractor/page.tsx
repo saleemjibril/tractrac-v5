@@ -982,7 +982,8 @@ export default function BecomeAnAgent() {
 
 const brands = ["case_ih", "sonalika", "john_deere", "mahindra", "others"];
 
-const tractorTypes = ["Harrower", "Ridger", "Plougher"];
+
+const tractorTypes = ["Harrower", "Ridger", "Plough", "Planter", "Sprayer"];
 
 const states = [
   "Abia",

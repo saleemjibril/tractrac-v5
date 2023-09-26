@@ -18,7 +18,6 @@ import {
   TableContainer,
   Tbody,
   Td,
-  Tfoot,
   Th,
   Thead,
   Tr,
@@ -187,20 +186,10 @@ export default function FarmersPage() {
                           {parseFloat(farmer?.farm_size ?? 0).toLocaleString()}
                         </Td>
                         <Td>{farmer?.location}</Td>
-                        <Td>{adminInfo?.fname ?? "Nil"}</Td>
+                        <Td>{farmer?.agent ?? "N/a"}</Td>
                       </Tr>
                     ))}
                   </Tbody>
-                  <Tfoot>
-                    <Tr>
-                      <Th>First Name</Th>
-                      <Th>Last Name</Th>
-                      <Th>Phone Number</Th>
-                      <Th>Farm Size</Th>
-                      <Th>Location</Th>
-                      <Th>Agent</Th>
-                    </Tr>
-                  </Tfoot>
                 </Table>
               </TableContainer>
             )}

@@ -31,6 +31,7 @@ import { useRouter } from "next/navigation";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useLoginUserMutation } from "@/redux/services/authApi";
 import { toast } from "react-toastify";
+import NoSsrWrapper from "../components/noSsrWrapper";
 
 export default function Home() {
   const dispatch = useAppDispatch();
@@ -76,7 +77,8 @@ export default function Home() {
     }
     return error;
   }
-  return (
+  return ( 
+    <NoSsrWrapper>
     <Box
       bgImage="url('images/modal-bg.svg')"
       bgRepeat="no-repeat"
@@ -370,6 +372,8 @@ export default function Home() {
         </Box>
       </Flex>
     </Box>
+    </NoSsrWrapper>
+
     // <>
     //   <TracTracPageModal title="Sign in" modalType={LoginModal}>
     //     <LoginModalComponent />

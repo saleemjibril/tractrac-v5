@@ -87,22 +87,23 @@ const LinkItems: Array<{ name: string; path: string; active: boolean }> = [
   },
   {
     name: "About",
-    path: "#",
+    path: "/about",
     active: false,
   },
+  { name: "Services", path: "/services", active: false },
   {
     name: "Contact Us",
-    path: "#",
+    path: "/contact",
     active: false,
   },
-  {
-    name: "Careers",
-    path: "#",
-    active: false,
-  },
+  // {
+  //   name: "Careers",
+  //   path: "#",
+  //   active: false,
+  // },
   {
     name: "Blog",
-    path: "#",
+    path: "/blog",
     active: false,
   },
 ];
@@ -335,7 +336,7 @@ function ServicesComponent() {
             mb="-100px"
             mx={{ base: "12px", md: "24px" }}
           >
-            <Box bgColor="#CC6D02" p="20px">
+            <Box bgColor="#CC6D02" p="20px" as="a" href="/home/hire-tractor">
               <Image
                 src="icons/tractor-2.svg"
                 alt="Tractor image icon"
@@ -350,7 +351,7 @@ function ServicesComponent() {
                 implements for hire at affordable rates.
               </Text>
             </Box>
-            <Box bgColor="#FF8802" p="20px" color="#222222">
+            <Box bgColor="#FF8802" p="20px" color="#222222" as="a" href="/home/enlist-tractor">
               <Image src="icons/list.svg" alt=""></Image>
               <Text fontSize="16px" mt="18px" fontWeight={600}>
                 Enlist your Tractors
@@ -361,7 +362,7 @@ function ServicesComponent() {
                 to various farmers across Africa.
               </Text>
             </Box>
-            <Box bgColor="#FFA035" p="20px">
+            <Box bgColor="#FFA035" p="20px" as="a" href="/home/agent">
               <Image src="icons/agent.svg" alt=""></Image>
               <Text fontSize="16px" mt="18px" fontWeight={600}>
                 Become an Agent
@@ -372,7 +373,7 @@ function ServicesComponent() {
                 communities.
               </Text>
             </Box>
-            <Box bgColor="#FFB867" p="20px" color="#222222">
+            <Box bgColor="#FFB867" p="20px" color="#222222" as="a" href="/home/invest-in-tractor">
               <Image src="icons/money.svg" alt=""></Image>
               <Text fontSize="16px" mt="18px" fontWeight={600}>
                 Invest in Tractors
@@ -648,15 +649,28 @@ function NavbarComponent({ onOpen }: MobileProps) {
               </Link>
               <Link
                 // p={2}
+                href={"/services"}
+                fontSize={"sm"}
+                fontWeight={700}
+                // color={linkColor}
+                _hover={{
+                  textDecoration: "none",
+                  // color: linkHoverColor,
+                }}
+              >
+                Services
+              </Link>
+              <Link
+                // p={2}
                 href={"/contact"}
                 fontSize={"sm"}
                 fontWeight={700}
                 // color={linkColor}
-                onClick={(e) => {
-                  e.preventDefault()
-                  let contact = document.getElementById("contact");
-                  contact && contact.scrollIntoView({ behavior: "smooth", block: "start" });
-                }}
+                // onClick={(e) => {
+                //   e.preventDefault()
+                //   let contact = document.getElementById("contact");
+                //   contact && contact.scrollIntoView({ behavior: "smooth", block: "start" });
+                // }}
                 _hover={{
                   textDecoration: "none",
                   // color: linkHoverColor,
@@ -664,7 +678,7 @@ function NavbarComponent({ onOpen }: MobileProps) {
               >
                 Contact Us
               </Link>
-              <Link
+              {/* <Link
                 // p={2}
                 href={"/careers"}
                 fontSize={"sm"}
@@ -676,7 +690,7 @@ function NavbarComponent({ onOpen }: MobileProps) {
                 }}
               >
                 Careers
-              </Link>
+              </Link> */}
               <Link
                 // p={2}
                 href={"/blog"}
@@ -1104,7 +1118,7 @@ function ContactUsComponent() {
 
   return (
     <Flex
-    id="contact"
+      id="contact"
       width={"100%"}
       // height={"535px"}
       bgImage="url('images/contact-us.svg')"
@@ -1163,7 +1177,12 @@ function ContactUsComponent() {
           <Text mb="8px" fontSize={"14px"}>
             Message
           </Text>
-          <Textarea placeholder="Message" name="message"  value={data.message} onChange={handleInputChange} />
+          <Textarea
+            placeholder="Message"
+            name="message"
+            value={data.message}
+            onChange={handleInputChange}
+          />
         </Box>
         <Button
           bgColor="#FA9411"
@@ -1174,21 +1193,23 @@ function ContactUsComponent() {
             try {
               setLoading(true);
               if (success) {
-                toast.error("You have already contacted us, please wait for a while  before trying again!");
+                toast.error(
+                  "You have already contacted us, please wait for a while  before trying again!"
+                );
                 return;
               }
               const emailRegex =
                 /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-                if (data.name.length < 3) {
-                  toast.error("Please enter a valid name");
-                  return;
-                }
+              if (data.name.length < 3) {
+                toast.error("Please enter a valid name");
+                return;
+              }
 
-                if (data.message.length < 15) {
-                  toast.error("Message must have at least 15 characters");
-                  return;
-                }
+              if (data.message.length < 15) {
+                toast.error("Message must have at least 15 characters");
+                return;
+              }
 
               if (data.email.length < 1 || !emailRegex.test(data.email)) {
                 toast.error("Please enter a valid email");
@@ -1396,8 +1417,8 @@ function FooterComponent() {
         flexWrap="wrap"
         justifyContent="center"
       >
-        <Link href="#">About us</Link>
-        <Link href="#">Contact us</Link>
+        <Link href="/about">About us</Link>
+        <Link href="/contact">Contact us</Link>
         <Link href="#">Facebook</Link>
         <Link href="#">Twitter</Link>
         <Link href="#">Instagram</Link>

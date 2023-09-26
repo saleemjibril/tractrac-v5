@@ -18,7 +18,6 @@ import {
   TableContainer,
   Tbody,
   Td,
-  Tfoot,
   Th,
   Thead,
   Tr,
@@ -213,7 +212,8 @@ export default function PaymentPage() {
                       }
                     }}
                   >
-                    Unapprove
+                    Not Approved
+                    {/* Unapprove */}
                   </Button>
                   {statusTypes[result?.data?.data?.status]?.color && (
                       <Box
