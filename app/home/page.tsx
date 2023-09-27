@@ -1,6 +1,5 @@
 "use client";
 import {
-  
   SimpleGrid,
   Flex,
   Text,
@@ -150,12 +149,13 @@ export default function Dashboard() {
               as="a"
               href={pageItem.path}
               onClick={(e) => {
+                alert(e.type);
                 if (pageItem.loginRequired && !profileInfo?.id) {
                   setModalState(true);
                   e.preventDefault();
                 }
-                if(pageItem.path.includes("#")){
-                  toast.info("This page is coming soon")
+                if (pageItem.path.includes("#")) {
+                  toast.info("This page is coming soon");
                 }
               }}
               py="35px"
@@ -164,6 +164,13 @@ export default function Dashboard() {
               bgColor="white"
               onMouseEnter={() => setHoveredIndex(index)} // Set hoveredIndex on mouse enter
               onMouseLeave={() => setHoveredIndex(null)} // Clear hoveredIndex on mouse leave
+              onTouchStart={() => setHoveredIndex(index)}
+              onTouchEnd={() => setHoveredIndex(null)}
+              // onMouseOver={() => setHoveredIndex(index)}
+              // on={() => setHoveredIndex(null)}
+              onPointerEnter={() => setHoveredIndex(index)}
+              onPointerLeave={() => setHoveredIndex(null)}
+              onTouchEndCapture={() => setHoveredIndex(index)}
               _hover={{
                 bgColor: "#FA9411",
                 color: "white",
@@ -203,7 +210,11 @@ export default function Dashboard() {
           );
         })}
       </SimpleGrid>
-      <LoginRequiredModal title="" isOpen={modalState} setModalState={setModalState} />
+      <LoginRequiredModal
+        title=""
+        isOpen={modalState}
+        setModalState={setModalState}
+      />
     </SidebarWithHeader>
   );
 }

@@ -62,6 +62,7 @@ import { userLogout } from "@/redux/features/auth/authActions";
 import { Home2, Element4, Icon as IconSax } from "iconsax-react";
 import { toast } from "react-toastify";
 import NoSsrWrapper from "./noSsrWrapper";
+import { AuthGuard } from "./AuthGuard";
 
 interface LinkItemProps {
   name: string;
@@ -84,7 +85,7 @@ interface MobileProps extends FlexProps {
   onOpen: () => void;
 }
 
-interface SidebarProps extends BoxProps {
+interface SidebarContentProps extends BoxProps {
   onClose: () => void;
 }
 
@@ -139,7 +140,7 @@ const LinkItems: Array<LinkItemProps> = [
   },
 ];
 
-const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+const SidebarContent = ({ onClose, ...rest }: SidebarContentProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const pathname = usePathname();
@@ -394,13 +395,13 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   );
 };
 
-interface ModalProps {
+interface SidebarProps {
   // title: string;
-  // modalType: string;
+  isAuth?: boolean;
   children: React.ReactNode;
 }
 
-export const SidebarWithHeader: React.FC<ModalProps> = ({ children }) => {
+export const SidebarWithHeader: React.FC<SidebarProps> = ({ children, isAuth }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   // const router = useRouter();
   // const { profileInfo } = useAppSelector((state) => state.auth);
@@ -412,6 +413,7 @@ export const SidebarWithHeader: React.FC<ModalProps> = ({ children }) => {
   // });
 
   return (
+    <AuthGuard isAuth={isAuth}>
     <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")} p={0}>
       <SidebarContent
         onClose={() => onClose}
@@ -433,9 +435,11 @@ export const SidebarWithHeader: React.FC<ModalProps> = ({ children }) => {
       <MobileNav onOpen={onOpen} />
       {/* <MobileNavigation /> */}
       <Box ml={{ base: 0, md: 60 }} p="4">
+      {/* <Box ml={{ base: 0, md: 60 }} p={{base: "3", md: "4"}}> */}
         <NoSsrWrapper>{children}</NoSsrWrapper>
       </Box>
     </Box>
+    </AuthGuard>
   );
 };
 

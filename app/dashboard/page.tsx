@@ -289,7 +289,7 @@ export default function Dashboard() {
 
 function StatisticsCard({ amount, title }: { amount: string; title: string }) {
   return (
-    <Box border="1px" borderColor="#F8A730" p="20px" textAlign="center">
+    <Box border="1px" borderColor="#F8A730" p="20px" textAlign="center" borderRadius="6px">
       <Text fontWeight={700} fontSize={amount?.length > 9 ? "24px" : "28px"}>
         {formatNumber(amount)}
       </Text>

@@ -82,7 +82,11 @@ export default function HireTractor() {
           if (latitude && longitude) {
             // if (latitude && longitude && result.status !== "fulfilled") {
             setLocation({ latitude, longitude });
-            getTractors(`${latitude}/${longitude}`);
+            getTractors(
+              `${latitude.toString().replace(".", "_")}/${longitude
+                .toString()
+                .replace(".", "_")}`
+            );
           } else {
             getTractors(null);
           }
@@ -120,11 +124,10 @@ export default function HireTractor() {
         .catch((_) => {
           setSearchData([]);
         });
-    }else{
-      setSearchData(null)
+    } else {
+      setSearchData(null);
     }
-  }, [ trigger, state, brand, implement]);
-
+  }, [trigger, state, brand, implement]);
 
   async function search() {
     // alert(state);
@@ -182,11 +185,18 @@ export default function HireTractor() {
       .join(" ");
   }
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader isAuth={true}>
       {tractorId ? (
         <HireTractorForm id={tractorId} />
       ) : (
-        <Box bgColor="white" mx="20px" my="12px" px="34px" py="20px">
+        //
+        <Box
+          bgColor="white"
+          mx={{ base: "0px", md: "20px" }}
+          my="12px"
+          px={{ base: "12px", md: "34px" }}
+          py="20px"
+        >
           <Stack>
             <Text fontSize="24px" fontWeight={700} mb="15px">
               Hire a Tractor
