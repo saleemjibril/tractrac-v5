@@ -36,7 +36,7 @@ import {
   Img,
   // NavItem,
 } from "@chakra-ui/react";
-import { ReactNode, useRef, MutableRefObject, useEffect } from "react";
+import { ReactNode, useRef, MutableRefObject, useEffect, useState } from "react";
 // import { MdCheckCircle } from "@chakra-ui/icons";
 import {
   FaFacebookF,
@@ -49,7 +49,7 @@ import {
   FaArrowUp,
 } from "react-icons/fa";
 import { openModal } from "@/redux/features/modalSlice";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
 import { FiMenu } from "react-icons/fi";
 
@@ -296,6 +296,11 @@ function VisionComponent({
 
 function NavbarComponent({ onOpen }: MobileProps) {
   const router = useRouter();
+  const { profileInfo } = useAppSelector((state) => state.auth);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <Box bg={"#F8F8F0"} p={0}>
@@ -326,6 +331,17 @@ function NavbarComponent({ onOpen }: MobileProps) {
           mr={{ base: "16px", md: "0px" }}
         >
           {/* <Stack height={"20px"} width={"20px"} direction={"row"}> */}
+          <Link href="https://www.linkedin.com/company/tractrac/">
+            <IconButton
+              fontSize="18px"
+              size={"sm"}
+              aria-label="LinkedIn Icon"
+              bg="#FFFFFF"
+              icon={<FaLinkedinIn />}
+              isRound={true}
+            />
+          </Link>
+          <Link href="https://web.facebook.com/tractracglobal">
           <IconButton
             size={"sm"}
             aria-label="Facebook Icon"
@@ -333,6 +349,8 @@ function NavbarComponent({ onOpen }: MobileProps) {
             bg="#FFFFFF"
             isRound={true}
           />
+          </Link>
+          <Link href="https://twitter.com/TractracGlobal">
           <IconButton
             fontSize="18px"
             size={"sm"}
@@ -340,41 +358,18 @@ function NavbarComponent({ onOpen }: MobileProps) {
             bg="#FFFFFF"
             icon={<FaTwitter />}
             isRound={true}
-          />
-          <IconButton
-            fontSize="18px"
-            size={"sm"}
-            aria-label="Whatsapp Icon"
-            bg="#FFFFFF"
-            icon={<FaWhatsapp />}
-            isRound={true}
-          />
-          <IconButton
-            fontSize="18px"
-            size={"sm"}
-            aria-label="Youtube Icon"
-            bg="#FFFFFF"
-            icon={<FaYoutube />}
-            isRound={true}
-          />
+          /></Link>
 
-          <IconButton
-            fontSize="18px"
-            size={"sm"}
-            aria-label="Instagram Icon"
-            bg="#FFFFFF"
-            icon={<FaInstagram />}
-            isRound={true}
-          />
-
-          <IconButton
-            fontSize="18px"
-            size={"sm"}
-            aria-label="LinkedIn Icon"
-            bg="#FFFFFF"
-            icon={<FaLinkedinIn />}
-            isRound={true}
-          />
+          <Link href="https://www.instagram.com/tractracglobal/">
+            <IconButton
+              fontSize="18px"
+              size={"sm"}
+              aria-label="Instagram Icon"
+              bg="#FFFFFF"
+              icon={<FaInstagram />}
+              isRound={true}
+            />
+          </Link>
           {/* </Stack> */}
         </Box>
       </Flex>
@@ -581,27 +576,42 @@ function NavbarComponent({ onOpen }: MobileProps) {
             </Stack>
           </Box>
           <Box pt="5px" display={{ base: "none", md: "flex" }}>
-            <ButtonGroup>
-              <Button
-                bg="#FFF5E8"
-                width={"190px"}
-                height={"40px"}
-                color="#FA9411"
-                onClick={() => router.push("/login")}
-              >
-                Login
-              </Button>
-              <Button
-                bg="#FA9411"
-                width={"190px"}
-                height={"40px"}
-                _hover={{ opacity: 0.8 }}
-                color="#FFFFFF"
-                onClick={() => router.push("/signup")}
-              >
-                Sign up
-              </Button>
-            </ButtonGroup>
+            {profileInfo?.id && mounted ? (
+              <ButtonGroup>
+                <Button
+                  bg="#FA9411"
+                  width={"190px"}
+                  height={"40px"}
+                  _hover={{ opacity: 0.8 }}
+                  color="#FFFFFF"
+                  onClick={() => router.push("/home")}
+                >
+                  Dashboard
+                </Button>
+              </ButtonGroup>
+            ) : (
+              <ButtonGroup>
+                <Button
+                  bg="#FFF5E8"
+                  width={"190px"}
+                  height={"40px"}
+                  color="#FA9411"
+                  onClick={() => router.push("/login")}
+                >
+                  Login
+                </Button>
+                <Button
+                  bg="#FA9411"
+                  width={"190px"}
+                  height={"40px"}
+                  _hover={{ opacity: 0.8 }}
+                  color="#FFFFFF"
+                  onClick={() => router.push("/signup")}
+                >
+                  Sign up
+                </Button>
+              </ButtonGroup>
+            )}
           </Box>
 
           <IconButton
@@ -773,9 +783,10 @@ function FooterComponent() {
       >
         <Link href="/about">About us</Link>
         <Link href="/contact">Contact us</Link>
-        <Link href="#">Facebook</Link>
-        <Link href="#">Twitter</Link>
-        <Link href="#">Instagram</Link>
+        <Link href="https://www.linkedin.com/company/tractrac">LinkedIn</Link>
+        <Link href="https://web.facebook.com/tractracglobal">Facebook</Link>
+        <Link href="https://twitter.com/TractracGlobal">Twitter</Link>
+        <Link href="https://www.instagram.com/tractracglobal">Instagram</Link>
       </Flex>
     </Flex>
   );

@@ -38,6 +38,7 @@ import {
   useRegisterUserMutation,
 } from "@/redux/services/authApi";
 import { toast } from "react-toastify";
+import { ArrowBackIcon } from "@chakra-ui/icons";
 
 export default function Verification() {
   const [countdown, setCountdown] = useState(45); // 2 minutes in seconds
@@ -109,25 +110,40 @@ export default function Verification() {
     >
       <Flex
         height="100%"
-        py="50px"
+        py="120px"
         px={{ base: "20px", md: "150px" }}
         direction="row-reverse"
+        alignItems="center"
       >
         <Stack
+          // margin="auto"
           bgColor="white"
-          p={{ base: "20px", md: "40px" }}
-          height="calc(100vh - 100px)"
+          px={{ base: "20px", md: "40px" }}
+          pb="80px"
+          // height="400px"
+          // height="calc(100vh - 100px)"
           justifyContent="center"
           maxW={{ base: "100%", md: "400px" }}
         >
+          <IconButton
+          backgroundColor="transparent"
+          mt="80px"
+          mb="30px"
+          w="20px"
+        
+            icon={<ArrowBackIcon   boxSize="20px" />}
+            aria-label="back icon"
+            onClick={() => router.back()}
+          />
           <Text
-            fontSize={{ base: "20px", md: "24px" }}
+            textAlign="center"
+            fontSize={{ base: "20px", md: "28px" }}
             color="#FA9411"
             fontWeight="700"
           >
             Verify Phone Number
           </Text>
-          <Text>
+          <Text textAlign="center">
             Please enter the 4 digit code sent to +{phoneNumber} through SMS
           </Text>
           <Formik
@@ -241,7 +257,7 @@ export default function Verification() {
               Didn&apos;t recieve a code?
               <Link
                 ml="4px"
-                color={disabled ? '#929292': "#FA9411"}
+                color={disabled ? "#929292" : "#FA9411"}
                 as="button"
                 type="button"
                 disabled={disabled}
@@ -270,7 +286,7 @@ export default function Verification() {
                   }
                 }}
               >
-              {disabled ? 'SMS Sent' : 'Resend SMS'}  
+                {disabled ? "SMS Sent" : "Resend SMS"}
               </Link>
             </Box>
             <Text fontSize="14px" color="#333333">

@@ -24,21 +24,26 @@ import {
   RadioGroup,
   Radio,
   Spacer,
+  IconButton,
 } from "@chakra-ui/react";
 import { SidebarWithHeader } from "../../components/Sidenav";
 import { saveLoginInfo } from "@/redux/features/auth/authActions";
 import { Formik, Form, Field } from "formik";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   AddIcon,
   ArrowForwardIcon,
   ArrowRightIcon,
+  CloseIcon,
   PlusSquareIcon,
 } from "@chakra-ui/icons";
 import dynamic from "next/dynamic";
 import { useAppSelector } from "@/redux/hooks";
-import { useBecomeAnAgentMutation } from "@/redux/services/userApi";
+import {
+  useAddFarmerMutation,
+  useBecomeAnAgentMutation,
+} from "@/redux/services/userApi";
 import { toast } from "react-toastify";
 import * as nigerianStates from "nigerian-states-and-lgas";
 import { FaPlus } from "react-icons/fa";
@@ -54,6 +59,8 @@ export default function BecomeAnAgent() {
   const [gender, setGender] = useState<string | null>("");
   const [success, setSuccess] = useState<boolean>(false);
   const [lgas, setLgas] = useState<string[]>([]);
+
+  const [modalState, setModalState] = useState(false);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -117,6 +124,9 @@ export default function BecomeAnAgent() {
               _hover={{
                 bgColor: "#F8A73099",
               }}
+              onClick={() => {
+                setModalState(true);
+              }}
             >
               <Box as="span" mr="12px">
                 Add Farmers
@@ -129,7 +139,11 @@ export default function BecomeAnAgent() {
               Fill the form below
             </Text>
             <Formik
-              initialValues={{ state: "", lga: "" }}
+              initialValues={{
+                state: "",
+                lga: "",
+                email: profileInfo?.email || "",
+              }}
               onSubmit={async (values: any, { resetForm }) => {
                 setError(null);
 
@@ -214,24 +228,32 @@ export default function BecomeAnAgent() {
                         boxShadow: 0,
                       }}
                       //  ref={initialRef}
-                      placeholder="Enter your L.G.A."
+                      placeholder="Enter your phone number"
                     />
                   </FormControl>
 
-                  <FormControl mb="20px" isDisabled>
-                    <FormLabel fontSize="14px">Email</FormLabel>
-                    <Input
-                      variant="flushed"
-                      borderColor="#929292"
-                      value={profileInfo?.email}
-                      _focus={{
-                        borderColor: "#929292",
-                        boxShadow: 0,
-                      }}
-                      //  ref={initialRef}
-                      placeholder="Enter your L.G.A."
-                    />
-                  </FormControl>
+                  <Field name="email">
+                    {({ field, form }: { [x: string]: any }) => (
+                      <FormControl mb="20px" isDisabled={!!profileInfo?.email}>
+                        <FormLabel fontSize="14px" color="#929292">
+                          Email
+                        </FormLabel>
+                        <Input
+                          {...field}
+                          type="email"
+                          variant="flushed"
+                          borderColor="#929292"
+                          // value={profileInfo?.email}
+                          _focus={{
+                            borderColor: "#929292",
+                            boxShadow: 0,
+                          }}
+                          //  ref={initialRef}
+                          placeholder="Enter your email"
+                        />
+                      </FormControl>
+                    )}
+                  </Field>
 
                   <FormControl mb="20px" isDisabled>
                     <Flex>
@@ -496,9 +518,246 @@ export default function BecomeAnAgent() {
           </ModalBody>
         </ModalContent>
       </ChakraModal>
+      <AddFarmerModal isOpen={modalState} setModalState={setModalState} />
     </SidebarWithHeader>
   );
 }
+
+interface ModalProps {
+  isOpen: boolean;
+  setModalState: Dispatch<SetStateAction<boolean>>;
+}
+
+const AddFarmerModal: React.FC<ModalProps> = ({ isOpen, setModalState }) => {
+  const [error, setError] = useState<string | null>(null);
+
+  function validateEmpty(value: any) {
+    // alert('jjj')
+    let error;
+    if (!value) {
+      error = "This field is required";
+    }
+    return error;
+  }
+  const { profileInfo } = useAppSelector((state) => state.auth);
+  const [addFarmer] = useAddFarmerMutation();
+
+  return (
+    <ChakraModal
+      isOpen={isOpen}
+      onClose={() => setModalState(false)}
+      //   closeOnOverlayClick={false}
+      closeOnEsc={false}
+      isCentered
+      //   size="xs"
+    >
+      <ModalOverlay />
+      <ModalContent px="30px" py="40px">
+        <ModalBody textAlign="center" py="20px">
+          <Flex>
+            <IconButton
+              aria-label="Close modal"
+              bgColor="transparent"
+              mb="50px"
+              icon={<CloseIcon />}
+              onClick={() => {
+                setModalState(false);
+              }}
+            />
+          </Flex>
+          <Text fontSize="16px" fontWeight={600} mb="20px">
+            Add a farmer
+          </Text>
+          <Formik
+            // initialValues={{ name: 'Sasuke' }}
+            initialValues={{
+              fname: "",
+              lname: "",
+              location: "",
+              phone: "",
+              farm_size: "",
+            }}
+            onSubmit={async (values: any, { resetForm }) => {
+              setError(null);
+
+              try {
+                // alert('ss')
+                console.log("nn", values);
+                const response = await addFarmer({
+                  ...values,
+                  user_id: profileInfo?.id,
+                }).unwrap();
+                if (response.status == "success") {
+                  //   resetForm();
+                  toast.success(response.message);
+                  setModalState(false);
+                } else {
+                  setError("An unknown error occured");
+                }
+              } catch (err) {
+                const error = err as any;
+                // alert('error')
+                if (error?.data?.errors) {
+                  // setError(error?.data?.errors[0])
+                } else if (error?.data?.message) {
+                  setError(error?.data?.message);
+                }
+                console.error("rejected", error);
+              }
+            }}
+          >
+            {(props) => (
+              <Form encType="multipart/form-data">
+                {error && (
+                  <Alert status="error" mb="12px">
+                    <AlertIcon />
+                    <AlertTitle>{error}</AlertTitle>
+                  </Alert>
+                )}
+
+                <Field name="fname" validate={validateEmpty}>
+                  {({ field, form }: { [x: string]: any }) => (
+                    <FormControl
+                      mb="16px"
+                      isInvalid={form.errors.fname && form.touched.fname}
+                    >
+                      <Input
+                        {...field}
+                        variant="flushed"
+                        color="#929292"
+                        borderColor="#929292"
+                        _focusVisible={{
+                          borderColor: "#929292",
+                        }}
+                        placeholder="First Name"
+                      />
+                      <FormErrorMessage>{form.errors.fname}</FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
+
+                <Field name="lname" validate={validateEmpty}>
+                  {({ field, form }: { [x: string]: any }) => (
+                    <FormControl
+                      mb="16px"
+                      isInvalid={form.errors.lname && form.touched.lname}
+                    >
+                      <Input
+                        {...field}
+                        variant="flushed"
+                        color="#929292"
+                        borderColor="#929292"
+                        _focusVisible={{
+                          borderColor: "#929292",
+                        }}
+                        placeholder="Last Name"
+                      />
+                      <FormErrorMessage>{form.errors.lname}</FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
+
+                <Field name="location" validate={validateEmpty}>
+                  {({ field, form }: { [x: string]: any }) => (
+                    <FormControl
+                      my={4}
+                      isInvalid={form.errors.location && form.touched.location}
+                    >
+                      <Input
+                        borderColor="#929292"
+                        color="#929292"
+                        _focusVisible={{
+                          borderColor: "#929292",
+                        }}
+                        variant="flushed"
+                        {...field}
+                        placeholder="Location"
+                      />
+                      <FormErrorMessage>
+                        {form.errors.location}
+                      </FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
+
+                <Field name="phone">
+                  {({ field, form }: { [x: string]: any }) => (
+                    <FormControl
+                      my={4}
+                      isInvalid={form.errors.phone && form.touched.phone}
+                    >
+                      <Input
+                        borderColor="#929292"
+                        _focusVisible={{
+                          borderColor: "#929292",
+                        }}
+                        type="text"
+                        color="#929292"
+                        variant="flushed"
+                        {...field}
+                        placeholder="Phone Number"
+                      />
+                      <FormErrorMessage>{form.errors.phone}</FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
+
+                <Field name="farm_size" validate={validateEmpty}>
+                  {({ field, form }: { [x: string]: any }) => (
+                    <FormControl
+                      my={4}
+                      isInvalid={
+                        form.errors.farm_size && form.touched.farm_size
+                      }
+                    >
+                      <Input
+                        borderColor="#929292"
+                        _focusVisible={{
+                          borderColor: "#929292",
+                        }}
+                        color="#929292"
+                        variant="flushed"
+                        {...field}
+                        placeholder="Size of Farm"
+                      />
+                      <FormErrorMessage>
+                        {form.errors.farm_size}
+                      </FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
+
+                <Button
+                  bgColor="#F8A730"
+                  color="white"
+                  width="100%"
+                  my="12px"
+                  fontSize="14px"
+                  fontWeight={400}
+                  isLoading={props.isSubmitting}
+                  //   isDisabled={success}
+                  minH="48px"
+                  type="submit"
+                  _disabled={{
+                    bgColor: "#F8A73088",
+                  }}
+                  _hover={{
+                    bgColor: "#F8A73088",
+                  }}
+                  _focus={{
+                    bgColor: "#F8A73088",
+                  }}
+                >
+                  Add farmer
+                </Button>
+              </Form>
+            )}
+          </Formik>
+        </ModalBody>
+      </ModalContent>
+    </ChakraModal>
+  );
+};
 
 const states = [
   "Abia",

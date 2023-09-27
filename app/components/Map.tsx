@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import loader from "../googleMapsLoader";
 
+import * as markerI from "./tractor-icon.svg";
+
 const Map = ({ addresses }: { addresses: string[] }) => {
   const [map, setMap] = useState<google.maps.Map | null>(null);
   useEffect(() => {
@@ -8,7 +10,7 @@ const Map = ({ addresses }: { addresses: string[] }) => {
       const geocoder = new window.google.maps.Geocoder();
 
       const mapOptions: google.maps.MapOptions = {
-        center: new window.google.maps.LatLng(9.0820, 8.6753),
+        center: new window.google.maps.LatLng(9.082, 8.6753),
         zoom: 6,
       };
       const documentMap = document?.getElementById("map") as HTMLElement;
@@ -17,7 +19,6 @@ const Map = ({ addresses }: { addresses: string[] }) => {
       addresses.forEach((address) => {
         geocoder.geocode({ address }, (results: any, status: any) => {
           if (status === "OK") {
-          
             // const documentMap = document?.getElementById("map");
             // if (documentMap) {
             // const newMap = new window.google.maps.Map(
@@ -27,8 +28,15 @@ const Map = ({ addresses }: { addresses: string[] }) => {
             const marker = new window.google.maps.Marker({
               position: results[0].geometry.location,
               map: newMap,
-              
-            })
+              icon: {
+                // url: google.maps.Circle
+                url: "/tractor-icon.svg",
+                // fillColor: "#EB00FF",
+                // scale: 7,
+                // url: markerI.default,
+                // url: "./tractor-icon.ico",
+              },
+            });
             setMap(newMap);
             // }
           }

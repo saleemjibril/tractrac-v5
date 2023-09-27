@@ -236,7 +236,7 @@ export default function BecomeAnAgent() {
                   type="email"
                   defaultValue={profileInfo?.email}
                   defaultCheck={profileInfo?.email}
-                  validate={validateEmpty}
+                  // validate={validateEmpty}
                 />
 
                 {/* <FormControl isDisabled mt="30px">

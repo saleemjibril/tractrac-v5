@@ -45,7 +45,7 @@ export default function HiredTractors() {
     error,
     // isFetching,
     isLoading,
-  // } = useGetHiredTractorsQuery("3");
+    // } = useGetHiredTractorsQuery("3");
   } = useGetHiredTractorsQuery(profileInfo?.id);
 
   return (
@@ -121,7 +121,28 @@ export default function HiredTractors() {
                   <Tr key={tractor?.id}>
                     <Td>{tractor?.state ?? "Nil"}</Td>
                     <Td>{tractor?.lga ?? "Nil"}</Td>
-                    <Td>{tractor?.address ?? "Nil"}</Td>
+                    {/* <Td>{tractor?.address ?? "Nil"}</Td> */}
+                    <Td 
+                    whiteSpace="break-spaces"
+                    // maxW="100px" 
+                    // display="inline-block"
+                    //  wordBreak="break-word"
+                    // maxW="50px"
+                      // sx={{
+                        // width: "50px",
+                        // overflowWrap: "break-word",
+                        // whiteSpace="unset"
+                        // Add any additional styles as needed
+                      // }}
+                    >
+                      {/* <Box maxW="80px" overflowWrap="break-word"> */}
+                      <Text  >
+                        { tractor?.address ?? "Nil" }
+                      {/* Gaa-akanbi, ilorin south, nigeria Gaa-akanbi, ilorin
+                      south, nigeria,  Gaa-akanbi, ilorin south, nigeria Gaa-akanbi, ilorin */}
+                      </Text>
+                      {/* </Box> */}
+                    </Td>
                     <Td>
                       {parseFloat(tractor?.farm_size ?? 0).toLocaleString()}
                     </Td>
@@ -149,7 +170,6 @@ export default function HiredTractors() {
                   </Tr>
                 ))}
               </Tbody>
-             
             </Table>
           </TableContainer>
         )}

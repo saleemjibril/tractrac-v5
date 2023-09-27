@@ -365,7 +365,7 @@ export default function InvestInTractor() {
                   placeHolder="Email Address"
                   type="email"
                   defaultValue={profileInfo?.email}
-                  validate={validateEmpty}
+                  // validate={validateEmpty}
                 />
 
                 <CustomInput

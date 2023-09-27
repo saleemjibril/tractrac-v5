@@ -34,8 +34,15 @@ export const tractorApi = createApi({
     // }),
 
     getTractors: builder.query({
-      query: () => ({
-        url: "/tractors",
+      query: (param?: any) => ({
+        url: param ?`/tractors/1/${param}` :"/tractors",
+        method: "GET",
+      }),
+    }),
+    
+    getSearchTractors: builder.query({
+      query: (params) => ({
+        url: `/tractor_search/${params}`,
         method: "GET",
       }),
     }),
@@ -76,6 +83,8 @@ export const tractorApi = createApi({
 // auto-generated based on the defined endpoints
 export const {
   useGetTractorsQuery,
+  useLazyGetTractorsQuery,
+  useLazyGetSearchTractorsQuery,
   useGetEnlistedTractorsQuery,
   useGetHiredTractorsQuery,
   useHireTractorMutation,

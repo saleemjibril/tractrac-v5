@@ -1,6 +1,9 @@
 "use client";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { ToastContainer, toast } from 'react-toastify';
+import Router from 'next/router'
+import NProgress from 'nprogress'
+import './app.css'
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -60,7 +63,19 @@ export const theme = extendTheme({
   //   lg: "960px",
   //   xl: "1200px",
   // },
+  
 });
+
+NProgress.configure({ showSpinner: true });
+
+Router.events.on('routeChangeStart', (url) => {
+  console.log(`Loading: ${url}`)
+  NProgress.start()
+})
+Router.events.on('routeChangeComplete', () => NProgress.done())
+Router.events.on('routeChangeError', () => NProgress.done())
+
+
 export default function RootLayout({
   children,
 }: {

@@ -298,7 +298,7 @@ export default function BecomeAnAgent() {
                         }
                       >
                         <FormLabel fontSize="12px" color="#323232">
-                          Tractor type
+                          Implement type
                         </FormLabel>
 
                         <Select

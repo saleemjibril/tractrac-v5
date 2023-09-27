@@ -31,7 +31,7 @@ import {
 import { SidebarWithHeader } from "../../components/Sidenav";
 import { Formik, Form, Field } from "formik";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { useAppSelector } from "@/redux/hooks";
 import { toast } from "react-toastify";
@@ -39,8 +39,9 @@ import { toast } from "react-toastify";
 import * as nigerianStates from "nigerian-states-and-lgas";
 import { ArrowDown2, Filter } from "iconsax-react";
 import {
-  useGetTractorsQuery,
+  useLazyGetTractorsQuery,
   useHireTractorMutation,
+  useLazyGetSearchTractorsQuery,
 } from "@/redux/services/tractorApi";
 import Map from "../../components/Map";
 
@@ -61,27 +62,111 @@ interface ITractorCard {
 }
 
 export default function HireTractor() {
-  const [location, setLocation] = useState<any>();
+  const [location, setLocation] = useState<any>(null);
+  const [searchData, setSearchData] = useState<any>(null);
   const [tractorId, setTractorId] = useState<string | null>(null);
-
+  const [state, setState] = useState<string | null>(null);
+  const [brand, setBrand] = useState<string | null>(null);
+  const [implement, setImplement] = useState<string | null>(null);
+  const [getTractors, result] = useLazyGetTractorsQuery();
+  const [trigger, searchResult] = useLazyGetSearchTractorsQuery({});
 
   useEffect(() => {
-    if('geolocation' in navigator) {
-        // Retrieve latitude & longitude coordinates from `navigator.geolocation` Web API
-        navigator.geolocation.getCurrentPosition(({ coords }) => {
-            const { latitude, longitude } = coords;
-            alert(latitude)
+    if ("geolocation" in navigator) {
+      // Retrieve latitude & longitude coordinates from `navigator.geolocation` Web API
+      console.log("error->", "dd");
+      navigator.geolocation.getCurrentPosition(
+        ({ coords }) => {
+          console.log("error->", coords);
+          const { latitude, longitude } = coords;
+          if (latitude && longitude) {
+            // if (latitude && longitude && result.status !== "fulfilled") {
             setLocation({ latitude, longitude });
-        })
+            getTractors(`${latitude}/${longitude}`);
+          } else {
+            getTractors(null);
+          }
+        },
+        (err) => {
+          getTractors(null);
+          console.log("err", err);
+        }
+      );
+    } else {
+      getTractors(null);
     }
-}, []);
+    // return {getTractors}
+  }, [getTractors]);
 
-  const {
-    data: result,
-    // isFetching,
-    isLoading,
-  } = useGetTractorsQuery({});
+  useEffect(() => {
+    let param = "";
+    if (state && brand && implement) {
+      param = `${implement}/${brand}/${state}`;
+    } else if (state && !brand && !implement) {
+      param = state;
+    } else if (!state && brand && implement) {
+      param = `${implement}/${brand}`;
+    } else if (!state && !brand && implement) {
+      param = implement;
+    } else if (!state && brand && !implement) {
+      param = brand;
+    }
+    if (param.length > 1) {
+      trigger(param)
+        .unwrap()
+        .then((result) => {
+          setSearchData(result?.data || []);
+        })
+        .catch((_) => {
+          setSearchData([]);
+        });
+    }else{
+      setSearchData(null)
+    }
+  }, [ trigger, state, brand, implement]);
 
+
+  async function search() {
+    // alert(state);
+    try {
+      let param = "";
+      if (state && brand && implement) {
+        // const result = await trigger(
+        //   `${implement}/${brand}/${state}`
+        // ).unwrap();
+        // setSearchData(result?.data || []);
+        param = `${implement}/${brand}/${state}`;
+        console.log("SEARCH DATA", searchData);
+      } else if (state && !brand && !implement) {
+        // const result = await trigger(state).unwrap();
+        // setSearchData(result?.data || []);
+        param = state;
+      } else if (!state && brand && implement) {
+        // const result = await trigger(`${implement}/${brand}`).unwrap();
+        // setSearchData(result?.data || []);
+        param = `${implement}/${brand}`;
+      } else if (!state && !brand && implement) {
+        // const result = await trigger(implement).unwrap();
+        // setSearchData(result?.data || []);
+        param = implement;
+      } else if (!state && brand && !implement) {
+        // alert(brand);
+        // const result = await trigger(brand).unwrap();
+        // // alert(result?.data || [])
+        // console.log("DDD", result?.data);
+        // setSearchData(result?.data || []);
+        param = brand;
+      } else {
+        // setSearchData(null);
+      }
+      if (param.length > 1 && searchData == null) {
+        const result = await trigger(param).unwrap();
+        setSearchData(result?.data || []);
+      }
+    } catch (e) {
+      setSearchData([]);
+    }
+  }
   console.log(result);
 
   //     id, {
@@ -90,16 +175,12 @@ export default function HireTractor() {
   //     skip: false,
   //   })
 
-  function validateEmpty(value: any) {
-    let error;
-    if (!value) {
-      error = "This field is required";
-    }
-    return error;
+  function snakeToCamelWithSpaces(str: string): string {
+    return str
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
   }
-
-  // const addresses = ["Coogee Beach", "Bondi Beach", "Cronulla Beach"];
-
   return (
     <SidebarWithHeader>
       {tractorId ? (
@@ -107,20 +188,22 @@ export default function HireTractor() {
       ) : (
         <Box bgColor="white" mx="20px" my="12px" px="34px" py="20px">
           <Stack>
-    {JSON.stringify(location)}
-
             <Text fontSize="24px" fontWeight={700} mb="15px">
               Hire a Tractor
             </Text>
-            {isLoading ? (
+            {result?.isLoading || result.status === "uninitialized" ? (
               <Skeleton
                 mt="12px"
                 height="360px"
                 borderRadius="4px"
                 // w="111px"
               />
+            ) : searchData ? (
+              <Map addresses={searchData?.map((item: any) => item.address)} />
             ) : (
-              <Map addresses={result?.data.map((item: any) => item.address)} />
+              <Map
+                addresses={result?.data?.data.map((item: any) => item.address)}
+              />
             )}
             {/* <Image src="/images/map.svg" alt="map image" /> */}
           </Stack>
@@ -152,23 +235,11 @@ export default function HireTractor() {
                   <option>All filters</option>
                 </Select>
               </InputGroup> */}
-              <Select
-                width="130px"
-                placeholder="State"
-                icon={<ArrowDown2 />}
-                color="#FA9411"
-                border="1px"
-                borderColor="#FA9411"
-                _focus={{
-                  borderColor: "#FA9411",
-                }}
-                _focusVisible={{
-                  borderColor: "#FA9411",
-                }}
-              />
+
               <Select
                 width="150px"
-                placeholder="Tractor Type"
+                placeholder="State"
+                value={(state || "").toLowerCase()}
                 icon={<ArrowDown2 />}
                 color="#FA9411"
                 border="1px"
@@ -179,7 +250,52 @@ export default function HireTractor() {
                 _focusVisible={{
                   borderColor: "#FA9411",
                 }}
-              />
+                onChange={(e) => {
+                  // alert(e?.target?.value);
+                  if (e?.target?.value) {
+                    setState(e?.currentTarget?.value);
+                    // search();
+                  } else {
+                    setState(null);
+                    //   // search();
+                  }
+                }}
+              >
+                {states.map((state) => (
+                  <option key={state} value={state.toLowerCase()}>
+                    {state}
+                  </option>
+                ))}
+              </Select>
+              <Select
+                width="170px"
+                placeholder="Implement Type"
+                icon={<ArrowDown2 />}
+                color="#FA9411"
+                border="1px"
+                borderColor="#FA9411"
+                _focus={{
+                  borderColor: "#FA9411",
+                }}
+                _focusVisible={{
+                  borderColor: "#FA9411",
+                }}
+                onChange={(e) => {
+                  if (e?.target?.value) {
+                    setImplement(e?.target?.value);
+                    // search();
+                  } else {
+                    setImplement(null);
+                    // search();
+                  }
+                }}
+              >
+                {tractorTypes.map((tractorType) => (
+                  <option key={tractorType} value={tractorType.toLowerCase()}>
+                    {tractorType}
+                  </option>
+                ))}
+              </Select>
               <Select
                 width="130px"
                 placeholder="Brand"
@@ -193,52 +309,103 @@ export default function HireTractor() {
                 _focusVisible={{
                   borderColor: "#FA9411",
                 }}
-              />
-            </Stack>
-            {isLoading ? (
-              <SimpleGrid
-                columns={{ base: 2, md: 4 }}
-                spacingX="20px"
-                spacingY="15px"
-                mt="30px"
+                onChange={(e) => {
+                  if (e?.target?.value) {
+                    setBrand(e?.target?.value);
+                    // search();
+                  } else {
+                    setBrand(null);
+                    // search();
+                  }
+                }}
               >
-                {[1, 2, 3, 4, 5, 6, 7, 8].map((index) => (
-                  <Box key={index} boxShadow="lg" bg="white" borderRadius="4px">
-                    <Skeleton height="120px" />
-                    <Box p="12px">
-                      <SkeletonText
-                        my="12px"
-                        noOfLines={3}
-                        spacing="3"
-                        skeletonHeight="6px"
-                      />
-
-                      <Skeleton
-                        mt="12px"
-                        height="30px"
-                        borderRadius="4px"
-                        w="111px"
-                      />
-                    </Box>
-
-                    {/* <SkeletonCircle size="10" /> */}
-                    {/* */}
-                  </Box>
+                {brands.map((brand) => (
+                  <option key={brand} value={brand.toLowerCase()}>
+                    {snakeToCamelWithSpaces(brand)}
+                  </option>
                 ))}
-              </SimpleGrid>
-            ) : (
-              // { location }
-              <SimpleGrid
-                columns={{ base: 2, md: 4 }}
-                spacingX="20px"
-                spacingY="15px"
-                mt="30px"
-                // spacing={{ base: "12px", md: "40px" }}
-              >
-                {result?.data?.length < 0 ? (
-                  <Text>Empty</Text>
+              </Select>
+            </Stack>
+            {
+              // searchResult?.isFetching ||
+              result?.isLoading || result.status === "uninitialized" ? (
+                <SimpleGrid
+                  columns={{ base: 2, md: 4 }}
+                  spacingX="20px"
+                  spacingY="15px"
+                  mt="30px"
+                >
+                  {[1, 2, 3, 4, 5, 6, 7, 8].map((index) => (
+                    <Box
+                      key={index}
+                      boxShadow="lg"
+                      bg="white"
+                      borderRadius="4px"
+                    >
+                      <Skeleton height="120px" />
+                      <Box p="12px">
+                        <SkeletonText
+                          my="12px"
+                          noOfLines={3}
+                          spacing="3"
+                          skeletonHeight="6px"
+                        />
+
+                        <Skeleton
+                          mt="12px"
+                          height="30px"
+                          borderRadius="4px"
+                          w="111px"
+                        />
+                      </Box>
+
+                      {/* <SkeletonCircle size="10" /> */}
+                      {/* */}
+                    </Box>
+                  ))}
+                </SimpleGrid>
+              ) : // { location }
+              // <SimpleGrid
+              //   columns={{ base: 2, md: 4 }}
+              //   spacingX="20px"
+              //   spacingY="15px"
+              //   mt="30px"
+              // >
+              //   {
+              searchData ? (
+                searchData?.length < 1 ? (
+                  <EmptyDataPlaceholder isSearch={true} />
                 ) : (
-                  result?.data.map((tractor: any) => (
+                  <SimpleGrid
+                    columns={{ base: 2, md: 4 }}
+                    spacingX="20px"
+                    spacingY="15px"
+                    mt="30px"
+                  >
+                    {searchData.map((tractor: any) => (
+                      <TractorCard
+                        key={tractor?.id}
+                        setTractorId={setTractorId}
+                        id={tractor?.id}
+                        name={`${tractor?.brand} ${tractor?.model}`}
+                        image={tractor?.image}
+                        capacity=" 105 to 135 HP"
+                        location={tractor?.state}
+                        tractor_type={tractor?.tractor_type}
+                      />
+                    ))}
+                  </SimpleGrid>
+                )
+              ) : result?.data?.data?.length < 1 ? (
+                <EmptyDataPlaceholder isSearch={false} />
+              ) : (
+                <SimpleGrid
+                  columns={{ base: 2, md: 4 }}
+                  spacingX="20px"
+                  spacingY="15px"
+                  mt="30px"
+                >
+                  {result?.data?.data.map((tractor: any) => (
                     <TractorCard
                       key={tractor?.id}
                       setTractorId={setTractorId}
@@ -249,10 +416,12 @@ export default function HireTractor() {
                       location={tractor?.state}
                       tractor_type={tractor?.tractor_type}
                     />
-                  ))
-                )}
-              </SimpleGrid>
-            )}
+                  ))}
+                </SimpleGrid>
+              )
+              //   }
+              // </SimpleGrid>
+            }
           </Box>
         </Box>
       )}
@@ -488,7 +657,7 @@ function HireTractorForm({ id }: { id: string }) {
                     isInvalid={form.errors.service && form.touched.service}
                   >
                     <FormLabel fontSize="12px" color="#323232">
-                      Implement
+                      Implement Type
                     </FormLabel>
                     <Select
                       {...field}
@@ -731,6 +900,63 @@ function HireTractorForm({ id }: { id: string }) {
   );
 }
 
+function EmptyDataPlaceholder({ isSearch }: { isSearch: boolean }) {
+  return (
+    <Flex justifyContent="center" alignItems="center">
+      <Box bgColor="white" width="100%" p="60px" textAlign="center" mt="20px">
+        {/* <Box bgColor="white" width="400px" p="60px" textAlign="center" mt="40px"> */}
+        <Center>
+          <Image src="/images/empty-state.svg" alt="Empty state image icon" />
+        </Center>
+        <Text color="#323232" fontWeight="700" fontSize="20px" mt="57px">
+          {isSearch ? "Search result is empty" : " Tractors list is empty"}
+        </Text>
+
+        <Text color="#323232" fontWeight="400" fontSize="18px">
+          Available tractors will be listed on this page
+        </Text>
+      </Box>
+    </Flex>
+  );
+}
+
+function SelectComponent({
+  options,
+  onSelected,
+}: {
+  options: any;
+  onSelected: any;
+}) {
+  const [value, setValue] = useState();
+
+  const updateValue = ({ target }: { target: any }) => {
+    alert(`before->${value}`);
+    setValue(target.value);
+    if (onSelected) onSelected(target.value);
+    alert(`after->${value}`);
+  };
+
+  return (
+    <>
+      {/* <label htmlFor={optionList.id}>{optionList.label}</label> */}
+      <Select
+        id="1"
+        // id={optionList.id}
+        // name={optionList.name}
+        value={value}
+        onChange={updateValue}
+      >
+        {options.map((option: any) => (
+          <option value={option.toLowerCase()} key={option}>
+            {option}
+          </option>
+        ))}
+      </Select>
+      {/* <button>{optionList.buttonLabel}</button> */}
+    </>
+  );
+}
+
 const states = [
   "Abia",
   "Adamawa",
@@ -770,3 +996,7 @@ const states = [
   "Yobe",
   "Zamfara",
 ];
+
+const brands = ["case_ih", "sonalika", "john_deere", "mahindra", "others"];
+
+const tractorTypes = ["Harrower", "Ridger", "Plough", "Planter", "Sprayer"];

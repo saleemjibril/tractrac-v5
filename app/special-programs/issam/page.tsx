@@ -18,18 +18,14 @@ import {
   useDisclosure,
   ModalBody,
 } from "@chakra-ui/react";
+// const DynamicComponent = dynamic(() => import('../../components/Sidenav'))
 import { SidebarWithHeader } from "../../components/Sidenav";
-import { saveLoginInfo } from "@/redux/features/auth/authActions";
 import { Formik, Form, Field } from "formik";
-import router from "next/router";
 import { useState } from "react";
-import { ArrowForwardIcon, ArrowRightIcon } from "@chakra-ui/icons";
+import { ArrowForwardIcon } from "@chakra-ui/icons";
 import dynamic from "next/dynamic";
 import { useAppSelector } from "@/redux/hooks";
-import {
-  useBecomeAnAgentMutation,
-  useValidateIssamIdMutation,
-} from "@/redux/services/userApi";
+import { useValidateIssamIdMutation } from "@/redux/services/userApi";
 import { toast } from "react-toastify";
 
 // const DynamicHeader = dynamic(() => import('../components/Sidenav'), {
@@ -128,7 +124,7 @@ export default function Issam() {
                           borderColor: "#929292",
                         }}
                         {...field}
-                        width={{base: "100%", lg: "328px"}}
+                        width={{ base: "100%", lg: "328px" }}
                         placeholder="Enter ID."
                       />
                       <FormErrorMessage>
@@ -141,7 +137,7 @@ export default function Issam() {
                 <Button
                   bgColor="#F8A730"
                   color="white"
-                  width={{base: "100%", lg: "328px"}}
+                  width={{ base: "100%", lg: "328px" }}
                   minH="50px"
                   my="16px"
                   fontSize="18px"
@@ -169,37 +165,31 @@ export default function Issam() {
           <Text fontSize="18px" fontWeight={600} mb="4px">
             About ISSAM
           </Text>
-          <Text mt="16px">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.{" "}
-          </Text>
-
-          <Text mt="16px">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            onsectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-            labore et dolore magna aliqua.{" "}
-          </Text>
-
-          <Text mt="16px">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            onsectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-            labore et dolore magna aliqua.{" "}
-          </Text>
-
-          <Text mt="16px">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            onsectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-            labore et dolore magna aliqua. Lorem ipsum dolor sit amet,
-            consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-            labore et dolore
+          <Text mt="16px" fontSize="16px" color="#333333">
+            The ISSAM (Improving Smallholder Farmers&#39; access to Small-scaled
+            Agricultural Mechanisation Services) project, supported by the
+            Mastercard Foundation, aims to address limited access to
+            mechanisation in Nigeria. <br />
+            <br />
+            Led by Tractrac Mechanisation Services, it targets young men and
+            women in rural communities, creating work opportunities and
+            improving access to affordable technologies. Implementation will
+            occur in five states: Adamawa, Federal Capital Territory, Kaduna,
+            Kano, and Nasarawa. The project seeks to create direct work
+            opportunities for 10,192 youth, with a focus on increasing female
+            participation. Indirectly, it aims to impact around 315,000 farmers.
+            <br />
+            <br />
+            Objectives include bundled mechanisation services, affordable last
+            mile access, financial inclusion, technology integration, and policy
+            enhancement. Strategic partners include Women In Mechanisation
+            Association (WIMA), National Centre for Agricultural Mechanisation
+            (NCAM), and others. Aligned with the Mastercard Foundation&#39;s vision,
+            the project aims to empower youth, promote gender equality, and
+            drive sustainable agricultural development in the target regions.
+            Through innovative technologies and inclusive market systems, the
+            project seeks to transform the rural mechanisation supply chain and
+            uplift smallholder farmers.
           </Text>
         </Box>
       </Flex>
@@ -234,8 +224,7 @@ export default function Issam() {
               height="45px"
               bgColor="#FA9411"
               _hover={{
-              bgColor:"#FA9411"
-
+                bgColor: "#FA9411",
               }}
               mt="12px"
               color="white"

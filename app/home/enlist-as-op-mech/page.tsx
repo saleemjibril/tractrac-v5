@@ -74,350 +74,363 @@ export default function BecomeAnAgent() {
 
   return (
     <SidebarWithHeader>
-      <Flex p="30px" gap="40px" direction={{ base: "column", lg: "row" }} bgColor="white">
+      <Flex
+        p="30px"
+        gap="40px"
+        direction={{ base: "column", lg: "row" }}
+        bgColor="white"
+      >
         <Stack w={{ base: "100%", lg: "60%" }}>
           <Text fontSize="24px" fontWeight={700} mb="4px">
-          Enlist as Operator/ Mechanic
+            Enlist as Operator/ Mechanic
           </Text>
-          <Image src="/images/enlist-as-operator.svg" alt="Agent image" borderRadius="10px" />
+          <Image
+            src="/images/enlist-as-operator.svg"
+            alt="Agent image"
+            borderRadius="10px"
+          />
           <Text fontSize="16px" fontWeight={600} my="4px">
-          Enlist as Operator/ Mechanic
+            Enlist as Operator/ Mechanic
           </Text>
           <Text>
-          Your expertise and passion as a mechanic or tractor operator would make you a valuable addition to our team. By becoming part of our program, you will have access to continuous training and development resources, ensuring that your skills remain sharp and up-to-date.
+            Your expertise and passion as a mechanic or tractor operator would
+            make you a valuable addition to our team. By becoming part of our
+            program, you will have access to continuous training and development
+            resources, ensuring that your skills remain sharp and up-to-date.
           </Text>
         </Stack>
 
         <Box pr="10px" flex="1">
           {/* <Box> */}
-            <Text fontWeight={500} mb="24px">
-              Fill the form below
-            </Text>
-            <Formik
-              initialValues={{ state: "", lga: "" }}
-              onSubmit={async (values: any, { resetForm }) => {
-                setError(null);
+          <Text fontWeight={500} mb="24px">
+            Fill the form below
+          </Text>
+          <Formik
+            initialValues={{
+              state: "",
+              lga: "",
+              email: profileInfo?.email || "",
+            }}
+            onSubmit={async (values: any, { resetForm }) => {
+              setError(null);
 
-                try {
-                  // alert('ss')
-                  console.log(values);
-                  const response = await becomeAnOpOrMech({
-                    ...values,
-                    user_id: profileInfo?.id,
-                  }).unwrap();
-                  if (response.status == "success") {
-                    setSuccess(true);
-                    onOpen();
-                    resetForm();
-                    toast.success(response.message);
-                  } else {
-                    setError("An unknown error occured");
-                  }
-                  console.log("fulfilled", response?.data[0]);
-                } catch (err) {
-                  const error = err as any;
-                  // alert('error')
-                  if (error?.data?.errors) {
-                    // setError(error?.data?.errors[0])
-                  } else if (error?.data?.message) {
-                    setError(error?.data?.message);
-                  }else{
-                    setError("An unknown error occured, please try again");
-                  }
-                  console.error("rejected", error);
+              try {
+                // alert('ss')
+                console.log(values);
+                const response = await becomeAnOpOrMech({
+                  ...values,
+                  user_id: profileInfo?.id,
+                }).unwrap();
+                if (response.status == "success") {
+                  setSuccess(true);
+                  onOpen();
+                  resetForm();
+                  toast.success(response.message);
+                } else {
+                  setError("An unknown error occured");
                 }
-              }}
-            >
-              {(props) => (
-                <Form>
-                  {error && (
-                    <Alert status="error" mb="12px">
-                      <AlertIcon />
-                      <AlertTitle>{error}</AlertTitle>
-                      {/* <AlertDescription>
+                console.log("fulfilled", response?.data[0]);
+              } catch (err) {
+                const error = err as any;
+                // alert('error')
+                if (error?.data?.errors) {
+                  // setError(error?.data?.errors[0])
+                } else if (error?.data?.message) {
+                  setError(error?.data?.message);
+                } else {
+                  setError("An unknown error occured, please try again");
+                }
+                console.error("rejected", error);
+              }
+            }}
+          >
+            {(props) => (
+              <Form>
+                {error && (
+                  <Alert status="error" mb="12px">
+                    <AlertIcon />
+                    <AlertTitle>{error}</AlertTitle>
+                    {/* <AlertDescription>
                 Your Chakra experience may be degraded.
               </AlertDescription> */}
-                    </Alert>
+                  </Alert>
+                )}
+
+                <FormControl mb="20px" isDisabled>
+                  {/* <FormLabel fontSize="14px">Firstname</FormLabel> */}
+                  <Input
+                    variant="flushed"
+                    borderColor="#929292"
+                    value={profileInfo?.fname}
+                    _focus={{
+                      borderColor: "#929292",
+                      boxShadow: 0,
+                    }}
+                    //  ref={initialRef}
+                    placeholder="Enter your L.G.A."
+                  />
+                </FormControl>
+
+                <FormControl mb="20px" isDisabled>
+                  {/* <FormLabel fontSize="14px">Lastname</FormLabel> */}
+                  <Input
+                    variant="flushed"
+                    borderColor="#929292"
+                    value={profileInfo?.lname}
+                    _focus={{
+                      borderColor: "#929292",
+                      boxShadow: 0,
+                    }}
+                    //  ref={initialRef}
+                    placeholder="Enter your L.G.A."
+                  />
+                </FormControl>
+
+                <FormControl mb="20px" isDisabled>
+                  {/* <FormLabel fontSize="14px">Phone number</FormLabel> */}
+                  <Input
+                    variant="flushed"
+                    borderColor="#929292"
+                    value={profileInfo?.phone}
+                    _focus={{
+                      borderColor: "#929292",
+                      boxShadow: 0,
+                    }}
+                    //  ref={initialRef}
+                    placeholder="Enter your L.G.A."
+                  />
+                </FormControl>
+
+                <Field name="email">
+                  {({ field, form }: { [x: string]: any }) => (
+                    <FormControl mb="20px" isDisabled={!!profileInfo?.email}>
+                      <Input
+                        {...field}
+                        variant="flushed"
+                        color="#929292"
+                        borderColor="#929292"
+                        // value={}
+                        _focusVisible={{
+                          borderColor: "#929292",
+                          boxShadow: 0,
+                        }}
+                        //  ref={initialRef}
+                        placeholder="Email Address"
+                      />
+                    </FormControl>
                   )}
+                </Field>
 
-                  <FormControl mb="20px" isDisabled>
-                    {/* <FormLabel fontSize="14px">Firstname</FormLabel> */}
-                    <Input
-                      variant="flushed"
-                      borderColor="#929292"
-                      value={profileInfo?.fname}
-                      _focus={{
-                        borderColor: "#929292",
-                        boxShadow: 0,
-                      }}
-                      //  ref={initialRef}
-                      placeholder="Enter your L.G.A."
-                    />
-                  </FormControl>
-
-                  <FormControl mb="20px" isDisabled>
-                    {/* <FormLabel fontSize="14px">Lastname</FormLabel> */}
-                    <Input
-                      variant="flushed"
-                      borderColor="#929292"
-                      value={profileInfo?.lname}
-                      _focus={{
-                        borderColor: "#929292",
-                        boxShadow: 0,
-                      }}
-                      //  ref={initialRef}
-                      placeholder="Enter your L.G.A."
-                    />
-                  </FormControl>
-
-                  <FormControl mb="20px" isDisabled>
-                    {/* <FormLabel fontSize="14px">Phone number</FormLabel> */}
-                    <Input
-                      variant="flushed"
-                      borderColor="#929292"
-                      value={profileInfo?.phone}
-                      _focus={{
-                        borderColor: "#929292",
-                        boxShadow: 0,
-                      }}
-                      //  ref={initialRef}
-                      placeholder="Enter your L.G.A."
-                    />
-                  </FormControl>
-
-                  <FormControl mb="20px" isDisabled>
-                    {/* <FormLabel fontSize="14px">Email</FormLabel> */}
-                    <Input
-                      variant="flushed"
-                      borderColor="#929292"
-                      value={profileInfo?.email}
-                      _focus={{
-                        borderColor: "#929292",
-                        boxShadow: 0,
-                      }}
-                      //  ref={initialRef}
-                      placeholder="Email Address"
-                    />
-                  </FormControl>
-
-                  <Field name="state" validate={validateEmpty}>
-                    {({ field, form }: { [x: string]: any }) => (
-                      <FormControl
-                        isInvalid={form.errors.state && form.touched.state}
-                        mb="20px"
-                      >
-                        {/* <FormLabel fontSize="14px">State</FormLabel> */}
-                        <Select
-                          // {...field}
-                          placeholder="State of residence"
-                          color="#929292"
-                          variant="flushed"
-                          borderColor="#929292"
-                          _focusVisible={{
-                            borderColor: "#929292",
-                          }}
-                          onChange={(v) => {
-                            const state = v.currentTarget.value || "";
-                            form.setFieldValue(
-                              field.name,
-                              v.currentTarget.value
+                <Field name="state" validate={validateEmpty}>
+                  {({ field, form }: { [x: string]: any }) => (
+                    <FormControl
+                      isInvalid={form.errors.state && form.touched.state}
+                      mb="20px"
+                    >
+                      {/* <FormLabel fontSize="14px">State</FormLabel> */}
+                      <Select
+                        // {...field}
+                        placeholder="State of residence"
+                        color="#929292"
+                        variant="flushed"
+                        borderColor="#929292"
+                        _focusVisible={{
+                          borderColor: "#929292",
+                        }}
+                        onChange={(v) => {
+                          const state = v.currentTarget.value || "";
+                          form.setFieldValue(field.name, v.currentTarget.value);
+                          // alert(props.values.state);
+                          if (state.includes("abuja")) {
+                            // Federal Capital Territory
+                            setLgas(
+                              nigerianStates.lgas(
+                                "Federal Capital Territory"
+                              ) ?? []
                             );
-                            // alert(props.values.state);
-                            if (state.includes("abuja")) {
-                              // Federal Capital Territory
-                              setLgas(
-                                nigerianStates.lgas(
-                                  "Federal Capital Territory"
-                                ) ?? []
-                              );
-                            } else {
-                              setLgas(nigerianStates.lgas(state) ?? []);
-                            }
-                          }}
-                        >
-                          {states.map((state) => (
-                            <option key={state} value={state.toLowerCase()}>
-                              {state}
-                            </option>
-                          ))}
-                        </Select>
-                        <FormErrorMessage>{form.errors.state}</FormErrorMessage>
-                      </FormControl>
-                    )}
-                  </Field>
-
-                  <Field name="lga" validate={validateEmpty}>
-                    {({ field, form }: { [x: string]: any }) => (
-                      <FormControl
-                        // my={4}
-                        isInvalid={form.errors.lga && form.touched.lga}
-                        mb="20px"
+                          } else {
+                            setLgas(nigerianStates.lgas(state) ?? []);
+                          }
+                        }}
                       >
-                        <Select
-                          // {...field}
-                          placeholder="Local Government Area"
-                          color="#929292"
-                          variant="flushed"
-                          borderColor="#929292"
-                          _focusVisible={{
-                            borderColor: "#929292",
-                          }}
-                          onChange={(v) => {
-                            // const state = v.currentTarget.value || "";
-                            form.setFieldValue(
-                              field.name,
-                              v.currentTarget.value
-                            );
-                            // alert(props.values.state);
-                            // setLgas(NaijaStates.lgas(state) ?? []);
-                          }}
-                        >
-                          {lgas.map((state) => (
-                            <option key={state} value={state.toLowerCase()}>
-                              {state}
-                            </option>
-                          ))}
-                        </Select>
-                        {/* <Input
+                        {states.map((state) => (
+                          <option key={state} value={state.toLowerCase()}>
+                            {state}
+                          </option>
+                        ))}
+                      </Select>
+                      <FormErrorMessage>{form.errors.state}</FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
+
+                <Field name="lga" validate={validateEmpty}>
+                  {({ field, form }: { [x: string]: any }) => (
+                    <FormControl
+                      // my={4}
+                      isInvalid={form.errors.lga && form.touched.lga}
+                      mb="20px"
+                    >
+                      <Select
+                        // {...field}
+                        placeholder="Local Government Area"
+                        color="#929292"
+                        variant="flushed"
+                        borderColor="#929292"
+                        _focusVisible={{
+                          borderColor: "#929292",
+                        }}
+                        onChange={(v) => {
+                          // const state = v.currentTarget.value || "";
+                          form.setFieldValue(field.name, v.currentTarget.value);
+                          // alert(props.values.state);
+                          // setLgas(NaijaStates.lgas(state) ?? []);
+                        }}
+                      >
+                        {lgas.map((state) => (
+                          <option key={state} value={state.toLowerCase()}>
+                            {state}
+                          </option>
+                        ))}
+                      </Select>
+                      {/* <Input
                         variant="flushed"
                         borderColor="orange"
                         {...field}
                         //  ref={initialRef}
                         placeholder="Enter your L.G.A."
                       /> */}
-                        <FormErrorMessage>{form.errors.lga}</FormErrorMessage>
-                      </FormControl>
-                    )}
-                  </Field>
+                      <FormErrorMessage>{form.errors.lga}</FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
 
-                  <Field name="town">
-                    {({ field, form }: { [x: string]: any }) => (
-                      <FormControl
-                        // my={4}
-                        isInvalid={form.errors.town && form.touched.town}
-                        mb="30px"
-                      >
-                        {/* <FormLabel fontSize="14px">Town (Optional)</FormLabel> */}
-                        <Input
-                          borderColor="#929292"
-                          color="#929292"
-                          _focusVisible={{
-                            borderColor: "#929292",
-                          }}
-                          variant="flushed"
-                          {...field}
-                          //  ref={initialRef}
-                          placeholder="Town (optional)"
-                        />
-                        <FormErrorMessage>{form.errors.town}</FormErrorMessage>
-                      </FormControl>
-                    )}
-                  </Field>
-
-
-                  <FormControl mb="20px" isDisabled>
-                    <Flex>
-                      <Box
-                        mr="14px"
-                        borderWidth="1px"
-                        borderColor="#FA9411"
-                        width="108px"
-                        cursor="pointer"
-                        onClick={() => {
-                          if (!gender || gender?.length < 1) {
-                            setGender("male");
-                          }
+                <Field name="town">
+                  {({ field, form }: { [x: string]: any }) => (
+                    <FormControl
+                      // my={4}
+                      isInvalid={form.errors.town && form.touched.town}
+                      mb="30px"
+                    >
+                      {/* <FormLabel fontSize="14px">Town (Optional)</FormLabel> */}
+                      <Input
+                        borderColor="#929292"
+                        color="#929292"
+                        _focusVisible={{
+                          borderColor: "#929292",
                         }}
-                        px="16px"
-                        py="8px"
-                      >
-                        <Flex columnGap="12px">
-                          <Box
-                            height="20px"
-                            width="20px"
-                            bgColor={
-                              gender?.toLowerCase() == "male"
-                                ? "#FA9411"
-                                : "transparent"
-                            }
-                            borderColor={
-                              gender?.toLowerCase() != "male"
-                                ? "#FA9411"
-                                : "transparent"
-                            }
-                            borderWidth={
-                              gender?.toLowerCase() != "male" ? "1px" : "0px"
-                            }
-                          ></Box>
-                          {/* <Spacer /> */}
-                          <Text fontSize="14px">Male</Text>
-                        </Flex>
-                      </Box>
-                      <Box
-                        borderWidth="1px"
-                        borderColor="#FA9411"
-                        minW="108px"
-                        cursor="pointer"
-                        onClick={() => {
-                          if (!gender || gender?.length < 1) {
-                            setGender("female");
-                          }
-                        }}
-                        // height="37px"
-                        px="16px"
-                        py="8px"
-                      >
-                        <Flex columnGap="12px">
-                          <Box
-                            height="20px"
-                            width="20px"
-                            bgColor={
-                              gender?.toLowerCase() == "female"
-                                ? "#FA9411"
-                                : "transparent"
-                            }
-                            borderColor={
-                              gender?.toLowerCase() != "female"
-                                ? "#FA9411"
-                                : "transparent"
-                            }
-                            borderWidth={
-                              gender?.toLowerCase() != "female" ? "1px" : "0px"
-                            }
-                          ></Box>
-                          <Text fontSize="14px">Female</Text>
-                        </Flex>
-                      </Box>
-                    </Flex>
-                  </FormControl>
+                        variant="flushed"
+                        {...field}
+                        //  ref={initialRef}
+                        placeholder="Town (optional)"
+                      />
+                      <FormErrorMessage>{form.errors.town}</FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
 
-                 
-                  <Button
-                    bgColor="#F8A730"
-                    color="white"
-                    width="100%"
-                    mb="16px"
-                    minH="50px"
-                    fontSize="18px"
-                    isLoading={props.isSubmitting}
-                    isDisabled={success}
-                    type="submit"
-                    _disabled={{
-                      bgColor: "#F8A73088",
-                    }}
-                    _hover={{
-                      bgColor: "#F8A73088",
-                    }}
-                    _focus={{
-                      bgColor: "#F8A73088",
-                    }}
-                  >
-                    Submit <ArrowForwardIcon boxSize="24px" ml="8px" />
-                  </Button>
-                </Form>
-              )}
-            </Formik>
-          </Box>
+                <FormControl mb="20px" isDisabled>
+                  <Flex>
+                    <Box
+                      mr="14px"
+                      borderWidth="1px"
+                      borderColor="#FA9411"
+                      width="108px"
+                      cursor="pointer"
+                      onClick={() => {
+                        if (!gender || gender?.length < 1) {
+                          setGender("male");
+                        }
+                      }}
+                      px="16px"
+                      py="8px"
+                    >
+                      <Flex columnGap="12px">
+                        <Box
+                          height="20px"
+                          width="20px"
+                          bgColor={
+                            gender?.toLowerCase() == "male"
+                              ? "#FA9411"
+                              : "transparent"
+                          }
+                          borderColor={
+                            gender?.toLowerCase() != "male"
+                              ? "#FA9411"
+                              : "transparent"
+                          }
+                          borderWidth={
+                            gender?.toLowerCase() != "male" ? "1px" : "0px"
+                          }
+                        ></Box>
+                        {/* <Spacer /> */}
+                        <Text fontSize="14px">Male</Text>
+                      </Flex>
+                    </Box>
+                    <Box
+                      borderWidth="1px"
+                      borderColor="#FA9411"
+                      minW="108px"
+                      cursor="pointer"
+                      onClick={() => {
+                        if (!gender || gender?.length < 1) {
+                          setGender("female");
+                        }
+                      }}
+                      // height="37px"
+                      px="16px"
+                      py="8px"
+                    >
+                      <Flex columnGap="12px">
+                        <Box
+                          height="20px"
+                          width="20px"
+                          bgColor={
+                            gender?.toLowerCase() == "female"
+                              ? "#FA9411"
+                              : "transparent"
+                          }
+                          borderColor={
+                            gender?.toLowerCase() != "female"
+                              ? "#FA9411"
+                              : "transparent"
+                          }
+                          borderWidth={
+                            gender?.toLowerCase() != "female" ? "1px" : "0px"
+                          }
+                        ></Box>
+                        <Text fontSize="14px">Female</Text>
+                      </Flex>
+                    </Box>
+                  </Flex>
+                </FormControl>
+
+                <Button
+                  bgColor="#F8A730"
+                  color="white"
+                  width="100%"
+                  mb="16px"
+                  minH="50px"
+                  fontSize="18px"
+                  isLoading={props.isSubmitting}
+                  isDisabled={success}
+                  type="submit"
+                  _disabled={{
+                    bgColor: "#F8A73088",
+                  }}
+                  _hover={{
+                    bgColor: "#F8A73088",
+                  }}
+                  _focus={{
+                    bgColor: "#F8A73088",
+                  }}
+                >
+                  Submit <ArrowForwardIcon boxSize="24px" ml="8px" />
+                </Button>
+              </Form>
+            )}
+          </Formik>
+        </Box>
         {/* </Box> */}
       </Flex>
 
@@ -442,7 +455,8 @@ export default function BecomeAnAgent() {
                 Registration Completed
               </Text>
               <Text my="8px" fontSize="14px">
-              Thank you for providing us with this information, check you profile for the status of your tractor
+                Thank you for providing us with this information, check you
+                profile for the status of your tractor
               </Text>
               <Button
                 mb="4px"

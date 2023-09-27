@@ -69,26 +69,26 @@ export default function BecomeAnAgent() {
             src="/images/women-in-mech.svg"
             alt="women-in-mechanization image"
           />
-          <Text fontSize="20px" fontWeight={500} my="4px">
-            Information
+          <Text fontSize="20px" fontWeight={600} my="4px">
+            Boosting the productivity and profitability of women in agriculture
           </Text>
-          <Text>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </Text>
-          <Text mt="16px">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            onsectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-            labore et dolore magna aliqua. Lorem ipsum dolor sit amet,
-            consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-            labore et dolore magna aliqua. onsectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          <Text color="#333333">
+            The Women in Mechanization initiative from Tractrac MSL aims tackle
+            the problem of low productivity in Nigeria&#39;s agricultural sector
+            using a bottom-up approach centered on women farmers. The initiative
+            aims to boost the productivity and profitability of women in
+            agriculture by sustainably facilitating access to and ownership of
+            power tillers and other labour-saving devices for these women.
+            <br />
+            Originally launched in 2020, Women in Mechanization set out to reach
+            three hundred (300) women in its first year; training them as
+            Booking and Hiring Agents, and Operators of these mechanization
+            equipment and labour-saving devices. Post training, each woman was
+            provided with at least one labour-saving device which they use on
+            their farms and rent out to other farmers in their various
+            communities at a fee. Beyond providing these women with
+            labour-saving devices, Women in Mechanization also seeks to promote
+            a better mechanization policy landscape in Nigeria.
           </Text>
         </Stack>
 
@@ -247,7 +247,8 @@ export default function BecomeAnAgent() {
                         _focusVisible={{
                           borderColor: "#929292",
                         }}
-                        type="number" color="#929292"
+                        type="number"
+                        color="#929292"
                         variant="flushed"
                         {...field}
                         //  ref={initialRef}
@@ -386,11 +387,11 @@ const CustomInput: FC<CustomInputProps> = ({
   validate,
 }) => {
   const [mounted, setMounted] = useState(false);
-  useEffect(()=>{
+  useEffect(() => {
     setMounted(true);
-  }, [])
+  }, []);
 
-  if(!mounted) return <Skeleton height="30px" mt="16px" />
+  if (!mounted) return <Skeleton height="30px" mt="16px" />;
 
   return defaultCheck ? (
     <FormControl mb="20px" isDisabled>

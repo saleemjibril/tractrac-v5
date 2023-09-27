@@ -52,8 +52,10 @@ const MAX_IMAGE_SIZE_BYTES = 2 * 1024 * 1024;
 export default function BecomeAnAgent() {
   const [error, setError] = useState<string | null>(null);
   const [idImageError, setIdImageError] = useState<string | null>(null);
-  const [tractorImageError, setTractorImageError] = useState<string | null>(null);
-  
+  const [tractorImageError, setTractorImageError] = useState<string | null>(
+    null
+  );
+
   const [success, setSuccess] = useState<boolean>(false);
   const inputRef = useRef<any>();
   const inputRef2 = useRef<any>();
@@ -63,7 +65,11 @@ export default function BecomeAnAgent() {
 
   const dispatch = useAppDispatch();
   const { profileInfo } = useAppSelector((state) => state.auth);
-  const { loading, error: tractorOnboardingError, success: requestSuccessful } = useAppSelector((state) => state.user);
+  const {
+    loading,
+    error: tractorOnboardingError,
+    success: requestSuccessful,
+  } = useAppSelector((state) => state.user);
 
   // const [onboardTractor] = useTractorOnboardingMutation();
 
@@ -80,22 +86,21 @@ export default function BecomeAnAgent() {
     // alert('jjj')
     // let error;
     if (!value) {
-        setIdImageError ( "This field is required");
-    }else{
-        setIdImageError ( null);
+      setIdImageError("This field is required");
+    } else {
+      setIdImageError(null);
     }
     // return error;
   }
 
   function validateTractorImage(value: any) {
     if (!value) {
-        setTractorImageError ( "This field is required");
-    }else{
-        setTractorImageError ( null);
+      setTractorImageError("This field is required");
+    } else {
+      setTractorImageError(null);
     }
     // return error;
   }
-
 
   return (
     <SidebarWithHeader>
@@ -134,7 +139,7 @@ export default function BecomeAnAgent() {
           </Text>
         </Stack>
 
-        <Box pr={{base: "0px", lg: "90px"}} flex="1" mt="21px">
+        <Box pr={{ base: "0px", lg: "90px" }} flex="1" mt="21px">
           <Box
             p="10px"
             fontSize="13px"
@@ -155,11 +160,17 @@ export default function BecomeAnAgent() {
             </Text>
           </Box>
           <Text fontWeight={600} fontSize="16px" my="24px">
-          Fill the form below to join this progam 
+            Fill the form below to join this progam
           </Text>
           <Formik
             // initialValues={{ name: 'Sasuke' }}
-            initialValues={{ dob: "", school: "", course: "", id_type: "" }}
+            initialValues={{
+              dob: "",
+              school: "",
+              course: "",
+              id_type: "",
+              email: profileInfo?.email || "",
+            }}
             onSubmit={async (values: any, { resetForm }) => {
               setError(null);
 
@@ -169,6 +180,7 @@ export default function BecomeAnAgent() {
                 const formData = new FormData();
                 formData.append("user_id", profileInfo?.id);
                 formData.append("dob", values?.dob);
+                formData.append("email", values?.email || "");
                 formData.append("id_no", values?.id_no);
                 formData.append("school", values?.school);
                 formData.append("course", values?.course);
@@ -177,7 +189,7 @@ export default function BecomeAnAgent() {
                 formData.append("id_image", values?.id_image);
                 formData.append("tractor_image", values?.tractor_image);
 
-                dispatch(tractorOnboarding(formData))
+                dispatch(tractorOnboarding(formData));
               } catch (err) {
                 const error = err as any;
                 // alert('error')
@@ -198,44 +210,52 @@ export default function BecomeAnAgent() {
                     <AlertTitle>{error}</AlertTitle>
                   </Alert>
                 )}
-                 {tractorOnboardingError && (
+                {tractorOnboardingError && (
                   <Alert status="error" mb="12px">
                     <AlertIcon />
                     <AlertTitle>{tractorOnboardingError}</AlertTitle>
                   </Alert>
                 )}
-                  {requestSuccessful && (
+                {requestSuccessful && (
                   <Alert status="success" mb="12px">
                     <AlertIcon />
                     <AlertTitle>Information has been submitted</AlertTitle>
                   </Alert>
                 )}
-                  <FormControl isDisabled mb="16px">
-                    <FormLabel fontSize="14px">Name</FormLabel>
-                    <Input
-                      variant="flushed"
-                      borderColor="#929292"
-                      value={`${profileInfo?.fname} ${profileInfo?.lname}`}
-                      _focusVisible={{
-                        borderColor: "#929292",
-                      }}
-                      //  ref={initialRef}
-                      placeholder="Enter your L.G.A."
-                    />
-                  </FormControl>
-                  <FormControl isDisabled mb="16px">
-                    <FormLabel fontSize="14px">Email</FormLabel>
-                    <Input
-                      variant="flushed"
-                      borderColor="#929292"
-                      value={profileInfo?.email}
-                      _focusVisible={{
-                        borderColor: "#929292",
-                      }}
-                      //  ref={initialRef}
-                      placeholder="Email"
-                    />
-                  </FormControl>
+                <FormControl isDisabled mb="16px">
+                  <FormLabel fontSize="14px">Name</FormLabel>
+                  <Input
+                    variant="flushed"
+                    borderColor="#929292"
+                    value={`${profileInfo?.fname} ${profileInfo?.lname}`}
+                    _focusVisible={{
+                      borderColor: "#929292",
+                    }}
+                    //  ref={initialRef}
+                    placeholder="Enter your L.G.A."
+                  />
+                </FormControl>
+
+                <Field name="email">
+                  {({ field, form }: { [x: string]: any }) => (
+                    <FormControl isDisabled={!!profileInfo?.email} mb="16px">
+                      <FormLabel fontSize="14px" color="#929292">
+                        Email
+                      </FormLabel>
+                      <Input
+                        {...field}
+                        variant="flushed"
+                        borderColor="#929292"
+                        // value={profileInfo?.email}
+                        _focusVisible={{
+                          borderColor: "#929292",
+                        }}
+                        //  ref={initialRef}
+                        placeholder="Email"
+                      />
+                    </FormControl>
+                  )}
+                </Field>
 
                 <Field name="dob" validate={validateEmpty}>
                   {({ field, form }: { [x: string]: any }) => (
@@ -297,7 +317,8 @@ export default function BecomeAnAgent() {
                         _focusVisible={{
                           borderColor: "#929292",
                         }}
-                        type="text"    color="#929292"
+                        type="text"
+                        color="#929292"
                         variant="flushed"
                         {...field}
                         //  ref={initialRef}
@@ -382,7 +403,10 @@ export default function BecomeAnAgent() {
                 </Field>
 
                 <Flex rowGap="16px" my="24px">
-                  <Field name="id_image" validate={(e: any)=> validateImage(e)}>
+                  <Field
+                    name="id_image"
+                    validate={(e: any) => validateImage(e)}
+                  >
                     {({ field, form }: { [x: string]: any }) => (
                       <FormControl
                         isInvalid={
@@ -409,7 +433,9 @@ export default function BecomeAnAgent() {
                               if (files) {
                                 const file = files[0];
                                 if (file.size > MAX_IMAGE_SIZE_BYTES) {
-                                  toast.error('Image size exceeds the maximum allowed size (2MB). Please select a smaller image.');
+                                  toast.error(
+                                    "Image size exceeds the maximum allowed size (2MB). Please select a smaller image."
+                                  );
                                   return;
                                 }
                                 form.setFieldValue(field.name, file);
@@ -427,12 +453,21 @@ export default function BecomeAnAgent() {
                             width="100%"
                           >
                             <AttachmentIcon color="#FA9411" />
-                            <Text ml="8px" color="#929292" fontSize="16px" fontWeight={400}>
-                            {field.value ? 'ID attached': 'Attach ID'}
+                            <Text
+                              ml="8px"
+                              color="#929292"
+                              fontSize="16px"
+                              fontWeight={400}
+                            >
+                              {field.value ? "ID attached" : "Attach ID"}
                             </Text>
                           </Button>
                         </InputGroup>
-                      {idImageError &&  <Text color="red" fontSize="14px" mt="2px">{idImageError}</Text> }
+                        {idImageError && (
+                          <Text color="red" fontSize="14px" mt="2px">
+                            {idImageError}
+                          </Text>
+                        )}
                       </FormControl>
                     )}
                   </Field>
@@ -440,7 +475,10 @@ export default function BecomeAnAgent() {
                   <Field name="tractor_image" validate={validateTractorImage}>
                     {({ field, form }: { [x: string]: any }) => (
                       <FormControl
-                        isInvalid={form.errors.tractor_image && form.touched.tractor_image}
+                        isInvalid={
+                          form.errors.tractor_image &&
+                          form.touched.tractor_image
+                        }
                         isRequired
                       >
                         <InputGroup>
@@ -453,11 +491,12 @@ export default function BecomeAnAgent() {
                               if (event?.currentTarget?.files) {
                                 const file = event?.currentTarget?.files[0];
                                 if (file.size > MAX_IMAGE_SIZE_BYTES) {
-                                  toast.error('Image size exceeds the maximum allowed size (2MB). Please select a smaller image.');
+                                  toast.error(
+                                    "Image size exceeds the maximum allowed size (2MB). Please select a smaller image."
+                                  );
                                   return;
                                 }
 
-                                
                                 form.setFieldValue(
                                   field.name,
                                   event?.currentTarget?.files[0]
@@ -475,10 +514,15 @@ export default function BecomeAnAgent() {
                             width="100%"
                           >
                             <FiUpload color="#FA9411" />
-                            <Text ml="8px" color="#929292" fontSize="16px" fontWeight={400}>
-                             
-                            {field.value ? 'Image attached': ' Tractor Image'}
-
+                            <Text
+                              ml="8px"
+                              color="#929292"
+                              fontSize="16px"
+                              fontWeight={400}
+                            >
+                              {field.value
+                                ? "Image attached"
+                                : " Tractor Image"}
                             </Text>
                           </Button>
                           {/* <Input
@@ -489,7 +533,11 @@ export default function BecomeAnAgent() {
                         //   value={value}
                         /> */}
                         </InputGroup>
-                        {tractorImageError &&  <Text color="red" fontSize="14px" mt="2px">{tractorImageError}</Text> }
+                        {tractorImageError && (
+                          <Text color="red" fontSize="14px" mt="2px">
+                            {tractorImageError}
+                          </Text>
+                        )}
                       </FormControl>
                     )}
                   </Field>

@@ -351,7 +351,13 @@ function ServicesComponent() {
                 implements for hire at affordable rates.
               </Text>
             </Box>
-            <Box bgColor="#FF8802" p="20px" color="#222222" as="a" href="/home/enlist-tractor">
+            <Box
+              bgColor="#FF8802"
+              p="20px"
+              color="#222222"
+              as="a"
+              href="/home/enlist-tractor"
+            >
               <Image src="icons/list.svg" alt=""></Image>
               <Text fontSize="16px" mt="18px" fontWeight={600}>
                 Enlist your Tractors
@@ -373,7 +379,13 @@ function ServicesComponent() {
                 communities.
               </Text>
             </Box>
-            <Box bgColor="#FFB867" p="20px" color="#222222" as="a" href="/home/invest-in-tractor">
+            <Box
+              bgColor="#FFB867"
+              p="20px"
+              color="#222222"
+              as="a"
+              href="/home/invest-in-tractor"
+            >
               <Image src="icons/money.svg" alt=""></Image>
               <Text fontSize="16px" mt="18px" fontWeight={600}>
                 Invest in Tractors
@@ -393,17 +405,36 @@ function ServicesComponent() {
             borderStyle="solid"
             borderTopStyle={{ base: "solid", md: "dotted" }}
             // borderTopWidth={"4px"}
-            px={{ base: "1em", md: "4em", lg: "8em", xl: "12em" }}
+            // px={{ base: "1em", md: "4em", lg: "8em", xl: "12em" }}
             pt="140px"
-            pb="48px"
+            // pb="48px"
           >
-            <Text textAlign="center" fontWeight={400}>
+            <Text
+              textAlign="center"
+              fontWeight={400}
+              px={{ base: "1em", md: "4em", lg: "7em", xl: "10em" }}
+            >
               Our integrated platform enables farmers to lease and own tractors,
               access genuine tractor implement, and participate in a sustainable
               and competitive mechanization market, driving positive change in
               the agricultural sector and empowering rural communities
               throughout Africa.
             </Text>
+
+            <Flex
+              mt="40px"
+              mb="20px"
+              px="30px"
+              justifyContent="space-between"
+              fontWeight={700}
+            >
+              <Link href="/home/register-as-vendor">Register as Vendors</Link>
+              <Link href="/home/enlist-as-op-mech">
+                Enlist as Operators/Mechanics{" "}
+              </Link>
+              <Link href="/home">Measure your Farm</Link>
+              <Link href="/home/track-tractor">Track your Tractors</Link>
+            </Flex>
           </Box>
         </Box>
       </Stack>
@@ -447,6 +478,18 @@ function NavbarComponent({ onOpen }: MobileProps) {
           mr={{ base: "16px", md: "0px" }}
         >
           {/* <Stack height={"20px"} width={"20px"} direction={"row"}> */}
+
+          <Link href="https://www.linkedin.com/company/tractrac/">
+            <IconButton
+              fontSize="18px"
+              size={"sm"}
+              aria-label="LinkedIn Icon"
+              bg="#FFFFFF"
+              icon={<FaLinkedinIn />}
+              isRound={true}
+            />
+          </Link>
+          <Link href="https://web.facebook.com/tractracglobal">
           <IconButton
             size={"sm"}
             aria-label="Facebook Icon"
@@ -454,6 +497,8 @@ function NavbarComponent({ onOpen }: MobileProps) {
             bg="#FFFFFF"
             isRound={true}
           />
+          </Link>
+          <Link href="https://twitter.com/TractracGlobal">
           <IconButton
             fontSize="18px"
             size={"sm"}
@@ -461,42 +506,35 @@ function NavbarComponent({ onOpen }: MobileProps) {
             bg="#FFFFFF"
             icon={<FaTwitter />}
             isRound={true}
-          />
-          <IconButton
+          /></Link>
+
+          <Link href="https://www.instagram.com/tractracglobal/">
+            <IconButton
+              fontSize="18px"
+              size={"sm"}
+              aria-label="Instagram Icon"
+              bg="#FFFFFF"
+              icon={<FaInstagram />}
+              isRound={true}
+            />
+          </Link>
+
+          {/* <IconButton
             fontSize="18px"
             size={"sm"}
             aria-label="Whatsapp Icon"
             bg="#FFFFFF"
             icon={<FaWhatsapp />}
             isRound={true}
-          />
-          <IconButton
+          /> */}
+          {/* <IconButton
             fontSize="18px"
             size={"sm"}
             aria-label="Youtube Icon"
             bg="#FFFFFF"
             icon={<FaYoutube />}
             isRound={true}
-          />
-
-          <IconButton
-            fontSize="18px"
-            size={"sm"}
-            aria-label="Instagram Icon"
-            bg="#FFFFFF"
-            icon={<FaInstagram />}
-            isRound={true}
-          />
-
-          <IconButton
-            fontSize="18px"
-            size={"sm"}
-            aria-label="LinkedIn Icon"
-            bg="#FFFFFF"
-            icon={<FaLinkedinIn />}
-            isRound={true}
-          />
-          {/* </Stack> */}
+          /> */}
         </Box>
       </Flex>
 
@@ -1419,9 +1457,10 @@ function FooterComponent() {
       >
         <Link href="/about">About us</Link>
         <Link href="/contact">Contact us</Link>
-        <Link href="#">Facebook</Link>
-        <Link href="#">Twitter</Link>
-        <Link href="#">Instagram</Link>
+        <Link href="https://www.linkedin.com/company/tractrac">LinkedIn</Link>
+        <Link href="https://web.facebook.com/tractracglobal">Facebook</Link>
+        <Link href="https://twitter.com/TractracGlobal">Twitter</Link>
+        <Link href="https://www.instagram.com/tractracglobal">Instagram</Link>
       </Flex>
     </Flex>
   );
@@ -1451,7 +1490,7 @@ function TabContent({
         bgImage="url('images/tab-bg.svg')"
         bgPosition="60% center"
         bgRepeat="no-repeat"
-        // height="400px"
+        height={{ base: "200px", lg: "450px" }}
         bgColor="#FFFFFF"
         ml={{ base: "0px", md: "-30px" }}
         borderRadius="10px"

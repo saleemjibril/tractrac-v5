@@ -206,7 +206,7 @@ export default function BecomeAnAgent() {
                   )}
                 </Field>
 
-                <Field name="email" validate={validateEmpty}>
+                <Field name="email">
                   {({ field, form }: { [x: string]: any }) => (
                     <FormControl
                       mb="20px"
