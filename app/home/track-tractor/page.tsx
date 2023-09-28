@@ -10,67 +10,18 @@ import {
   FormLabel,
   Image,
   Input,
-  Stack,
   Text,
   Box,
-  Select,
-  Modal as ChakraModal,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
-  ModalBody,
-  ModalContent,
-  Icon,
-  Center,
-  SimpleGrid,
-  InputGroup,
-  InputLeftElement,
 } from "@chakra-ui/react";
 import { SidebarWithHeader } from "../../components/Sidenav";
 import { Formik, Form, Field } from "formik";
-import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useState } from "react";
-import { ArrowForwardIcon } from "@chakra-ui/icons";
-import { useAppSelector } from "@/redux/hooks";
-import { toast } from "react-toastify";
-
-import * as nigerianStates from "nigerian-states-and-lgas";
-import { ArrowDown2, Filter } from "iconsax-react";
-import //   useGetTractorsQuery,
-"@/redux/services/tractorApi";
-
-interface ITractorCard {
-  id: string;
-  name: string;
-  image: string;
-  capacity: string;
-  location: string;
-  tractor_type: string;
-  setTractorId: Dispatch<SetStateAction<string | null>>;
-}
+import { useState } from "react";
 
 export default function TrackATractor() {
-  const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  //   const {
-  //     data: result,
-  //     // isFetching,
-  //     isLoading,
-  //   } = useGetTractorsQuery({});
-
-  //   console.log(result);
-
-  function validateEmpty(value: any) {
-    let error;
-    if (!value) {
-      error = "This field is required";
-    }
-    return error;
-  }
-
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader isAuth={true}>
       <Box
         pl="60px"
         pr={{ base: "60px", lg: "150px", xl: "200px" }}

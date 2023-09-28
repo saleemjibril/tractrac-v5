@@ -23,14 +23,20 @@ import {
   Avatar,
   Button,
   Icon,
+  ButtonGroup,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { SearchIcon } from "@chakra-ui/icons";
 import { useAppSelector } from "@/redux/hooks";
-import { useGetUsersQuery } from "@/redux/services/adminApi";
+import {
+  useDeleteUserMutation,
+  useGetUsersQuery,
+  useUpdateUserRoleMutation,
+} from "@/redux/services/adminApi";
 import { AdminSidebarWithHeader } from "@/app/components/AdminSidenav";
 import { Table as CTable, createColumn } from "react-chakra-pagination";
 import { FiTrash2, FiUser } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 const statusTypes: Record<string, { title: string; color: string }> = {
   pending: { title: "Pending", color: "#FA9411" },
@@ -133,7 +139,11 @@ export default function UsersPage() {
     // } = useGetHiredTractorsQuery("3");
   } = useGetUsersQuery({});
 
+  const [deleteUser] = useDeleteUserMutation();
+  const [updateUserRole] = useUpdateUserRoleMutation();
+
   const [search, setSearchInput] = useState("");
+  const [processing, setProcessing] = useState(false);
 
   function filterUsers(users: any[], searchString: string): any[] {
     if (!users) return [];
@@ -162,8 +172,95 @@ export default function UsersPage() {
       gender: user.gender,
       email: user.email,
       state: user.state,
+      action: (
+        <ButtonGroup>
+          <Button
+            colorScheme="red"
+            isDisabled={processing}
+            onClick={async () => {
+              const result = confirm(
+                `Are you sure you want to delete ${
+                  user.email || user.fname
+                }'s account?`
+              );
+              if (result) {
+                try {
+                  setProcessing(true);
+                  const response = await deleteUser({
+                    user_id: user.id,
+                  }).unwrap();
+
+                  if (response.status == "success") {
+                    toast.success(
+                      response.message ?? "User deleted successfully"
+                    );
+                  } else {
+                    toast.error("An unknown error occured");
+                  }
+                } catch (err) {
+                  const error = err as any;
+                  // alert('error')
+                  if (error?.data?.errors) {
+                    // setError(error?.data?.errors[0])
+                  } else if (error?.data?.message) {
+                    toast.error(error?.data?.message);
+                  }
+                  console.error("rejected", error);
+                } finally {
+                  setProcessing(false);
+                }
+              }
+            }}
+            size="sm"
+          >
+            Delete
+          </Button>
+          <Button
+            colorScheme="yellow"
+            isDisabled={processing}
+            onClick={async () => {
+              const message = user.role == "user" ? "an admin" : "a user";
+              // const newRole = user.role == "user" ? "admin" : "user";
+              const result = confirm(
+                `Are you sure you want to make this user ${message}?`
+              );
+              if (result) {
+                try {
+                  setProcessing(true);
+                  const response = await updateUserRole({
+                    user_id: user.id,
+                    role: message.split(" ")[1],
+                  }).unwrap();
+
+                  if (response.status == "success") {
+                    toast.success(
+                      response.message ?? "User role updated successfully"
+                    );
+                  } else {
+                    toast.error("An unknown error occured");
+                  }
+                } catch (err) {
+                  const error = err as any;
+                  // alert('error')
+                  if (error?.data?.errors) {
+                    // setError(error?.data?.errors[0])
+                  } else if (error?.data?.message) {
+                    toast.error(error?.data?.message);
+                  }
+                  console.error("rejected", error);
+                } finally {
+                  setProcessing(false);
+                }
+              }
+            }}
+            size="sm"
+          >
+            {user.role == "user" ? "Admin" : "User"}
+          </Button>
+        </ButtonGroup>
+      ),
     }));
-  }, [result, search]);
+  }, [result, search, processing, deleteUser, updateUserRole]);
 
   // Need pass type of `tableDate` for ts autocomplete
   const columnHelper = createColumn<any>();
@@ -193,6 +290,10 @@ export default function UsersPage() {
     columnHelper.accessor("state", {
       cell: (info) => info.getValue(),
       header: "State",
+    }),
+    columnHelper.accessor("action", {
+      cell: (info) => info.getValue(),
+      header: "Actions",
     }),
   ];
 

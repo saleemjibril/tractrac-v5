@@ -59,7 +59,7 @@ export default function EnlistedTractors() {
   // const skeletons = [1,2,3,4,5,6];
 
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader isAuth={true}>
       <Box mx="20px" my="12px" py="20px">
         <Box
           bgColor="white"

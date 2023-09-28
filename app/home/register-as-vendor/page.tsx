@@ -68,7 +68,7 @@ export default function BecomeAnAgent() {
   }
 
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader isAuth={true}>
       <Flex
         py="30px"
         px="40px"

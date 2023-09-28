@@ -73,7 +73,7 @@ export default function BecomeAnAgent() {
   }
 
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader isAuth={true}>
       <Flex
         p="30px"
         gap="40px"

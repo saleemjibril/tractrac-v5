@@ -45,6 +45,8 @@ import { FileUploader } from "react-drag-drop-files";
 import { FaFileUpload, FaUpload } from "react-icons/fa";
 import { FiFile, FiUpload } from "react-icons/fi";
 import { enlistTractor } from "@/redux/features/user/userActions";
+import { usePlacesWidget } from "react-google-autocomplete";
+import Autocomplete from "react-google-autocomplete";
 
 const fileTypes = ["JPG", "PNG", "JPEG"];
 
@@ -119,8 +121,13 @@ export default function BecomeAnAgent() {
       .join(" ");
   }
 
+  const { ref } = usePlacesWidget<any>({
+    apiKey: "AIzaSyBWo_tQ4rjQkZz1kN5WXfnemHCaF0gQ8BU",
+    onPlaceSelected: (place) => console.log(place),
+  });
+
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader isAuth={true}>
       <Box bgColor="white" mx="20px" my="12px" px="34px" py="20px">
         <Stack>
           <Text fontSize="24px" fontWeight={700} mb="20px">
@@ -151,6 +158,7 @@ export default function BecomeAnAgent() {
               insured: "",
               tracker: "",
               lga: "",
+              state: "",
             }}
             onSubmit={async (values: any, { resetForm }) => {
               setError(null);
@@ -175,6 +183,8 @@ export default function BecomeAnAgent() {
                 formData.append("brand", values?.brand);
                 formData.append("model", values?.model);
                 formData.append("address", values?.address);
+                formData.append("lga", values?.lga);
+                formData.append("state", values?.state);
                 formData.append("tractor_type", values?.tractor_type);
                 formData.append("purchase_year", values?.purchase_year);
                 formData.append("plate_number", values?.plate_number);
@@ -672,7 +682,50 @@ export default function BecomeAnAgent() {
                     )}
                   </Field>
 
-                  <Field name="address">
+                  <Field name="address" validate={validateEmpty}>
+                    {({ field, form }: { [x: string]: any }) => (
+                      <FormControl
+                        // my={4}
+                        isInvalid={form.errors.address && form.touched.address}
+                      >
+                        <FormLabel fontSize="12px" color="#323232">
+                          Tractor Address
+                        </FormLabel>
+                        <Autocomplete
+                          style={{
+                            padding: "0px 10px 0px 10px",
+                            borderRadius: "6px",
+                            width: "100%",
+                            fontSize: "12px",
+                            color: "#929292",
+                            height: "39px",
+                            backgroundColor: "#3232320D",
+                          }}
+                          placeholder=""
+                          apiKey={"AIzaSyBWo_tQ4rjQkZz1kN5WXfnemHCaF0gQ8BU"}
+                          onChange={(e)=>{
+                            // alert(`Address: ${e.currentTarget?.value}`)
+                            form.setFieldValue(field.name, e.currentTarget?.value);
+                          }}
+                          onPlaceSelected={(place) => {
+                            console.log("hello", place.formatted_address);
+                            // alert(place.formatted_address)
+                          }}
+                          options={{
+                            types: ['address'],
+                            // types: ["(regions)"],
+                            componentRestrictions: { country: "ng" },
+                          }}
+                        />
+                        <FormErrorMessage>
+                          {form.errors.address}
+                        </FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+                  {/* ; */}
+                  {/*
+                   <Field name="address" validate={validateEmpty}>
                     {({ field, form }: { [x: string]: any }) => (
                       <FormControl
                         // my={4}
@@ -688,15 +741,15 @@ export default function BecomeAnAgent() {
                           _focusVisible={{
                             borderColor: "#929292",
                           }}
-                          {...field}
+                          ref={ref}
+                          // {...field}
                         />
                         <FormErrorMessage>
                           {form.errors.address}
                         </FormErrorMessage>
                       </FormControl>
                     )}
-                  </Field>
-
+                  </Field> */}
                   {/* <Field name="town">
                     {({ field, form }: { [x: string]: any }) => (
                       <FormControl
@@ -981,7 +1034,6 @@ export default function BecomeAnAgent() {
 }
 
 const brands = ["case_ih", "sonalika", "john_deere", "mahindra", "others"];
-
 
 const tractorTypes = ["Harrower", "Ridger", "Plough", "Planter", "Sprayer"];
 

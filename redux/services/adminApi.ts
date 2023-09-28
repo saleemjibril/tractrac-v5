@@ -25,7 +25,7 @@ export const adminApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["farmers", "all_enlisted_tractors", "all_hired_tractors"],
+  tagTypes: ["farmers", "all_enlisted_tractors", "all_hired_tractors", "users"],
   endpoints: (builder) => ({
     getFarmers: builder.query({
       query: () => ({
@@ -61,6 +61,7 @@ export const adminApi = createApi({
         url: "/users",
         method: "GET",
       }),
+      providesTags: ["users"],
     }),
 
     getSingleTractor: builder.query({
@@ -136,6 +137,25 @@ export const adminApi = createApi({
         body: transformRequest(data),
       }),
     }),
+
+    deleteUser: builder.mutation({
+      query: (data: any) => ({
+        url: "/admin_delete_user",
+        method: "POST",
+        body: transformRequest(data),
+      }),
+      invalidatesTags: ["users"],
+    }),
+
+
+    updateUserRole: builder.mutation({
+      query: (data: any) => ({
+        url: "/admin_update_user_role",
+        method: "POST",
+        body: transformRequest(data),
+      }),
+      invalidatesTags: ["users"],
+    }),
   }),
 });
 
@@ -157,4 +177,6 @@ export const {
   useAddFarmerMutation,
   useUpdateBioDataMutation,
   useUpdatePasswordMutation,
+  useDeleteUserMutation,
+  useUpdateUserRoleMutation
 } = adminApi;

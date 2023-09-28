@@ -3,9 +3,6 @@
 import {
   Box,
   ButtonGroup,
-  List,
-  ListIcon,
-  ListItem,
   Stack,
   Flex,
   Text,
@@ -14,40 +11,27 @@ import {
   IconButton,
   useColorModeValue,
   Divider,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
   Image,
   Input,
-  Textarea,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
   Center,
   Drawer,
   useDisclosure,
   DrawerContent,
   FlexProps,
   CloseButton,
-  Img,
   Spacer,
-  // NavItem,
+  Show,
+  Hide,
 } from "@chakra-ui/react";
-import { ReactNode, useRef, MutableRefObject, useEffect, useState } from "react";
-// import { MdCheckCircle } from "@chakra-ui/icons";
+import {
+  useEffect,
+  useState,
+} from "react";
 import {
   FaFacebookF,
   FaTwitter,
   FaInstagram,
-  FaWhatsapp,
   FaLinkedinIn,
-  FaYoutube,
-  FaCheckCircle,
-  FaArrowUp,
 } from "react-icons/fa";
 import { openModal } from "@/redux/features/modalSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -55,9 +39,6 @@ import { useRouter } from "next/navigation";
 import { FiMenu } from "react-icons/fi";
 import { AddIcon } from "@chakra-ui/icons";
 import { serviceItems } from "./items";
-
-// import Image from "next/image";
-// import styles from './page.module.css'
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
@@ -95,19 +76,14 @@ const LinkItems: Array<{ name: string; path: string }> = [
 ];
 
 export default function ServicesPage() {
-  const dispatch = useAppDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const showModal = (type: string) => {
-    dispatch(openModal(type));
-  };
 
   return (
     <>
       <Box position={"relative"}>
         <NavbarComponent onOpen={onOpen} />
-        <Center mb="40px">
-          <Stack mt="60px" textAlign="center">
+        <Center mb={{ base: "0px", md: "40px" }}>
+          <Stack mt={{ base: "20px", md: "60px" }} textAlign="center">
             <Text
               fontSize="24px"
               fontFamily="cursive"
@@ -118,7 +94,11 @@ export default function ServicesPage() {
             >
               Our Services
             </Text>
-            <Text fontWeight={600} lineHeight={"18px"} fontSize="32px">
+            <Text
+              fontWeight={600}
+              lineHeight={{ base: "28px", md: "18px" }}
+              fontSize={{ base: "24px", md: "32px" }}
+            >
               Bridging the Gap to Mechanisation
             </Text>
           </Stack>
@@ -133,41 +113,71 @@ export default function ServicesPage() {
             <Box
               boxShadow="lg"
               py="38px"
-              px="70px"
+              px={{ base: "20px", md: "70px" }}
               mb="50px"
               key={item.buttonText}
             >
-              <Flex mb="20px">
-                <Text fontWeight={600} fontSize="28px">
+              <Flex mb="20px" justifyContent="center">
+                <Text
+                  fontWeight={600}
+                  fontSize={{ base: "20px", md: "24px", lg: "28px" }}
+                  alignSelf='center'
+                  // textAlign={{ base: "center", md: "left" }}
+                >
                   {item.title}
                 </Text>
-                <Spacer />
-                <Button
-                  fontSize="14px"
-                  bgColor="#FA9411"
-                  color="white"
-                  _hover={{
-                    bgColor: "#FA9411",
-                    opacity: ".8",
-                  }}
-                  as="a"
-                  href={item.buttonLink}
-                >
-                  <Box as="span" mr="30px">
-                    {item.buttonText}
-                  </Box>
-                  <AddIcon boxSize="12px" />
-                </Button>
+                <Show above="sm">
+                  <Spacer />
+                  <Button
+                    fontSize="14px"
+                    bgColor="#FA9411"
+                    color="white"
+                    _hover={{
+                      bgColor: "#FA9411",
+                      opacity: ".8",
+                    }}
+                    as="a"
+                    href={item.buttonLink}
+                  >
+                    <Box as="span" mr="30px">
+                      {item.buttonText}
+                    </Box>
+                    <AddIcon boxSize="12px" />
+                  </Button>
+                </Show>
               </Flex>
               <Divider mb="20px" />
               <Box
                 color="#858A8F"
                 lineHeight="30px"
-                fontSize="16px"
+                textAlign={{ base: "center", md: "left" }}
+                fontSize={{base: "14px", md: "16px"}}
                 fontWeight={500}
               >
                 {item.content}
               </Box>
+              <Hide above="sm">
+                <Flex justifyContent="center">
+                  <Button
+                    // alignSelf="center"
+                    mt="20px"
+                    fontSize="14px"
+                    bgColor="#FA9411"
+                    color="white"
+                    _hover={{
+                      bgColor: "#FA9411",
+                      opacity: ".8",
+                    }}
+                    as="a"
+                    href={item.buttonLink}
+                  >
+                    <Box as="span" mr="30px">
+                      {item.buttonText}
+                    </Box>
+                    <AddIcon boxSize="12px" />
+                  </Button>
+                </Flex>
+              </Hide>
             </Box>
           ))}
         </Box>
@@ -239,23 +249,24 @@ function NavbarComponent({ onOpen }: MobileProps) {
             />
           </Link>
           <Link href="https://web.facebook.com/tractracglobal">
-          <IconButton
-            size={"sm"}
-            aria-label="Facebook Icon"
-            icon={<FaFacebookF />}
-            bg="#FFFFFF"
-            isRound={true}
-          />
+            <IconButton
+              size={"sm"}
+              aria-label="Facebook Icon"
+              icon={<FaFacebookF />}
+              bg="#FFFFFF"
+              isRound={true}
+            />
           </Link>
           <Link href="https://twitter.com/TractracGlobal">
-          <IconButton
-            fontSize="18px"
-            size={"sm"}
-            aria-label="Twitter Icon"
-            bg="#FFFFFF"
-            icon={<FaTwitter />}
-            isRound={true}
-          /></Link>
+            <IconButton
+              fontSize="18px"
+              size={"sm"}
+              aria-label="Twitter Icon"
+              bg="#FFFFFF"
+              icon={<FaTwitter />}
+              isRound={true}
+            />
+          </Link>
 
           <Link href="https://www.instagram.com/tractracglobal/">
             <IconButton
@@ -458,7 +469,7 @@ function NavbarComponent({ onOpen }: MobileProps) {
               </Link> */}
               <Link
                 // p={2}
-                href={"#"}
+                href={"/blog"}
                 fontSize={"sm"}
                 fontWeight={700}
                 // color={linkColor}
@@ -677,7 +688,7 @@ function FooterComponent() {
         flexWrap="wrap"
         justifyContent="center"
       >
-      <Link href="/about">About us</Link>
+        <Link href="/about">About us</Link>
         <Link href="/contact">Contact us</Link>
         <Link href="https://www.linkedin.com/company/tractrac">LinkedIn</Link>
         <Link href="https://web.facebook.com/tractracglobal">Facebook</Link>

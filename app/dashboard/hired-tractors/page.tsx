@@ -49,7 +49,7 @@ export default function HiredTractors() {
   } = useGetHiredTractorsQuery(profileInfo?.id);
 
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader isAuth={true}>
       <Box mx="20px" my="12px" py="20px">
         <Flex justifyContent="space-between" mb="10px" alignContent="center">
           <Text

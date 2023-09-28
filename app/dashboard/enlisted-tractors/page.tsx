@@ -58,7 +58,7 @@ export default function EnlistedTractors() {
   // const skeletons = [1,2,3,4,5,6];
 
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader isAuth={true}>
       {/* <SimpleGrid columns={{ base: 2, md: 4 }} spacingX="40px" spacingY="20px">
         {[1, 2, 3, 4, 5, 6, 7, 8].map((index) => (
           <Box key={index} boxShadow="lg" bg="white" borderRadius="4px">

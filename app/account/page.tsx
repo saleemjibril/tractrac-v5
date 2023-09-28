@@ -13,17 +13,6 @@ import {
   Text,
   Button,
   Center,
-  Table,
-  Modal as ChakraModal,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  Skeleton,
-  SkeletonText,
-  Divider,
   Input,
   Spacer,
   InputGroup,
@@ -125,7 +114,7 @@ export default function AccountPage() {
 
             <TabPanels>
               <TabPanel>
-                <Box pl="24px" mr={{ base: "0px", lg: "40em" }}>
+                <Box pl="24px" mr={{ base: "0px", md: "20em", lg: "30em" }}>
                   <Text fontWeight={700} fontSize="28px" mt="12px">
                     Edit Profile
                   </Text>
@@ -360,7 +349,7 @@ export default function AccountPage() {
                   UPDATE PASSWORD TAB
               */}
               <TabPanel>
-                <Box pl="24px" mr={{ base: "0px", lg: "40em" }}>
+                <Box pl="24px" mr={{ base: "0px", md: "20em", lg: "30em" }}>
                   <Text fontWeight={700} fontSize="28px" mt="12px">
                     Change Password
                   </Text>

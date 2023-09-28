@@ -4,7 +4,7 @@ export const serviceItems = [
   {
     title: "Hire a tractor",
     buttonText: "Hire a tractor",
-    buttonLink: "/dashboard",
+    buttonLink: "/home/hire-tractor",
     content: (
       <>
         <Text>
@@ -44,7 +44,7 @@ export const serviceItems = [
   {
     title: "Enlist your Tractor",
     buttonText: "Enlist your Tractor",
-    buttonLink: "/dashboard",
+    buttonLink: "/home/enlist-tractor",
     content: (
       <>
         <Text>
@@ -65,7 +65,7 @@ export const serviceItems = [
   {
     title: "Become a Booking Agent",
     buttonText: "Become an Agent",
-    buttonLink: "/dashboard",
+    buttonLink: "/home/agent",
     content: (
       <>
         <Text>
@@ -84,7 +84,7 @@ export const serviceItems = [
   {
     title: "Invest in Tractor",
     buttonText: "Invest in Tractors",
-    buttonLink: "/dashboard",
+    buttonLink: "/home/invest-in-tractor",
     content: (
       <>
         <Text>
@@ -106,7 +106,7 @@ export const serviceItems = [
   {
     title: "Register as Vendors",
     buttonText: "Register as Vendors",
-    buttonLink: "/dashboard",
+    buttonLink: "/home/register-as-vendor",
     content: (
       <>
         <Text>
@@ -124,7 +124,7 @@ export const serviceItems = [
   {
     title: "Enlist as Operators/Mechanics",
     buttonText: "Enlist as Operators/Mechanics",
-    buttonLink: "/dashboard",
+    buttonLink: "/home/enlist-as-op-mech",
     content: (
       <>
         <Text>
@@ -137,7 +137,7 @@ export const serviceItems = [
   {
     title: "Measure your Farm",
     buttonText: "Measure your Farm",
-    buttonLink: "/dashboard",
+    buttonLink: "/home",
     content: (
       <>
         <Text>
@@ -153,8 +153,8 @@ export const serviceItems = [
   },
   {
     title: "Track your Tractors",
-    buttonText: "Measure your Farm",
-    buttonLink: "/dashboard",
+    buttonText: "Track a Tractor",
+    buttonLink: "/home/track-tractor",
     content: (
       <>
         <Text>

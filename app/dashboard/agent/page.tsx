@@ -94,7 +94,7 @@ export default function Agent() {
   }
 
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader isAuth={true}>
       <Box mx="20px" my="12px" py="12px">
         <Box bg="white" boxShadow="lg" borderRadius="4px">
           <Text

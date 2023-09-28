@@ -80,7 +80,7 @@ export default function BecomeAnAgent() {
   }
 
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader isAuth={true}>
       <Flex p="16px" gap="56px" direction={{ base: "column", lg: "row" }}>
         <Stack w={{ base: "100%", lg: "60%" }}>
           <Text fontSize="24px" fontWeight={700} mb="4px">

@@ -69,6 +69,7 @@ interface LinkItemProps {
   path: string;
   imageLight?: string;
   imageDark: string;
+  requiresAuth?: boolean;
   iconLight: ComponentWithAs<"svg", IconProps> | IconSax;
   iconDark: ComponentWithAs<"svg", IconProps> | IconSax;
 }
@@ -87,6 +88,8 @@ interface MobileProps extends FlexProps {
 
 interface SidebarContentProps extends BoxProps {
   onClose: () => void;
+  isAuthenticated?: boolean;
+  isMounted?: boolean;
 }
 
 const LinkItems: Array<LinkItemProps> = [
@@ -129,6 +132,7 @@ const LinkItems: Array<LinkItemProps> = [
     path: "/payment",
     iconLight: Payment,
     iconDark: Payment,
+    requiresAuth: true,
   },
   {
     name: "Account",
@@ -137,10 +141,16 @@ const LinkItems: Array<LinkItemProps> = [
     path: "/account",
     iconLight: User,
     iconDark: User,
+    requiresAuth: true,
   },
 ];
 
-const SidebarContent = ({ onClose, ...rest }: SidebarContentProps) => {
+const SidebarContent = ({
+  onClose,
+  isAuthenticated,
+  isMounted,
+  ...rest
+}: SidebarContentProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const pathname = usePathname();
@@ -176,20 +186,25 @@ const SidebarContent = ({ onClose, ...rest }: SidebarContentProps) => {
         </Text> */}
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link) => {
-        const image = pathname == link.path ? link.imageLight : link.imageDark;
-        return (
-          <NavItem
-            key={link.name}
-            image={image}
-            path={link.path}
-            iconLight={link.iconLight}
-            iconDark={link.iconDark}
-          >
-            <Text fontSize="14px">{link.name}</Text>
-          </NavItem>
-        );
-      })}
+      {isMounted &&
+        LinkItems.map((link) => {
+          const image =
+            pathname == link.path ? link.imageLight : link.imageDark;
+          if (link.requiresAuth && !isAuthenticated) {
+            return <></>;
+          }
+          return (
+            <NavItem
+              key={link.name}
+              image={image}
+              path={link.path}
+              iconLight={link.iconLight}
+              iconDark={link.iconDark}
+            >
+              <Text fontSize="14px">{link.name}</Text>
+            </NavItem>
+          );
+        })}
       <Spacer />
       <Box
         mx="8"
@@ -373,9 +388,16 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               bg={useColorModeValue("white", "gray.900")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
-              <MenuItem key="1">Profile</MenuItem>
-              <MenuItem key="2">Settings</MenuItem>
-              {/* <MenuItem>Billing</MenuItem> */}
+              {mounted && profileInfo?.fname && (
+                <Link
+                  href="/account"
+                  textDecoration="none"
+                  textDecorationStyle="unset"
+                >
+                  <MenuItem key="1">Profile</MenuItem>
+                </Link>
+              )}
+
               <MenuDivider />
               <MenuItem
                 key="3"
@@ -401,44 +423,47 @@ interface SidebarProps {
   children: React.ReactNode;
 }
 
-export const SidebarWithHeader: React.FC<SidebarProps> = ({ children, isAuth }) => {
+export const SidebarWithHeader: React.FC<SidebarProps> = ({
+  children,
+  isAuth,
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   // const router = useRouter();
-  // const { profileInfo } = useAppSelector((state) => state.auth);
-
-  // useEffect(() => {
-  //   if (!profileInfo) {
-  //     router.replace("/login");
-  //   }
-  // });
+  const { userToken } = useAppSelector((state) => state.auth);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <AuthGuard isAuth={isAuth}>
-    <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")} p={0}>
-      <SidebarContent
-        onClose={() => onClose}
-        display={{ base: "none", md: "block" }}
-      />
-      <Drawer
-        isOpen={isOpen}
-        placement="left"
-        onClose={onClose}
-        returnFocusOnClose={false}
-        onOverlayClick={onClose}
-        size="xs"
-      >
-        <DrawerContent>
-          <SidebarContent onClose={onClose} />
-        </DrawerContent>
-      </Drawer>
-      {/* mobilenav */}
-      <MobileNav onOpen={onOpen} />
-      {/* <MobileNavigation /> */}
-      <Box ml={{ base: 0, md: 60 }} p="4">
-      {/* <Box ml={{ base: 0, md: 60 }} p={{base: "3", md: "4"}}> */}
-        <NoSsrWrapper>{children}</NoSsrWrapper>
+      <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")} p={0}>
+        <SidebarContent
+          onClose={() => onClose}
+          isAuthenticated={!!userToken}
+          isMounted={mounted}
+          display={{ base: "none", md: "block" }}
+        />
+        <Drawer
+          isOpen={isOpen}
+          placement="left"
+          onClose={onClose}
+          returnFocusOnClose={false}
+          onOverlayClick={onClose}
+          size="xs"
+        >
+          <DrawerContent>
+            <SidebarContent onClose={onClose} />
+          </DrawerContent>
+        </Drawer>
+        {/* mobilenav */}
+        <MobileNav onOpen={onOpen} />
+        {/* <MobileNavigation /> */}
+        <Box ml={{ base: 0, md: 60 }} p="4">
+          {/* <Box ml={{ base: 0, md: 60 }} p={{base: "3", md: "4"}}> */}
+          <NoSsrWrapper>{children}</NoSsrWrapper>
+        </Box>
       </Box>
-    </Box>
     </AuthGuard>
   );
 };

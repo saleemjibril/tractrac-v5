@@ -27,29 +27,19 @@ import { Formik, Form, Field } from "formik";
 import { useRouter } from "next/navigation";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import {
-//   useResendOtpMutation,
+  //   useResendOtpMutation,
   useSendOtpMutation,
   useResetPasswordMutation,
 } from "@/redux/services/authApi";
 import { toast } from "react-toastify";
+import { ArrowBackIcon } from "@chakra-ui/icons";
 
 export default function RecoverPassword() {
-  // useEffect(() => {
-  //   dispatch(openModal(LoginModal));
-  // });
-  const { loading, profileInfo } = useAppSelector((state) => state.auth);
-  // const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const [isSendOtp, setIsSendOtp] = useState<boolean>(true);
 
   const [phoneNumber, setPhoneNumber] = useState("");
-
-  // useEffect(() => {
-  //   // redirect authenticated user to home screen
-  //   if (profileInfo) {
-  //     router.replace("/home");
-  //   }
-  // }, [router, profileInfo]);
 
   return (
     <Box
@@ -80,6 +70,14 @@ export default function RecoverPassword() {
             p={{ base: "20px", md: "40px" }}
             justifyContent="center"
           >
+            <IconButton
+              backgroundColor="transparent"
+              mb="27px"
+              w="20px"
+              icon={<ArrowBackIcon boxSize="20px" />}
+              aria-label="back icon"
+              onClick={() => router.back()}
+            />
             <Text
               fontSize={{ base: "20px", md: "24px" }}
               // color="#FA9411"
@@ -296,8 +294,8 @@ function ResetPasswordComponent({ phoneNumber }: { phoneNumber: string }) {
                     {...field}
                     type="number"
                     id="Otp field"
-                      bgColor="#3232320D"
-                      placeholder="1234"
+                    bgColor="#3232320D"
+                    placeholder="1234"
                   />
                   <FormErrorMessage>{form.errors.otp}</FormErrorMessage>
                 </FormControl>
@@ -346,7 +344,10 @@ function ResetPasswordComponent({ phoneNumber }: { phoneNumber: string }) {
               {({ field, form }: { [x: string]: any }) => (
                 <FormControl
                   my={4}
-                  isInvalid={form.errors.confirm_password && form.touched.confirm_password}
+                  isInvalid={
+                    form.errors.confirm_password &&
+                    form.touched.confirm_password
+                  }
                 >
                   <FormLabel
                     fontSize="12px"
@@ -375,7 +376,9 @@ function ResetPasswordComponent({ phoneNumber }: { phoneNumber: string }) {
                       />
                     </InputRightElement>
                   </InputGroup>
-                  <FormErrorMessage>{form.errors.confirm_password}</FormErrorMessage>
+                  <FormErrorMessage>
+                    {form.errors.confirm_password}
+                  </FormErrorMessage>
                 </FormControl>
               )}
             </Field>
@@ -396,8 +399,6 @@ function ResetPasswordComponent({ phoneNumber }: { phoneNumber: string }) {
             >
               Submit
             </Button>
-
-          
           </Form>
         )}
       </Formik>

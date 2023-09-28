@@ -57,6 +57,7 @@ interface ITractorCard {
   image: string;
   capacity: string;
   location: string;
+  distance: string;
   tractor_type: string;
   setTractorId: Dispatch<SetStateAction<string | null>>;
 }
@@ -400,7 +401,8 @@ export default function HireTractor() {
                         name={`${tractor?.brand} ${tractor?.model}`}
                         image={tractor?.image}
                         capacity=" 105 to 135 HP"
-                        location={tractor?.state}
+                        location={tractor?.address}
+                        distance={tractor?.distance}
                         tractor_type={tractor?.tractor_type}
                       />
                     ))}
@@ -423,7 +425,10 @@ export default function HireTractor() {
                       name={`${tractor?.brand} ${tractor?.model}`}
                       image={tractor?.image}
                       capacity=" 105 to 135 HP"
-                      location={tractor?.state}
+                      location={`${tractor?.lga},${tractor?.state}`}
+                      // location={tractor?.address}
+                      // distance={"10"}
+                      distance={tractor?.distance}
                       tractor_type={tractor?.tractor_type}
                     />
                   ))}
@@ -443,6 +448,7 @@ function TractorCard({
   name,
   image,
   location,
+  distance,
   tractor_type,
   setTractorId,
   id,
@@ -454,7 +460,7 @@ function TractorCard({
       onClick={() => setTractorId(id)}
       cursor="pointer"
     >
-      <Box h="200px">
+      <Box h="200px" position="relative">
         <Image
           borderTopRadius="4px"
           src={
@@ -465,6 +471,21 @@ function TractorCard({
           width="100%"
           objectFit="cover"
         />
+        {distance != "0" && (
+          <Box
+            bgColor="#FA9411"
+            borderRadius="6px"
+            py="2px"
+            px="8px"
+            position="absolute"
+            bottom="4"
+            right="2"
+          >
+            <Text fontSize="12px" color="white">
+              {distance}KM Away
+            </Text>
+          </Box>
+        )}
       </Box>
 
       <Box p="12px" bgColor="white" borderRadius="4px">
@@ -500,12 +521,15 @@ function TractorCard({
               {capacity}
             </Box>
           </Text> */}
-        <Text fontSize="12px" color="#323232" fontWeight={700} mt="8px">
-          Location:{" "}
-          <Box fontWeight={500} as="span">
-            {location}
-          </Box>
-        </Text>
+        {/* <Text fontSize="12px" color="#323232" fontWeight={700} mt="8px"> */}
+        {/* Location:  */}
+        <Box fontWeight={500} fontSize="12px" mt="8px" as="span" noOfLines={2}>
+          <Box fontWeight={700} as="span">
+            Location:
+          </Box>{" "}
+          {location.length < 2 ? "N/a" : location}
+        </Box>
+        {/* </Text> */}
       </Box>
     </Box>
   );

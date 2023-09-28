@@ -149,7 +149,6 @@ export default function Dashboard() {
               as="a"
               href={pageItem.path}
               onClick={(e) => {
-                alert(e.type);
                 if (pageItem.loginRequired && !profileInfo?.id) {
                   setModalState(true);
                   e.preventDefault();
