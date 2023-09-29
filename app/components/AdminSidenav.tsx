@@ -47,15 +47,7 @@ import { FaUser } from "react-icons/fa";
 import { ArrowBackIcon, SearchIcon, StarIcon } from "@chakra-ui/icons";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  HomeDark,
-  Dashboard,
-  Payment,
   User,
-  TractorPlusDark,
-  ClarityHomeLine,
-  ClarityHomeLineWhite,
-  TractorPlus,
-  TractorPlusWhite,
   Assign,
   Verification,
   Farmers,

@@ -1,5 +1,5 @@
 "use client";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useMemo } from "react";
 import {
   Box,
   Image,
@@ -88,6 +88,16 @@ export default function AssignSingleTractorPage() {
     setRequestId(requestId);
   }, [params, router, trigger]);
 
+  const resultData = useMemo(() => {
+    if (result?.data?.data) {
+      return {
+        tractor: result?.data?.data?.tractor,
+        info: { ...result?.data?.data, tractor: undefined },
+      };
+    }
+    return { tractor: {}, info: {} };
+  }, [result]);
+
   return (
     <AdminSidebarWithHeader>
       <Box mx="20px" my="12px" py="12px">
@@ -131,8 +141,8 @@ export default function AssignSingleTractorPage() {
                     borderRadius="4px"
                     // src="/images/man-with-tractor.svg"
                     src={
-                      result?.data?.data?.image?.startsWith("https")
-                        ? result?.data.data.image
+                      resultData?.tractor?.image?.startsWith("https")
+                        ?  resultData?.tractor?.image
                         : "/images/man-with-tractor.svg"
                     }
                     alt="Man with a tractor image"
@@ -181,52 +191,54 @@ export default function AssignSingleTractorPage() {
                     Tractor Specification
                   </Text>
                   <ButtonGroup spacing="40px">
-                    <Button
-                      color="white"
-                      bgColor="#F03B13"
-                      width="120px"
-                      height="34px"
-                      fontSize="14px"
-                      isLoading={loading == "disapproved"}
-                      onClick={async () => {
-                        if (loading) return;
-                        try {
-                          setLoading("disapproved");
-                          const response = await assignTractor({
-                            user_id: adminInfo?.id,
-                            request_id: requestId,
-                            status: "disapproved",
-                          }).unwrap();
-                          if (response.status == "success") {
-                            toast.success(response?.message || "success");
-                            router.back();
-                          } else {
-                            toast.error(
-                              response?.message || "Unknown error occured"
-                            );
+                    {result?.data?.data?.status == "pending" && (
+                      <Button
+                        color="white"
+                        bgColor="#F03B13"
+                        width="120px"
+                        height="34px"
+                        fontSize="14px"
+                        isLoading={loading == "disapproved"}
+                        onClick={async () => {
+                          if (loading) return;
+                          try {
+                            setLoading("disapproved");
+                            const response = await assignTractor({
+                              user_id: adminInfo?.id,
+                              request_id: requestId,
+                              status: "disapproved",
+                            }).unwrap();
+                            if (response.status == "success") {
+                              toast.success(response?.message || "success");
+                              router.back();
+                            } else {
+                              toast.error(
+                                response?.message || "Unknown error occured"
+                              );
+                            }
+                            // alert("lld");
+                          } catch (e) {
+                            const error = e as any;
+                            // alert(JSON.stringify(error))
+                            // alert('error')
+                            if (error?.data?.errors) {
+                              // setError(error?.data?.errors[0])
+                            } else if (error?.data?.message) {
+                              toast.error(error?.data?.message);
+                              // setError(error?.data?.message);
+                            } else {
+                              toast.error(
+                                "Server error occured, please contact support"
+                              );
+                            }
+                          } finally {
+                            setLoading(null);
                           }
-                          // alert("lld");
-                        } catch (e) {
-                          const error = e as any;
-                          // alert(JSON.stringify(error))
-                          // alert('error')
-                          if (error?.data?.errors) {
-                            // setError(error?.data?.errors[0])
-                          } else if (error?.data?.message) {
-                            toast.error(error?.data?.message);
-                            // setError(error?.data?.message);
-                          } else {
-                            toast.error(
-                              "Server error occured, please contact support"
-                            );
-                          }
-                        } finally {
-                          setLoading(null);
-                        }
-                      }}
-                    >
-                      Not Approved
-                    </Button>
+                        }}
+                      >
+                        Not Approved
+                      </Button>
+                    )}
                     {statusTypes[result?.data?.data?.status]?.color && (
                       <Box
                         // mt="10px"
@@ -254,76 +266,123 @@ export default function AssignSingleTractorPage() {
                 </Flex>
                 <Table variant="striped" bgColor="white">
                   <Tbody>
+                  <Tr>
+                      <Td>Name of Hirer</Td>
+                      <Td>{resultData.info?.name || "N/A"}</Td>
+                    </Tr>
+
+                    <Tr>
+                      <Td>State</Td>
+                      <Td>{resultData.info?.state || "N/A"}</Td>
+                    </Tr>
+
+                    <Tr>
+                      <Td>LGA</Td>
+                      <Td>{resultData.info?.lga || "N/A"}</Td>
+                    </Tr>
+
+                    <Tr>
+                      <Td>Address</Td>
+                      <Td>{resultData.info?.address || "N/A"}</Td>
+                    </Tr>
+
+                    <Tr>
+                      <Td>Farm size(units in hectares)</Td>
+                      <Td>{resultData.info?.farm_size || "N/A"}</Td>
+                    </Tr>
+
+
+                    <Tr>
+                      <Td>Implement</Td>
+                      <Td>{resultData.tractor?.tractor_type || "N/A"}</Td>
+                    </Tr>
+
+
+                    <Tr>
+                      <Td>Start Date</Td>
+                      <Td>{resultData.info?.start_date || "N/A"}</Td>
+                    </Tr>
+
+
+                    <Tr>
+                      <Td>End Date</Td>
+                      <Td>{resultData.info?.end_date || "N/A"}</Td>
+                    </Tr>
+
+                    <Tr>
+                      <Td>Tractor Owner</Td>
+                      <Td>{resultData.tractor?.owner || "N/A"}</Td>
+                    </Tr>
+
                     <Tr>
                       <Td>Brand</Td>
-                      <Td>{result?.data?.data?.brand || "N/A"}</Td>
+                      <Td>{resultData.tractor?.brand || "N/A"}</Td>
                     </Tr>
 
                     <Tr>
                       <Td>Model</Td>
-                      <Td>{result?.data?.data?.model || "N/A"}</Td>
+                      <Td>{resultData.tractor?.model || "N/A"}</Td>
                     </Tr>
 
-                    <Tr>
-                      <Td>Tractor Type</Td>
-                      <Td>{result?.data?.data?.tractor_type || "N/A"}</Td>
-                    </Tr>
 
                     <Tr>
                       <Td>Tractor Rating (Horse Power)</Td>
-                      <Td>{result?.data?.data?.rating || "N/A"}</Td>
+                      <Td>{resultData.tractor?.rating || "N/A"}</Td>
                     </Tr>
 
                     <Tr>
                       <Td>Purchase Year</Td>
-                      <Td>{result?.data?.data?.purchase_year || "N/A"}</Td>
+                      <Td>{resultData.tractor?.purchase_year || "N/A"}</Td>
                     </Tr>
 
                     <Tr>
                       <Td>Chasis Number </Td>
-                      <Td>{result?.data?.data?.chasis_serial_vn || "N/A"}</Td>
+                      <Td>
+                        {resultData.tractor?.chasis_serial_vn || "N/A"}
+                      </Td>
                     </Tr>
 
                     <Tr>
                       <Td>Plate Number</Td>
-                      <Td>{result?.data?.data?.plate_no || "N/A"}</Td>
+                      <Td>{resultData.tractor?.plate_no || "N/A"}</Td>
                     </Tr>
 
                     <Tr>
                       <Td>Manufacturing Year</Td>
-                      <Td>{result?.data?.data?.manufactured_year || "N/A"}</Td>
+                      <Td>{resultData.tractor?.manufactured_year || "N/A"}</Td>
                     </Tr>
 
                     <Tr>
                       <Td>Tractor Insurance</Td>
                       <Td>
-                        {result?.data?.data?.insured == "1" ? "yes" : "no"}
+                        {resultData.tractor?.insured == "1" ? "yes" : "no"}
                       </Td>
                     </Tr>
 
                     <Tr>
                       <Td>Insurance Company</Td>
-                      <Td>{result?.data?.data?.insurance_company || "N/A"}</Td>
+                      <Td>{resultData.tractor?.insurance_company || "N/A"}</Td>
                     </Tr>
 
                     <Tr>
                       <Td>Insurance Expiry Year</Td>
-                      <Td>{result?.data?.data?.insurance_expiry || "N/A"}</Td>
+                      <Td>{resultData.tractor?.insurance_expiry || "N/A"}</Td>
                     </Tr>
 
                     <Tr>
                       <Td>Tractor Tracker</Td>
-                      <Td>{result?.data?.data?.tracker || "N/A"}</Td>
+                      <Td>{resultData.tractor?.tracker || "N/A"}</Td>
                     </Tr>
                   </Tbody>
                 </Table>
               </TableContainer>
-            )}
+            )} 
             <Button
               mt="30px"
               color="white"
               height="48px"
               width="100%"
+              isDisabled={result?.isLoading || result.status === "uninitialized"}
               bgColor="#FA9411"
               isLoading={loading == "approved"}
               onClick={async () => {
@@ -357,7 +416,7 @@ export default function AssignSingleTractorPage() {
               }}
             >
               Send
-            </Button>
+            </Button> 
           </Box>
         </Box>
       </Box>

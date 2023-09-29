@@ -45,7 +45,7 @@ export default function Investments() {
     // isFetching,
     isLoading,
     // } = useGetEnlistedTractorsQuery("3");
-  } = useGetInvestmentsQuery({});
+  } = useGetInvestmentsQuery(profileInfo?.id);
 
   console.log(error, result);
 

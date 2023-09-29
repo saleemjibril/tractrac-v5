@@ -152,8 +152,9 @@ export default function BecomeAnAgent() {
             </Text>
             <Text fontWeight={600}>by onboarding tractors around you</Text>
             <Text mt="8px">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              The Tractor Onboarding Program is a win-win for everyone involved.
+              Students and youth corpers earn money while gaining valuable
+              skills.
             </Text>
             <Text color="#FF0000" mt="8px">
               For Students and Youth corpers Only

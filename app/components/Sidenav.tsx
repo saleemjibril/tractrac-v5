@@ -29,31 +29,17 @@ import {
   Button,
   Show,
 } from "@chakra-ui/react";
-import {
-  FiHome,
-  FiTrendingUp,
-  FiCompass,
-  FiStar,
-  FiSettings,
-  FiMenu,
-  FiBell,
-  FiChevronDown,
-} from "react-icons/fi";
-import { IconType } from "react-icons";
+import { FiMenu, FiChevronDown } from "react-icons/fi";
 
-import { FaUser } from "react-icons/fa";
-
-import { ArrowBackIcon, SearchIcon, StarIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon } from "@chakra-ui/icons";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  HomeDark,
-  Dashboard,
   Payment,
+  PaymentWhite,
   User,
   TractorPlusDark,
   ClarityHomeLine,
   ClarityHomeLineWhite,
-  TractorPlus,
   TractorPlusWhite,
 } from "../components/Icons";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -130,7 +116,7 @@ const LinkItems: Array<LinkItemProps> = [
     imageLight: "pay-light",
     imageDark: "pay-dark",
     path: "/payment",
-    iconLight: Payment,
+    iconLight: PaymentWhite,
     iconDark: Payment,
     requiresAuth: true,
   },
@@ -391,8 +377,10 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               {mounted && profileInfo?.fname && (
                 <Link
                   href="/account"
-                  textDecoration="none"
-                  textDecorationStyle="unset"
+                  _hover={{
+                    textDecoration: "none",
+                  }}
+                  // textDecoration="none"
                 >
                   <MenuItem key="1">Profile</MenuItem>
                 </Link>

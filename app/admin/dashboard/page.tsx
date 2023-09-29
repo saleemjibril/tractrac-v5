@@ -9,13 +9,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { AdminSidebarWithHeader } from "../../components/AdminSidenav";
-import {
-  TaskList,
-  Tractor_2,
-  Money_2,
-  Demand,
-  TaskListWhite,
-} from "../../components/Icons";
 import { createElement, useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import { usePathname } from "next/navigation";

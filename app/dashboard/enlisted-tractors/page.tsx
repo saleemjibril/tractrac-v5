@@ -155,7 +155,7 @@ export default function EnlistedTractors() {
                 name={`${tractor?.brand} ${tractor?.model}`}
                 capacity=" 105 to 135 HP"
                 type={tractor?.tractor_type}
-                location={tractor?.state}
+                location={tractor?.address}
                 image={tractor?.image}
                 status={tractor?.status}
               />

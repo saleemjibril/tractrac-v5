@@ -13,7 +13,8 @@ import {
   TaskList,
   Tractor_2,
   Money_2,
-  Demand,
+  DemandLight,
+  DemandDark,
   TaskListWhite,
 } from "../components/Icons";
 import { createElement, useEffect, useState } from "react";
@@ -78,7 +79,8 @@ export default function Dashboard() {
       name: "Demand Generated",
       // imageLight: "pay-light",
       // imageDark: "pay-dark",
-      icon: Demand,
+      icon: DemandDark,
+      iconActive: DemandLight,
       path: `${path}/demand-generated`,
     },
     {
@@ -263,7 +265,7 @@ export default function Dashboard() {
             title="Total Amount Invested"
             amount={result?.data?.total_investments || 0}
           />
-          <StatisticsCard title="Total Farmers Registered" amount="2904" />
+          <StatisticsCard title="Total Farmers Registered"  amount={result?.data?.total_farmers || 0} />
           <StatisticsCard
             title="Total Tractors Hired"
             amount={result?.data?.total_hired_tractors || 0}
@@ -278,7 +280,7 @@ export default function Dashboard() {
           />
           <StatisticsCard
             title="Total Number of Demand Fulfilled"
-            amount="300"
+            amount={result?.data?.total_demand_fulfiled || 0}
           />
         </SimpleGrid>
       </Box>

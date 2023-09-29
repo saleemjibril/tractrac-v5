@@ -488,6 +488,7 @@ export default function BecomeAnAgent() {
                     {({ field, form }: { [x: string]: any }) => (
                       <FormControl
                         isInvalid={form.errors.insured && form.touched.insured}
+                        width="20%"
                       >
                         <FormLabel fontSize="12px" color="#323232">
                           Is the tractor insured
@@ -512,6 +513,7 @@ export default function BecomeAnAgent() {
                   <Field name="insurance_expiry">
                     {({ field, form }: { [x: string]: any }) => (
                       <FormControl
+                      width="25%"
                         isInvalid={
                           form.errors.insurance_expiry &&
                           form.touched.insurance_expiry
@@ -541,13 +543,14 @@ export default function BecomeAnAgent() {
                     )}
                   </Field>
 
-                  {/* <Field name="insurance_company">
+                   <Field name="insurance_company" >
                     {({ field, form }: { [x: string]: any }) => (
                       <FormControl
                         isInvalid={
                           form.errors.insurance_company &&
                           form.touched.insurance_company
                         }
+                        flex="1"
                       >
                         <FormLabel fontSize="12px" color="#323232">
                           Insurance company
@@ -563,7 +566,7 @@ export default function BecomeAnAgent() {
                         </FormErrorMessage>
                       </FormControl>
                     )}
-                  </Field> */}
+                  </Field> 
                 </Flex>
 
                 <Flex mt="20px" columnGap="30px">

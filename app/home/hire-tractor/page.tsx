@@ -107,10 +107,13 @@ export default function HireTractor() {
     let param = "";
     if (state && brand && implement) {
       param = `${implement}/${brand}/${state}`;
-    } else if (state && !brand && !implement) {
-      param = state;
+    } else if (state && implement && !brand) {
+      // param = `${state}/${implement}`;
+      param = `${implement}/${state}`;
     } else if (!state && brand && implement) {
       param = `${implement}/${brand}`;
+    } else if (state && !brand && !implement) {
+      param = state;
     } else if (!state && !brand && implement) {
       param = implement;
     } else if (!state && brand && !implement) {
@@ -471,7 +474,7 @@ function TractorCard({
           width="100%"
           objectFit="cover"
         />
-        {distance != "0" && (
+        {distance && distance != "0" && (
           <Box
             bgColor="#FA9411"
             borderRadius="6px"

@@ -338,7 +338,7 @@ function ServicesComponent() {
           >
             <Box bgColor="#CC6D02" p="20px" as="a" href="/home/hire-tractor">
               <Image
-                src="icons/tractor-2.svg"
+                src="icons/tractor-bold.svg"
                 alt="Tractor image icon"
                 width="110px"
               ></Image>
@@ -490,23 +490,24 @@ function NavbarComponent({ onOpen }: MobileProps) {
             />
           </Link>
           <Link href="https://web.facebook.com/tractracglobal">
-          <IconButton
-            size={"sm"}
-            aria-label="Facebook Icon"
-            icon={<FaFacebookF />}
-            bg="#FFFFFF"
-            isRound={true}
-          />
+            <IconButton
+              size={"sm"}
+              aria-label="Facebook Icon"
+              icon={<FaFacebookF />}
+              bg="#FFFFFF"
+              isRound={true}
+            />
           </Link>
           <Link href="https://twitter.com/TractracGlobal">
-          <IconButton
-            fontSize="18px"
-            size={"sm"}
-            aria-label="Twitter Icon"
-            bg="#FFFFFF"
-            icon={<FaTwitter />}
-            isRound={true}
-          /></Link>
+            <IconButton
+              fontSize="18px"
+              size={"sm"}
+              aria-label="Twitter Icon"
+              bg="#FFFFFF"
+              icon={<FaTwitter />}
+              isRound={true}
+            />
+          </Link>
 
           <Link href="https://www.instagram.com/tractracglobal/">
             <IconButton
@@ -564,7 +565,7 @@ function NavbarComponent({ onOpen }: MobileProps) {
           <Box display={"flex"}>
             <Image
               src="icons/call.svg"
-              alt="Vercel Logo"
+              alt="call icon"
               // layout='fill'
               // objectFit='cover'
               // className={styles.vercelLogo}
@@ -642,15 +643,17 @@ function NavbarComponent({ onOpen }: MobileProps) {
           justifyContent="space-between"
         >
           <Box display={"flex"} alignItems={"center"}>
-            <Image
-              src="/logo.svg"
-              alt="Vercel Logo"
-              // layout='fill'
-              // objectFit='cover'
-              // className={styles.vercelLogo}
-              width={120}
-              height={24}
-            />
+            <Link href="/">
+              <Image
+                src="/logo.svg"
+                alt="app Logo"
+                // layout='fill'
+                // objectFit='cover'
+                // className={styles.vercelLogo}
+                width={120}
+                height={24}
+              />
+            </Link>
 
             <Stack
               direction={"row"}

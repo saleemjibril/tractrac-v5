@@ -512,16 +512,14 @@ function NavbarComponent({ onOpen }: MobileProps) {
           justifyContent="space-between"
         >
           <Box display={"flex"} alignItems={"center"}>
+          <Link href="/">
             <Image
               src="/logo.svg"
-              alt="Vercel Logo"
-              // layout='fill'
-              // objectFit='cover'
-              // className={styles.vercelLogo}
+              alt="app Logo"
               width={120}
               height={24}
             />
-
+</Link>
             <Stack
               direction={"row"}
               spacing={"32px"}

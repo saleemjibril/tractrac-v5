@@ -124,7 +124,7 @@ export default function EnlistedTractors() {
                   name={`${tractor?.brand} ${tractor?.model}`}
                   capacity=" 105 to 135 HP"
                   type={tractor?.tractor_type}
-                  location={tractor?.state}
+                  location={tractor?.address}
                   image={tractor?.image}
                   status={tractor?.status}
                 />
@@ -201,12 +201,19 @@ function TractorCard({
             {capacity}
           </Box>
         </Text> */}
-        <Text fontSize="12px" color="#323232" fontWeight={700} mt="8px">
+         <Box fontWeight={500} fontSize="12px" mt="8px" as="span" noOfLines={2}>
+          <Box fontWeight={700} as="span">
+            Location:
+          </Box>{" "}
+          {/* {location} */}
+          {location?.length < 2 ? "N/a" : location}
+        </Box>
+        {/* <Text fontSize="12px" color="#323232" fontWeight={700} mt="8px">
           Location:{" "}
           <Box fontWeight={500} as="span">
             {location?.length < 1 ? "Nil" : location}
           </Box>
-        </Text>
+        </Text> */}
         {statusTypes[status]?.color && (
           <Box
             mt="10px"
