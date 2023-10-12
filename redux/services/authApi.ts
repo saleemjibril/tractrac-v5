@@ -6,7 +6,7 @@ export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
     // base url of backend API
-    baseUrl: "https://api.tractrac.co/v1",
+    baseUrl: "https://tractrac.iiimpact.org/v1",
     prepareHeaders: (headers, { getState }) => {
       headers.set("Content-Type", "application/x-www-form-urlencoded");
       return headers;

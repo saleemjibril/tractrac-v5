@@ -7,7 +7,7 @@ export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({
     // base url of backend API
-    baseUrl: "https://api.tractrac.co/v1",
+    baseUrl: "https://tractrac.iiimpact.org/v1",
     // prepareHeaders: (headers, { getState }) => {
     //   return headers;
     // },

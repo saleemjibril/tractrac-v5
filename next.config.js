@@ -7,6 +7,7 @@ const nextConfig = {
         // ssr and displayName are configured by default
         styledComponents: true,
       },
+      //output: 'export'
 }
 
 module.exports = nextConfig
