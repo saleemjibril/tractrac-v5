@@ -133,7 +133,7 @@ export default function Home() {
             </Box>
           </Flex> */}
           <Text color="#858A8F" fontSize="16px" textAlign="center" mb="50px">
-          Welcome to TracTrac! This Privacy Policy is designed to help you understand how we collect, use, disclose, and safeguard your personal information. By downloading, installing, or using the TracTrac mobile application ("Tractrac Plus"), you consent to the practices described in this Privacy Policy.
+          Welcome to TracTrac! This Privacy Policy is designed to help you understand how we collect, use, disclose, and safeguard your personal information. By downloading, installing, or using the TracTrac mobile application &quot;Tractrac Plus&quot;, you consent to the practices described in this Privacy Policy.
 
           </Text>
 
@@ -155,7 +155,7 @@ export default function Home() {
             <Text color="#858A8F" fontSize="16px" textAlign="center">
             a. Personal Information: We may collect and store personal information you provide to us, including but not limited to your name and contact details
             <br/>
-            b. Location Information: TracTrac may access your device's location to provide location-based services such as matching you with nearby tractor service providers.
+            b. Location Information: TracTrac may access your device&apos;s location to provide location-based services such as matching you with nearby tractor service providers.
             <br/>
             c. Usage Information: We collect information about how you interact with the App, including the features you use and the content you view.
             <br/>
