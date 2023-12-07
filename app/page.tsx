@@ -425,15 +425,15 @@ function ServicesComponent() {
               mt="40px"
               mb="20px"
               px="30px"
-              justifyContent="space-between"
+              justifyContent="center"
               fontWeight={700}
             >
-              <Link href="/home/register-as-vendor">Register as Vendors</Link>
+              {/* <Link href="/home/register-as-vendor">Register as Vendors</Link>
               <Link href="/home/enlist-as-op-mech">
                 Enlist as Operators/Mechanics{" "}
-              </Link>
-              <Link href="/home">Measure your Farm</Link>
-              <Link href="/home/track-tractor">Track your Tractors</Link>
+              </Link> */}
+              <Link href="/services">Explore our Services</Link>
+              {/* <Link href="/home/track-tractor">Track your Tractors</Link> */}
             </Flex>
           </Box>
         </Box>
@@ -972,6 +972,7 @@ function HowItWorksComponent() {
             bgColor="#33333380"
             borderBottomLeftRadius="10px"
             borderBottomRightRadius="10px"
+            position="relative"
           >
             <TabContent
               title={
@@ -1488,22 +1489,24 @@ function TabContent({
       pb={{ base: "20px", md: "60px" }}
       borderBottomLeftRadius="10px"
       borderBottomRightRadius="10px"
+      position="relative"
     >
       <Flex
         bgImage="url('images/tab-bg.svg')"
         bgPosition="60% center"
         bgRepeat="no-repeat"
-        height={{ base: "200px", lg: "450px" }}
+        height={{ base: "100%", lg: "450px" }}
         bgColor="#FFFFFF"
         ml={{ base: "0px", md: "-30px" }}
         borderRadius="10px"
         color="black"
-        alignItems="center"
+        alignItems={{ base: "start", md: "center" }}
         px="60px"
         py="40px"
         direction={{ base: "column", md: "row" }}
         justifyContent="space-between"
         gap={{ base: "20px", md: "0px" }}
+        position="relative"
       >
         <Box>
           {title}

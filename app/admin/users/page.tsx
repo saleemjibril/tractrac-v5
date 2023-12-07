@@ -172,6 +172,7 @@ export default function UsersPage() {
       gender: user.gender,
       email: user.email,
       state: user.state,
+      interests: user.interests,
       action: (
         <ButtonGroup>
           <Button
@@ -295,6 +296,12 @@ export default function UsersPage() {
       cell: (info) => info.getValue(),
       header: "Actions",
     }),
+    
+    columnHelper.accessor("interests", {
+      cell: (info) => info.getValue(),
+      header: "Interests",
+    }),
+  
   ];
 
   return (
