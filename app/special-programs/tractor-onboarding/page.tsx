@@ -117,7 +117,7 @@ export default function BecomeAnAgent() {
             Information
           </Text>
           <Text color="#333333" fontSize="14px">
-          At Tractrac, we are committed to providing farmers with access to tractors, regardless of location. That's why we have created the Tractor Onboarding Program.
+          At Tractrac, we are committed to providing farmers with access to tractors, regardless of location. That&apos;s why we have created the Tractor Onboarding Program.
           </Text>
           <Text color="#333333" fontSize="14px" mt="8px">
           The Tractor Onboarding Program is a way for students and youth corpers to earn money while gaining valuable skills in agricultural mechanization. As part of the program, students and youth corpers will be responsible for onboarding tractors in their communities. This includes inspecting the tractors, ensuring that they are in good working condition, and registering them with Tractrac.

@@ -227,7 +227,7 @@ function ServicesComponent() {
             src="images/tractor.svg"
             alt="Tractor image"
             width={"328px"}
-            // height={385}
+          // height={385}
           />
 
           <Box mt="-200px" ml="-90px">
@@ -288,7 +288,7 @@ function ServicesComponent() {
               src="images/machinery-2.svg"
               alt="Farm machinery"
               width={"200px"}
-              // height={149}
+            // height={149}
             />
             <List spacing={3}>
               <ListItem fontSize="18px" fontWeight="400" alignItems="center">
@@ -407,7 +407,7 @@ function ServicesComponent() {
             // borderTopWidth={"4px"}
             // px={{ base: "1em", md: "4em", lg: "8em", xl: "12em" }}
             pt="140px"
-            // pb="48px"
+          // pb="48px"
           >
             <Text
               textAlign="center"
@@ -570,7 +570,7 @@ function NavbarComponent({ onOpen }: MobileProps) {
               // objectFit='cover'
               // className={styles.vercelLogo}
               width={{ base: "20px", lg: "40px" }}
-              // height={40}
+            // height={40}
             />
             <Box pl={{ base: "4px", lg: "10px" }}>
               <Text
@@ -591,8 +591,8 @@ function NavbarComponent({ onOpen }: MobileProps) {
               src="icons/clock.svg"
               alt="Clock Icon"
               width={{ base: "20px", lg: "40px" }}
-              // width={40}
-              // height={40}
+            // width={40}
+            // height={40}
             />
             <Box pl={{ base: "4px", lg: "10px" }}>
               <Text
@@ -613,8 +613,8 @@ function NavbarComponent({ onOpen }: MobileProps) {
               src="icons/location.svg"
               alt="Location icon"
               width={{ base: "20px", lg: "40px" }}
-              // width={40}
-              // height={40}
+            // width={40}
+            // height={40}
             />
             <Box pl={{ base: "4px", lg: "10px" }}>
               <Text
@@ -813,7 +813,7 @@ const SidebarContent = ({ onClose }: SidebarProps) => {
       pos="fixed"
       //   as="flex"
       h="full"
-      // {...rest}
+    // {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         {/* <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
@@ -1341,7 +1341,7 @@ function GetMobileAppComponent() {
           </Text>
           <Stack direction="row" gap="16px" justify="center">
             <Link
-            href="https://play.google.com/store/apps/details?id=com.tractrac.trac_trac&hl=en_GB">
+              href="https://play.google.com/store/apps/details?id=com.tractrac.trac_trac&hl=en_GB">
               <Image
                 src="images/google-play.svg"
                 alt=""
