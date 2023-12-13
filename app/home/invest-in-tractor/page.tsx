@@ -599,7 +599,7 @@ export default function InvestInTractor() {
                 mt="12px"
                 color="white"
               >
-                Go to Dashboard <ArrowForwardIcon ml="8px" />
+                Go to Home <ArrowForwardIcon ml="8px" />
               </Button>
             </Flex>
           </ModalBody>

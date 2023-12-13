@@ -90,13 +90,9 @@ export default function BecomeAnAgent() {
             Register as a Tractor Vendor
           </Text>
           <Text>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+          Tractrac is always on the hunt for reliable vendors who will work with us to provide genuine tractors and their spare parts to our vast network of Mechanization Service Providers (MSPs) and Tractor Owners.
+Interested in joining our guild of vendors?
+Fill Out our form.
           </Text>
         </Stack>
 

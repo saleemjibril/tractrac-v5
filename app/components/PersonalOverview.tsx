@@ -39,8 +39,8 @@ export default function PersonalOverview() {
         />
         <StatisticsCard title="Approved Leasing Request" amount={formatNumber(result?.data?.total_approved_leasing || 0)}/>
         <StatisticsCard title="Total Tractors Enlisted" amount={formatNumber(result?.data?.total_tractors_enlisted || 0)}/>
-        <StatisticsCard title="Total Number of Demand Fulfilled" amount={formatNumber(result?.data?.total_demands_fulfilled || 0)} />
-        <StatisticsCard title="Total Amount Invested" amount={formatNumber(result?.data?.total_investments || 0)} />
+        <StatisticsCard title="Total Tractors In-Use" amount={formatNumber(result?.data?.total_demands_fulfilled || 0)} />
+        <StatisticsCard title="Total Pending Requests" amount={formatNumber(result?.data?.total_investments || 0)} />
       </SimpleGrid>
     </Box>
   );

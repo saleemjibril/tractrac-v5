@@ -432,7 +432,7 @@ function ServicesComponent() {
               <Link href="/home/enlist-as-op-mech">
                 Enlist as Operators/Mechanics{" "}
               </Link> */}
-              <Link href="/services">Explore our Services</Link>
+              <Link href="/services">Explore more services</Link>
               {/* <Link href="/home/track-tractor">Track your Tractors</Link> */}
             </Flex>
           </Box>
@@ -1340,11 +1340,14 @@ function GetMobileAppComponent() {
             Request, Enlist and Invest in Tractors on the GO!
           </Text>
           <Stack direction="row" gap="16px" justify="center">
-            <Image
-              src="images/google-play.svg"
-              alt=""
-              width={{ base: "150px", md: "240px" }}
-            />
+            <Link
+            href="https://play.google.com/store/apps/details?id=com.tractrac.trac_trac&hl=en_GB">
+              <Image
+                src="images/google-play.svg"
+                alt=""
+                width={{ base: "150px", md: "240px" }}
+              />
+            </Link>
             <Image
               src="images/app-store.svg"
               alt=""

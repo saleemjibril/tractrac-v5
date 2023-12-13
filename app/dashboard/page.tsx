@@ -262,24 +262,33 @@ export default function Dashboard() {
           spacingY="20px"
         >
           <StatisticsCard
-            title="Total Amount Invested"
-            amount={result?.data?.total_investments || 0}
+            title="Total Tractors Enlisted"
+            amount={result?.data?.total_tractors_enlisted || 0}
           />
-          <StatisticsCard title="Total Farmers Registered"  amount={result?.data?.total_farmers || 0} />
+
           <StatisticsCard
             title="Total Tractors Hired"
             amount={result?.data?.total_hired_tractors || 0}
           />
+          
+
+          <StatisticsCard
+            title="Total Tractors In-Use"
+            amount={result?.data?.total_hired_tractors || 0}
+          />
+          
           <StatisticsCard
             title="Total Agents Registered"
             amount={result?.data?.total_agents || 0}
           />
+
           <StatisticsCard
-            title="Total Tractors Enlisted"
-            amount={result?.data?.total_tractors_enlisted || 0}
+            title="Total Tractor Vendors Registered"
+            amount={result?.data?.total_agents || 0}
           />
+          
           <StatisticsCard
-            title="Total Number of Demand Fulfilled"
+            title="Total Operators/Mechanic Registered"
             amount={result?.data?.total_demand_fulfiled || 0}
           />
         </SimpleGrid>
