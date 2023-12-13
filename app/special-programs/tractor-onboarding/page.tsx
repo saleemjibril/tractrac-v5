@@ -117,25 +117,13 @@ export default function BecomeAnAgent() {
             Information
           </Text>
           <Text color="#333333" fontSize="14px">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+          At Tractrac, we are committed to providing farmers with access to tractors, regardless of location. That's why we have created the Tractor Onboarding Program.
           </Text>
           <Text color="#333333" fontSize="14px" mt="8px">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            onsectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-            labore et dolore magna aliqua.
+          The Tractor Onboarding Program is a way for students and youth corpers to earn money while gaining valuable skills in agricultural mechanization. As part of the program, students and youth corpers will be responsible for onboarding tractors in their communities. This includes inspecting the tractors, ensuring that they are in good working condition, and registering them with Tractrac.
           </Text>
           <Text color="#333333" fontSize="14px" mt="8px">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            onsectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-            labore et dolore magna aliqua.
+          If you are a student or youth corper who is interested in participating in the Onboard program. fill the form.
           </Text>
         </Stack>
 
