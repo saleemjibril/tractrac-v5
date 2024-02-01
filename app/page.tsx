@@ -183,9 +183,9 @@ export default function Home() {
                 />
               </span>
               <div>
-                <h4 style={{ fontWeight: "bold" }}>TracTrac App</h4>
+                <h4 style={{ fontWeight: "bold" }}>Download TracTrac App</h4>
                 <span>
-                  Tractors for everyone, <br /> everywhere.
+                  For better mobile experience, <br /> get our mobile app.
                 </span>
               </div>
             </div>
