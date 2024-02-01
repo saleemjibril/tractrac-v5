@@ -262,6 +262,50 @@ export default function UsersPage() {
       ),
     }));
   }, [result, search, processing, deleteUser, updateUserRole]);
+  const formatPhoneNumber = (phoneNumber: string) => {
+    // Format phone number as needed (e.g., adding dashes)
+    return phoneNumber?.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+  };
+
+  const handleExportCSV = () => {
+    let tableData = filterUsers(result?.data, search);
+    // Convert data to CSV format
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [
+        [
+          "ID",
+          "First Name",
+          "Last Name",
+          "Phone Number",
+          "Gender",
+          "Email",
+          "State",
+          "Interest",
+        ],
+        ...tableData.map((row) => [
+          row.id,
+          row.fname,
+          row.lname,
+          formatPhoneNumber(row.phone),
+          row.gender,
+          row.email,
+          row.state,
+          row.interests,
+        ]),
+      ]
+        .map((row) => row.join(","))
+        .join("\n");
+
+    // Create a download link and trigger the download
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "farmers_table_data.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   // Need pass type of `tableDate` for ts autocomplete
   const columnHelper = createColumn<any>();
@@ -296,12 +340,11 @@ export default function UsersPage() {
       cell: (info) => info.getValue(),
       header: "Actions",
     }),
-    
+
     columnHelper.accessor("interests", {
       cell: (info) => info.getValue(),
       header: "Interests",
     }),
-  
   ];
 
   return (
@@ -337,6 +380,21 @@ export default function UsersPage() {
                   onChange={(e) => setSearchInput(e?.currentTarget.value)}
                 />
               </InputGroup>
+              <Button
+                borderWidth="1px"
+                // borderColor="#FA9411"
+                mb="12px"
+                ml="20px"
+                // height="42px"
+                borderRadius="4px"
+                // width="200px"
+                _hover={{
+                  opacity: 0.5,
+                }}
+                onClick={tableData && handleExportCSV}
+              >
+                <Text fontSize="14px">Export CSV</Text>
+              </Button>
             </Flex>
 
             {isLoading ? (

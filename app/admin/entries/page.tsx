@@ -71,6 +71,7 @@ import { AgentsEntry } from "./agents";
 import { InvestmentsEntry } from "./investments";
 import { VendorsEntry } from "./vendors";
 import { ContactsEntry } from "./contact";
+import { Operator } from "./operator";
 
 const statusTypes: Record<string, { title: string; color: string }> = {
   pending: { title: "Pending", color: "#FA9411" },
@@ -107,7 +108,7 @@ export default function AccountPage() {
                   borderBottomColor: "#F8A730",
                 }}
               >
-               Collaborate with us
+                Collaborate with us
               </Tab>
               <Tab
                 _selected={{
@@ -115,7 +116,7 @@ export default function AccountPage() {
                   borderBottomColor: "#F8A730",
                 }}
               >
-              Agent
+                Agent
               </Tab>
               <Tab
                 _selected={{
@@ -123,7 +124,7 @@ export default function AccountPage() {
                   borderBottomColor: "#F8A730",
                 }}
               >
-              Invest
+                Invest
               </Tab>
               <Tab
                 _selected={{
@@ -131,7 +132,7 @@ export default function AccountPage() {
                   borderBottomColor: "#F8A730",
                 }}
               >
-              Vendors
+                Vendors
               </Tab>
               <Tab
                 _selected={{
@@ -139,12 +140,19 @@ export default function AccountPage() {
                   borderBottomColor: "#F8A730",
                 }}
               >
-              Contact Us
+                Operators
+              </Tab>
+              <Tab
+                _selected={{
+                  color: "#F8A730",
+                  borderBottomColor: "#F8A730",
+                }}
+              >
+                Contact Us
               </Tab>
             </TabList>
 
             <TabPanels>
-
               <TabPanel>
                 <WomenInMechEntry />
               </TabPanel>
@@ -164,11 +172,13 @@ export default function AccountPage() {
               <TabPanel>
                 <VendorsEntry />
               </TabPanel>
+              <TabPanel>
+                <Operator />
+              </TabPanel>
 
               <TabPanel>
                 <ContactsEntry />
               </TabPanel>
-
             </TabPanels>
           </Tabs>
         </Box>

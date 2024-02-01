@@ -34,11 +34,8 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { SidebarWithHeader } from "../../components/Sidenav";
-import {useEffect, useState } from "react";
-import {
-  CloseIcon,
-  SearchIcon,
-} from "@chakra-ui/icons";
+import { useEffect, useState } from "react";
+import { CloseIcon, SearchIcon } from "@chakra-ui/icons";
 import { useAppSelector } from "@/redux/hooks";
 import {
   useAddFarmerMutation,
@@ -75,18 +72,66 @@ export default function FarmersPage() {
     if (searchString.trim() === "") {
       return farmers; // If the search string is empty, return all farmers
     }
-  
+
     const searchValue = searchString.trim();
-  
+
     // Check if the search input is a valid number
     const isNumeric = !isNaN(parseFloat(searchValue)) && isFinite(+searchValue);
-  
-    return farmers.filter((farmer) =>
-      isNumeric
-        ? farmer.phone.includes(searchValue) // Search by phone if it's a number
-        : farmer.fname.toLowerCase().includes(searchValue.toLowerCase()) // Search by name if it's not a number
+
+    return farmers.filter(
+      (farmer) =>
+        isNumeric
+          ? farmer.phone.includes(searchValue) // Search by phone if it's a number
+          : farmer.fname.toLowerCase().includes(searchValue.toLowerCase()) // Search by name if it's not a number
     );
   }
+  let tableData = filterFarmers(result?.data, search);
+  const formatPhoneNumber = (phoneNumber: string) => {
+    // Format phone number as needed (e.g., adding dashes)
+    return phoneNumber?.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+  };
+
+  const formatNumberWithCommas = (number: number) => {
+    // Format number with commas
+    return number.toLocaleString();
+  };
+
+  const handleExportCSV = () => {
+    // Convert data to CSV format
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [
+        [
+          "ID",
+          "First Name",
+          "Last Name",
+          "Phone Number",
+          "Location",
+          "Farm Size",
+          "Agent",
+        ],
+        ...tableData.map((row) => [
+          row.id,
+          row.fname,
+          row.lname,
+          formatPhoneNumber(row.phone),
+          row.location,
+          formatNumberWithCommas(row.farm_size),
+          row.agent,
+        ]),
+      ]
+        .map((row) => row.join(","))
+        .join("\n");
+
+    // Create a download link and trigger the download
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "farmers_table_data.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <AdminSidebarWithHeader>
@@ -124,25 +169,51 @@ export default function FarmersPage() {
 
               <Spacer />
 
-              <Button
-                // border="1px"
-                // borderColor="#FA9411"
-                bgColor="#FA9411"
-                mb="12px"
-                ml="20px"
-                height="42px"
-                borderRadius="4px"
-                width="200px"
-                color="white"
-                _hover={{
-                  opacity: 0.8,
-                }}
-                onClick={() => {
-                  setModalState(true);
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  // flexWrap: "wrap",
+                  // rowGap: "15px",
                 }}
               >
-                <Text fontSize="14px">Add a Farmer</Text>
-              </Button>
+                <Button
+                  borderWidth="1px"
+                  // borderColor="#FA9411"
+                  mb="12px"
+                  ml="20px"
+                  // height="42px"
+                  borderRadius="4px"
+                  // width="200px"
+                  _hover={{
+                    opacity: 0.5,
+                  }}
+                  onClick={tableData && handleExportCSV}
+                >
+                  <Text fontSize="14px">Export CSV</Text>
+                </Button>
+                <Button
+                  // border="1px"
+                  // borderColor="#FA9411"
+                  bgColor="#FA9411"
+                  mb="12px"
+                  ml="20px"
+                  // height="42px"
+                  borderRadius="4px"
+                  // width="200px"
+                  px="16px"
+                  py="10px"
+                  color="white"
+                  _hover={{
+                    opacity: 0.8,
+                  }}
+                  onClick={() => {
+                    setModalState(true);
+                  }}
+                >
+                  <Text fontSize="14px">Add a Farmer</Text>
+                </Button>
+              </div>
             </Flex>
 
             {isLoading ? (
@@ -160,38 +231,42 @@ export default function FarmersPage() {
             ) : error ? (
               <EmptyTractorsPlaceholder />
             ) : (
-              <TableContainer
-                border="1px"
-                borderColor="#32323220"
-                borderRadius="12px"
-              >
-                <Table variant="simple" bgColor="white">
-                  <Thead color="#323232" bgColor="#E2E8F0">
-                    <Tr>
-                      <Th>First Name</Th>
-                      <Th>Last Name</Th>
-                      <Th>Phone Number</Th>
-                      <Th>Farm Size</Th>
-                      <Th>Location</Th>
-                      <Th>Agent</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {filterFarmers(result?.data, search).map((farmer: any) => (
-                      <Tr key={farmer?.id}>
-                        <Td>{farmer?.fname ?? "Nil"}</Td>
-                        <Td>{farmer?.lname ?? "Nil"}</Td>
-                        <Td>{farmer?.phone}</Td>
-                        <Td>
-                          {parseFloat(farmer?.farm_size ?? 0).toLocaleString()}
-                        </Td>
-                        <Td>{farmer?.location}</Td>
-                        <Td>{farmer?.agent ?? "N/a"}</Td>
+              <>
+                <TableContainer
+                  border="1px"
+                  borderColor="#32323220"
+                  borderRadius="12px"
+                >
+                  <Table variant="simple" bgColor="white">
+                    <Thead color="#323232" bgColor="#E2E8F0">
+                      <Tr>
+                        <Th>First Name</Th>
+                        <Th>Last Name</Th>
+                        <Th>Phone Number</Th>
+                        <Th>Farm Size</Th>
+                        <Th>Location</Th>
+                        <Th>Agent</Th>
                       </Tr>
-                    ))}
-                  </Tbody>
-                </Table>
-              </TableContainer>
+                    </Thead>
+                    <Tbody>
+                      {tableData?.map((farmer: any) => (
+                        <Tr key={farmer?.id}>
+                          <Td>{farmer?.fname ?? "Nil"}</Td>
+                          <Td>{farmer?.lname ?? "Nil"}</Td>
+                          <Td>{farmer?.phone}</Td>
+                          <Td>
+                            {parseFloat(
+                              farmer?.farm_size ?? 0
+                            ).toLocaleString()}
+                          </Td>
+                          <Td>{farmer?.location}</Td>
+                          <Td>{farmer?.agent ?? "N/a"}</Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+              </>
             )}
           </Box>
         </Box>

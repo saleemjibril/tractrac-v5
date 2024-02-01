@@ -287,6 +287,10 @@ export default function AssignSingleTractorPage() {
                     </Tr>
 
                     <Tr>
+                      <Td>Hirer Phone Number</Td>
+                      <Td>{resultData.info?.hirer_phone || "N/A"}</Td>
+                    </Tr>
+                    <Tr>
                       <Td>Farm size(units in hectares)</Td>
                       <Td>{resultData.info?.farm_size || "N/A"}</Td>
                     </Tr>
@@ -312,6 +316,10 @@ export default function AssignSingleTractorPage() {
                     <Tr>
                       <Td>Tractor Owner</Td>
                       <Td>{resultData.tractor?.owner || "N/A"}</Td>
+                    </Tr>
+                    <Tr>
+                      <Td>Owner Phone Number</Td>
+                      <Td>{resultData.tractor?.owner_phone || "N/A"}</Td>
                     </Tr>
 
                     <Tr>

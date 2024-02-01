@@ -36,6 +36,7 @@ import {
   Alert,
   AlertIcon,
   AlertTitle,
+  useMediaQuery,
   // NavItem,
 } from "@chakra-ui/react";
 import {
@@ -111,10 +112,16 @@ const LinkItems: Array<{ name: string; path: string; active: boolean }> = [
 export default function Home() {
   const dispatch = useAppDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [show, setShow] = useState<boolean>(true);
+  const [isMobile] = useMediaQuery("(max-width: 600px)");
 
   const showModal = (type: string) => {
     dispatch(openModal(type));
   };
+  useEffect(() => {
+    setShow(true);
+    console.log(isMobile);
+  }, [isMobile]);
 
   return (
     <>
@@ -141,6 +148,95 @@ export default function Home() {
             <SidebarContent onClose={onClose} />
           </DrawerContent>
         </Drawer>
+        {show && isMobile && (
+          <div
+            className="notice"
+            style={{
+              width: "95%",
+              marginLeft: "auto",
+              marginRight: "auto",
+              background: "white",
+              position: "fixed",
+              bottom: "10px",
+              transform: "translateX(2.5%)",
+              padding: "16px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              borderRadius: "8px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                gap: "10px",
+                fontSize: "12px",
+                alignItems: "center",
+                position: "relative",
+              }}
+            >
+              <span>
+                <img src="images/tractor-icon-avatar.svg" alt="logo-image" />
+              </span>
+              <div>
+                <h4 style={{ fontWeight: "bold" }}>TracTrac App</h4>
+                <span>
+                  Tractors for everyone, <br /> everywhere.
+                </span>
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                // justifyContent: "space-between",
+                alignItems: "center",
+                flexDirection: "column",
+                fontSize: "12px",
+              }}
+            >
+              <div
+                style={{
+                  position: "relative",
+                }}
+              >
+                <a href="https://play.google.com/store/apps/details?id=com.tractrac.trac_trac&hl=en_GB">
+                  <button
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      padding: "8px 16px",
+                      borderRadius: "8px",
+                      // border: "1px solid red",
+                      color: "white",
+                      background: "#FA9411",
+                    }}
+                  >
+                    Download
+                  </button>
+                </a>
+                <span
+                  style={{
+                    position: "absolute",
+                    top: "-40px",
+                    right: "-25px",
+                    background: "white",
+                    padding: "3px",
+                    borderRadius: "100px",
+                    height: "25px",
+                    width: "25px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  onClick={() => setShow(false)}
+                >
+                  <CloseButton size="sm" />
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
       </Box>
     </>
   );
@@ -227,7 +323,7 @@ function ServicesComponent() {
             src="images/tractor.svg"
             alt="Tractor image"
             width={"328px"}
-          // height={385}
+            // height={385}
           />
 
           <Box mt="-200px" ml="-90px">
@@ -288,7 +384,7 @@ function ServicesComponent() {
               src="images/machinery-2.svg"
               alt="Farm machinery"
               width={"200px"}
-            // height={149}
+              // height={149}
             />
             <List spacing={3}>
               <ListItem fontSize="18px" fontWeight="400" alignItems="center">
@@ -407,7 +503,7 @@ function ServicesComponent() {
             // borderTopWidth={"4px"}
             // px={{ base: "1em", md: "4em", lg: "8em", xl: "12em" }}
             pt="140px"
-          // pb="48px"
+            // pb="48px"
           >
             <Text
               textAlign="center"
@@ -570,7 +666,7 @@ function NavbarComponent({ onOpen }: MobileProps) {
               // objectFit='cover'
               // className={styles.vercelLogo}
               width={{ base: "20px", lg: "40px" }}
-            // height={40}
+              // height={40}
             />
             <Box pl={{ base: "4px", lg: "10px" }}>
               <Text
@@ -591,8 +687,8 @@ function NavbarComponent({ onOpen }: MobileProps) {
               src="icons/clock.svg"
               alt="Clock Icon"
               width={{ base: "20px", lg: "40px" }}
-            // width={40}
-            // height={40}
+              // width={40}
+              // height={40}
             />
             <Box pl={{ base: "4px", lg: "10px" }}>
               <Text
@@ -613,8 +709,8 @@ function NavbarComponent({ onOpen }: MobileProps) {
               src="icons/location.svg"
               alt="Location icon"
               width={{ base: "20px", lg: "40px" }}
-            // width={40}
-            // height={40}
+              // width={40}
+              // height={40}
             />
             <Box pl={{ base: "4px", lg: "10px" }}>
               <Text
@@ -813,7 +909,7 @@ const SidebarContent = ({ onClose }: SidebarProps) => {
       pos="fixed"
       //   as="flex"
       h="full"
-    // {...rest}
+      // {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         {/* <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
@@ -1340,8 +1436,7 @@ function GetMobileAppComponent() {
             Request, Enlist and Invest in Tractors on the GO!
           </Text>
           <Stack direction="row" gap="16px" justify="center">
-            <Link
-              href="https://play.google.com/store/apps/details?id=com.tractrac.trac_trac&hl=en_GB">
+            <Link href="https://play.google.com/store/apps/details?id=com.tractrac.trac_trac&hl=en_GB">
               <Image
                 src="images/google-play.svg"
                 alt=""
