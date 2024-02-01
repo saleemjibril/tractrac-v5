@@ -176,7 +176,11 @@ export default function Home() {
               }}
             >
               <span>
-                <img src="images/tractor-icon-avatar.svg" alt="logo-image" />
+                {/* <img src="images/tractor-icon-avatar.svg" alt="logo-image" /> */}
+                <Image
+                  src="images/tractor-icon-avatar.svg"
+                  alt="logo-image"
+                />
               </span>
               <div>
                 <h4 style={{ fontWeight: "bold" }}>TracTrac App</h4>
