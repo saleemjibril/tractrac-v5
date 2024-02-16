@@ -40,7 +40,7 @@ const TracTracPageModal: React.FC<ModalProps> = ({
       closeOnEsc={false}
     >
       <ModalOverlay
-        bgImage="url('images/modal-bg.svg')"
+        bgImage="url('images/modal-bg.jpg')"
         bgRepeat="no-repeat"
         bgPosition="right bottom"
         bgSize="cover"

@@ -254,7 +254,7 @@ function BannerComponent() {
       position={"relative"}
       width={"100%"}
       height={{ base: "350px", md: "535px" }}
-      bgImage="linear-gradient(to left, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('banner.svg')"
+      bgImage="linear-gradient(to left, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('hero_banner.jpg')"
       bgPosition="center"
       bgSize="cover"
       bgAttachment="fixed"
@@ -317,14 +317,14 @@ function ServicesComponent() {
         <Stack ml={"120px"}>
           <Box mb="-100px" ml="-120px">
             <Image
-              src="images/machinery.svg"
+              src="images/machinery.jpg"
               alt="Tractor image"
               width={216}
               height={245}
             />
           </Box>
           <Image
-            src="images/tractor.svg"
+            src="images/tractor.jpg"
             alt="Tractor image"
             width={"328px"}
             // height={385}
@@ -332,7 +332,7 @@ function ServicesComponent() {
 
           <Box mt="-200px" ml="-90px">
             <Image
-              src="images/years-of-experience.svg"
+              src="images/years-of-experience.jpg"
               alt="Tractor image"
               width={157}
               height={157}
@@ -385,7 +385,7 @@ function ServicesComponent() {
           <Flex gap="20px" mt="32px">
             <Image
               display={{ base: "none", md: "flex" }}
-              src="images/machinery-2.svg"
+              src="images/machinery-2.jpg"
               alt="Farm machinery"
               width={"200px"}
               // height={149}
@@ -1123,7 +1123,7 @@ function FaqComponent() {
   return (
     <Flex>
       <Image
-        src="images/faq.svg"
+        src="images/faq.jpg"
         alt=""
         display={{ base: "none", md: "block" }}
       />
@@ -1263,7 +1263,7 @@ function ContactUsComponent() {
       id="contact"
       width={"100%"}
       // height={"535px"}
-      bgImage="url('images/contact-us.svg')"
+      bgImage="url('images/contact-us.jpg')"
       bgPosition="center"
       bgSize="cover"
       bgAttachment="fixed"

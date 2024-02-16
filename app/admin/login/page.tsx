@@ -73,7 +73,7 @@ export default function Home() {
   }
   return (
     <Box
-      bgImage="url('/images/modal-bg.svg')"
+      bgImage="url('/images/modal-bg.jpg')"
       bgRepeat="no-repeat"
       bgPosition="right bottom"
       bgSize="cover"
