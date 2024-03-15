@@ -332,7 +332,7 @@ function ServicesComponent() {
 
           <Box mt="-200px" ml="-90px">
             <Image
-              src="images/years-of-experience.jpg"
+              src="images/years-of-experience.svg"
               alt="Tractor image"
               width={157}
               height={157}
