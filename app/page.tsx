@@ -725,7 +725,7 @@ function NavbarComponent({ onOpen }: MobileProps) {
                 Address
               </Text>
               <Text fontWeight={[400, 700]} fontSize="12px">
-                12 Ebitu Ukiwe Str. Jabi, Abuja
+              17 IT Agbani street. Jabi, Abuja
               </Text>
             </Box>
           </Box>
