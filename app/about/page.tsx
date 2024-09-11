@@ -460,7 +460,7 @@ function NavbarComponent({ onOpen }: MobileProps) {
                 Address
               </Text>
               <Text fontWeight={[400, 700]} fontSize="12px">
-               17 IT Agbani street. Jabi, Abuja
+               11 Vanern St, Wuse, Abuja 904101, Federal Capital Territory
               </Text>
             </Box>
           </Box>
