@@ -312,7 +312,7 @@ export const blogItems = [
         <Text>
         Imagine a future where 135,000 smallholder farmers, including women, youth, and people with disabilities, are empowered with modern agricultural tools and knowledge.
         An agricultural ecosystem with 6,054 new and existing mechanization service providers (MSPs) trained, equipped, and thriving across Nigeria and Sub-Saharan Africa.
-        Over the next five years, Tractrac and Mastercard Foundation are turning this vision into reality through the "Improving Smallholder Farmers' Access to Small-Scale Agricultural Mechanization" (ISSAM) initiative.
+        Over the next five years, Tractrac and Mastercard Foundation are turning this vision into reality through the Improving Smallholder Farmers Access to Small-Scale Agricultural Mechanization (ISSAM) initiative.
         </Text>
 
         <Text mt="30px">
@@ -326,7 +326,7 @@ export const blogItems = [
           <br /> Recognizing this, Mastercard Foundation has consistently invested in agriculture to drive economic growth, reduce poverty, and support local industries. With its focus on enabling youth employment and empowering underserved communities, the foundation has partnered with organizations across Africa to boost productivity and sustainability in agriculture.
         </Text>
         <Text mt="20px">
-        However, the demand for mechanization services continues to outpace supply, particularly in rural areas. To bridge this gap, Tractrac is proud to announce a strategic partnership with Mastercard Foundation to launch the "Improving Smallholder Farmers' Access to Small-Scale Agricultural Mechanization Services (ISSAM)" initiative. This five-year project is designed to empower 135,000 smallholder farmers, including women, youth, and persons with disabilities, while building the capacity of 6,054 new and existing Mechanization Service Providers (MSPs)
+        However, the demand for mechanization services continues to outpace supply, particularly in rural areas. To bridge this gap, Tractrac is proud to announce a strategic partnership with Mastercard Foundation to launch the Improving Smallholder Farmers Access to Small-Scale Agricultural Mechanization Services (ISSAM) initiative. This five-year project is designed to empower 135,000 smallholder farmers, including women, youth, and persons with disabilities, while building the capacity of 6,054 new and existing Mechanization Service Providers (MSPs)
         </Text>
 
         <Text mt="30px">
