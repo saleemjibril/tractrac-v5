@@ -311,8 +311,8 @@ export const blogItems = [
       <>
         <Text>
         Imagine a future where 135,000 smallholder farmers, including women, youth, and people with disabilities, are empowered with modern agricultural tools and knowledge.
-An agricultural ecosystem with 6,054 new and existing mechanization service providers (MSPs) trained, equipped, and thriving across Nigeria and Sub-Saharan Africa.
-Over the next five years, Tractrac and Mastercard Foundation are turning this vision into reality through the "Improving Smallholder Farmers' Access to Small-Scale Agricultural Mechanization" (ISSAM) initiative.
+        An agricultural ecosystem with 6,054 new and existing mechanization service providers (MSPs) trained, equipped, and thriving across Nigeria and Sub-Saharan Africa.
+        Over the next five years, Tractrac and Mastercard Foundation are turning this vision into reality through the "Improving Smallholder Farmers' Access to Small-Scale Agricultural Mechanization" (ISSAM) initiative.
         </Text>
 
         <Text mt="30px">
