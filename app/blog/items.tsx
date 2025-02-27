@@ -300,4 +300,114 @@ export const blogItems = [
       </>
     ),
   },
+  {
+    id: "4",
+    image: "/blog/issam.jpg",
+    title:
+      "Inside Tractrac and Mastercard Foundation's Partnership: Improving Smallholder Farmers’ Access to Small-Scale Agricultural Mechanization (ISSAM)",
+    excerpt:
+      "Imagine a future where 135,000 smallholder farmers, including women, youth, and people with disabilities, are empowered with modern agricultural tools and knowledge.... ",
+    content: (
+      <>
+        <Text>
+        Imagine a future where 135,000 smallholder farmers, including women, youth, and people with disabilities, are empowered with modern agricultural tools and knowledge.
+An agricultural ecosystem with 6,054 new and existing mechanization service providers (MSPs) trained, equipped, and thriving across Nigeria and Sub-Saharan Africa.
+Over the next five years, Tractrac and Mastercard Foundation are turning this vision into reality through the "Improving Smallholder Farmers' Access to Small-Scale Agricultural Mechanization" (ISSAM) initiative.
+        </Text>
+
+        <Text mt="30px">
+          <Box as="span" fontWeight={600} display="block">
+          Overview
+          </Box>
+          The agricultural sector is the backbone of Nigeria’s economy, contributing 24.4% to the GDP and employing over 70% of the population. Despite this, many smallholder farmers in Nigeria and Sub-Saharan Africa still face challenges such as limited access to mechanization, low productivity, and insufficient financial resources. The mechanization rate in Sub-Saharan Africa is just 8%, far behind regions like Asia (75%) and Latin America (55%), according to the FAO. These gaps underscore the urgent need for innovative solutions to empower smallholder farmers. <br />
+          According to FAO (Clarke, 1997), the term “Agricultural mechanization”
+          generally refers to the application of tools, implements, and powered
+          machinery as inputs to achieve agricultural production.
+          <br /> Recognizing this, Mastercard Foundation has consistently invested in agriculture to drive economic growth, reduce poverty, and support local industries. With its focus on enabling youth employment and empowering underserved communities, the foundation has partnered with organizations across Africa to boost productivity and sustainability in agriculture.
+        </Text>
+        <Text mt="20px">
+        However, the demand for mechanization services continues to outpace supply, particularly in rural areas. To bridge this gap, Tractrac is proud to announce a strategic partnership with Mastercard Foundation to launch the "Improving Smallholder Farmers' Access to Small-Scale Agricultural Mechanization Services (ISSAM)" initiative. This five-year project is designed to empower 135,000 smallholder farmers, including women, youth, and persons with disabilities, while building the capacity of 6,054 new and existing Mechanization Service Providers (MSPs)
+        </Text>
+
+        <Text mt="30px">
+          <Box as="span" fontWeight={600} display="block">
+          Key Objectives of ISSAM
+          </Box>
+          The ISSAM project is built on seven core objectives aimed at transforming the agricultural landscape:
+          <br />
+          <UnorderedList>
+            <ListItem>
+            Educate 135,000 smallholder farmers on the benefits of mechanization, improving access and demand for these services.
+            </ListItem>
+            <ListItem>
+            Build the capacity of 6,054 entrepreneurs, including MSPs, booking agents, equipment operators, and mechanics, with training in technical skills, entrepreneurship, marketing, and financial management.
+            </ListItem>
+            <ListItem>
+            Provide technology adoption grants and financing opportunities, enabling 4,628
+            micro-entrepreneurs to access lease-to-own mechanization tools.
+            </ListItem>
+            <ListItem>
+            Partner with financial institutions to develop innovative financing models for mechanization tools.
+            </ListItem>
+            <ListItem>
+            Foster enabling policies that encourage investment in the mechanization sector.
+            </ListItem>
+            <ListItem>
+            Strengthen associations and cooperatives to enhance intervention uptake and sustainability.
+            </ListItem>
+          </UnorderedList>
+          The ISSAM initiative will also focus on two priority machines for smallholder farmers:
+          <UnorderedList>
+          <ListItem>
+          Power Tiller – A two-wheel tractor included in the lease-to-own financing package.
+            </ListItem>
+            <ListItem>
+            Tryctor – A three-wheeled, fully-assembled mini-tractor manufactured in Nigeria by Bespoke Design Concept.
+            </ListItem>
+          </UnorderedList>
+          <br />
+          The Tryctor offers labor-saving features and full implements, making it a versatile and affordable solution for small-scale farmers.
+          <br />
+          Through their innovative Tryctor models, Bespoke Design Concept provides affordable solutions tailored to the needs of smallholder farmers. Their commitment to supporting 
+          micro-entrepreneurs through financing options and advocating for favorable government policies aligns seamlessly with ISSAM’s goals.
+        </Text>
+
+        <Text mt="30px">
+          <Box as="span" fontWeight={600} display="block">
+          Transforming Lives Through ISSAM
+          </Box>
+          This partnership between Tractrac and the Mastercard Foundation will create a ripple effect across Nigeria’s agricultural landscape, delivering:
+          <br />
+          <UnorderedList>
+            <ListItem>
+            Market Systems Transformation
+            </ListItem>
+            <ListItem>
+            High Financial & Social Returns
+            </ListItem>
+            <ListItem>
+            Sustainability and Policy Enhancement
+            </ListItem>
+            <ListItem>
+            Innovation & Technology Adoption
+            </ListItem>
+            <ListItem>
+            Capacity Building and Private Sector Engagement
+            </ListItem>
+            <ListItem>
+            Easier Access to Finance and Sustainable Business Models
+            </ListItem>
+          </UnorderedList>
+          These efforts will not only increase agricultural productivity but also uplift livelihoods and drive Nigeria’s economic growth.
+        </Text>
+        <Text mt="30px">
+          <Box as="span" fontWeight={600} display="block">
+          A Shared Commitment
+          </Box>
+          At Tractrac, we remain unwavering in our commitment to improving smallholder farmers’ access to agricultural mechanization. We’re excited to embark on this journey with Mastercard Foundation and look forward to the impact we’ll create together.
+          <br />
+        </Text>
+      </>
+    ),
+  },
 ];
