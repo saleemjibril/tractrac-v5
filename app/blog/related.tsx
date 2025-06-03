@@ -1,9 +1,5 @@
-
-// app/blog/page.tsx
 import { graphQLClient } from '../utils/graphql';
-import BlogInner from "../components/blogInner";
 
-// Define types for WordPress data
 interface Post {
   posts: {
     nodes: {
@@ -21,9 +17,7 @@ interface Post {
     }[];
   };
 }
- 
 
-// Define the function to fetch posts with media
 async function getPostsWithMedia() {
   const postsQuery = ` 
     query AllPosts {
@@ -45,7 +39,6 @@ async function getPostsWithMedia() {
     }
   `;
   
-
   try {
     const postsData = await graphQLClient.request<Post>(postsQuery);
     return postsData.posts.nodes;
@@ -55,22 +48,12 @@ async function getPostsWithMedia() {
   }
 }
 
-export async function generateMetadata() {
-  return {
-    title: "Blog",
-    description:
-      "Facilitating access to mechanization services for all farmers in Africa.",
-  };
-}
-
-
-export default async function BlogPosts() {
-  // Call the defined function to fetch posts with media
-  const postsWithMedia = await getPostsWithMedia();
-
-  return (
-    <>
-      <BlogInner posts={postsWithMedia} />
-    </>
-  );
+export default async function relatedBlogs(blogId : string) {
+    const blogList = await getPostsWithMedia();
+    let relatedList = blogList.filter(blog => blog.id !== blogId);
+  
+    if(relatedList.length > 3){
+      relatedList.slice(0,3);
+    }
+    return relatedList;
 }

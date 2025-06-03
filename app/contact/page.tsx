@@ -259,7 +259,7 @@ export default function ContactUsPage() {
                     } else if (error?.data?.message) {
                       setError(error?.data?.message);
                     }
-                    console.error("rejected", error);
+                    console.log("rejected", error);
                   } finally {
                     setLoading(false);
                   }

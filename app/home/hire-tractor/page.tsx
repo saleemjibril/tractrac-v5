@@ -620,7 +620,7 @@ function HireTractorForm({ id }: { id: string }) {
             } else if (error?.data?.message) {
               setError(error?.data?.message);
             }
-            console.error("rejected", error);
+            console.log("rejected", error);
           }
         }}
       >

@@ -149,20 +149,21 @@ export default function BecomeAnAgent() {
 
                 try {
                   // alert('ss')
-                  console.log(values);
-                  const response = await becomeAgent({
-                    ...values,
-                    user_id: profileInfo?.id,
-                  }).unwrap();
-                  if (response.status == "success") {
-                    setSuccess(true);
-                    onOpen();
-                    resetForm();
-                    toast.success(response.message);
-                  } else {
-                    setError("An unknown error occured");
-                  }
-                  console.log("fulfilled", response?.data[0]);
+                  console.log("become an agent", {values});
+                  // const response = await becomeAgent({
+                  //   ...values,
+                  //   user_id: profileInfo?.id,
+                  // })
+                  // .unwrap();
+                  // if (response.status == "success") {
+                  //   setSuccess(true);
+                  //   onOpen();
+                  //   resetForm();
+                  //   toast.success(response.message);
+                  // } else {
+                  //   setError("An unknown error occured");
+                  // }
+                  // console.log("fulfilled", response?.data[0]);
                 } catch (err) {
                   const error = err as any;
                   // alert('error')
@@ -171,7 +172,7 @@ export default function BecomeAnAgent() {
                   } else if (error?.data?.message) {
                     setError(error?.data?.message);
                   }
-                  console.error("rejected", error);
+                  console.log("rejected", error);
                 }
               }}
             >
@@ -602,7 +603,7 @@ const AddFarmerModal: React.FC<ModalProps> = ({ isOpen, setModalState }) => {
                 } else if (error?.data?.message) {
                   setError(error?.data?.message);
                 }
-                console.error("rejected", error);
+                console.log("rejected", error);
               }
             }}
           >

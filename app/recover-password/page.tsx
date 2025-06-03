@@ -149,7 +149,7 @@ function SendOtpComponent({
           } else if (error?.data?.message) {
             setError(error?.data?.message);
           }
-          console.error("rejected", error);
+          console.log("rejected", error);
         }
       }}
     >
@@ -264,7 +264,7 @@ function ResetPasswordComponent({ phoneNumber }: { phoneNumber: string }) {
             } else if (error?.data?.message) {
               setError(error?.data?.message);
             }
-            console.error("rejected", error);
+            console.log("rejected", error);
           }
         }}
       >

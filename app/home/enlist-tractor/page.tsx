@@ -221,7 +221,7 @@ export default function BecomeAnAgent() {
                 } else if (error?.data?.message) {
                   setError(error?.data?.message);
                 }
-                console.error("rejected", error);
+                console.log("rejected", error);
               }
             }}
           >
@@ -348,7 +348,7 @@ export default function BecomeAnAgent() {
                         isInvalid={form.errors.rating && form.touched.rating}
                       >
                         <FormLabel fontSize="12px" color="#323232">
-                          Tractor rating (housepower)
+                          Tractor rating (horsepower)
                         </FormLabel>
                         <Input
                           {...field}
